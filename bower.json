@@ -2,7 +2,7 @@
   "name": "mapo",
   "private": true,
   "dependencies": {
-   
+   "jquery": "*"
   },
   "devDependencies": {},
   "license": "https://github.com/chsword/Mapo/blob/master/LICENSE",
