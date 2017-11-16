@@ -1,0 +1,17 @@
+{
+  "name": "mapo",
+  "version": "1.0.0.0",
+  "author": "chsword",
+  "license": "https://github.com/chsword/Mapo/blob/master/LICENSE",
+  "private": true,
+  "readme": "https://github.com/chsword/Mapo/blob/master/README.md",
+  "description": "",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  },
+  "repository": "https://github.com/chsword/Mapo/"
+
+}

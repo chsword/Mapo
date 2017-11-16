@@ -1,0 +1,16 @@
+{
+  "name": "mapo",
+  "private": true,
+  "dependencies": {
+   
+  },
+  "devDependencies": {},
+  "license": "https://github.com/chsword/Mapo/blob/master/LICENSE",
+  "authors": [ "chsword" ],
+  "repository": {
+    "url": "https://github.com/chsword/Mapo/",
+    "type": "git"
+  },
+  "description": "",
+  "ignore": []
+}
