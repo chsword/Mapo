@@ -3,6 +3,16 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+lib/**/less
+lib/**/scss
+lib/**/sass
+lib/**/src
+lib/**/.bower.json
+lib/**/.gitignore
+lib/**/.npmignore
+lib/**/bower.json
+lib/**/*.txt
+lib/**/*.md
 # User-specific files
 *.suo
 *.user
