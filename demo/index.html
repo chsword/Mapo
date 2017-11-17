@@ -7,7 +7,7 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content='ProcessOn一款HTML5版的免费在线作图工具，无需下载和安装，点击即可使用；支持用户无延迟协作 和历史记录动画回放等，只需一个浏览器即可全部完成！轻松、简单、易用！' />
-
+    <link type='text/css' rel='stylesheet' href="../lib/font-awesome/css/font-awesome.min.css"/>
 
 
 
@@ -97,7 +97,7 @@
 <h1 style="display: none;">ProcessOn无需下载的(HTML5)免费在线作图工具</h1>
 <div id="designer_header">
     <div class="titlebar">
-        <a class="btn_back" href="/diagraming/back?id=52c5096c0cf22b592924695d" title='返回'><span class="ico ico_goback"></span></a>
+        <a class="btn_back" href="/diagraming/back?id=52c5096c0cf22b592924695d" title='返回'><span class="fa fa-ico_goback"></span></a>
         <div class="row row1">
             <div id="title_container">
                 <span class="diagram_title">未命名文件</span>
@@ -120,90 +120,92 @@
 
             <div class="header_right_btn">
                 <div class="toolbar_button" onclick="UI.showAddColla()" title="分享与协作">
-                    <div class="ico ico_header_share"></div>
+                    <i class="fa fa-ico_header_share"></i>
                 </div>
             </div>
 
 
             <div class="user" onmousedown="UI.showUserMenu(event)">
                 <img src="../src/images/default/default/profile-full-male.png"/>softfn
-                <div class="ico ico_accordion"></div>
+                <i class="fa fa-ico_accordion"></i>
             </div>
 
         </div>
     </div>
     <div class="toolbar">
         <!-- Clipboard -->
-        <div id="bar_undo" class="toolbar_button" title='撤销 (Ctrl+Z)'><div class="ico undo"></div></div>
-        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'><div class="ico redo"></div></div>
-        <div id="bar_brush" class="toolbar_button" title='格式刷 (Ctrl+Shift+B)'><div class="ico brush"></div></div>
+        <div id="bar_undo" class="toolbar_button" title='撤销 (Ctrl+Z)'><i class="fa fa-undo"></i></div>
+        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'><i class="fa fa-redo"></i></div>
+        <div id="bar_brush" class="toolbar_button" title='格式刷 (Ctrl+Shift+B)'>
+            <i class="fa fa-paint-brush"></i></div>
         <div class="toolbar_devider"></div>
 
         <!-- Font -->
-        <div id="bar_font_family" title='字体' class="toolbar_button" style="width: 80px;"><div class="text_content">Arial</div><div class="ico ico_dropdown"></div></div>
+        <div id="bar_font_family" title='字体' class="toolbar_button" style="width: 80px;"><text class="text_content">Arial</text>
+            <i class="fa fa-angle-double-down"></i></div>
         <div class="toolbar_small_devider"></div>
         <div id="bar_font_size" title='字号' class="spinner" style="width: 50px;"></div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button"><div class="ico bold"></div></div>
-        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button"><div class="ico italic"></div></div>
-        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button"><div class="ico underline"></div></div>
+        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button"><div class="fa fa-bold"></div></div>
+        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button"><div class="fa fa-italic"></div></div>
+        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button"><div class="fa fa-underline"></div></div>
         <div id="bar_font_color" title='文本颜色' class="toolbar_button drop_button">
-            <div class="ico fontcolor"></div>
+            <i class="fa fa-font"></i>
             <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_font_align" title='对齐' class="toolbar_button drop_button">
-            <div class="ico alignleft"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-align-left"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
 
         <!-- Style -->
         <div id="bar_fill" title='填充样式' class="toolbar_button drop_button">
-            <div class="ico fillcolor"></div>
+            <i class="fa fa-fillcolor"></i>
             <div class="btn_color" style="background-color: rgb(255,255,255)"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_color" title='线条颜色' class="toolbar_button drop_button">
-            <div class="ico linecolor"></div>
+            <i class="fa fa-linecolor"></i>
             <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_width" title='线宽' class="toolbar_button drop_button">
-            <div class="ico linewidth"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-linewidth"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_style" title='线条样式' class="toolbar_button drop_button">
-            <div class="ico linedash"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-linedash"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
 
         <!-- Linker Style -->
         <div id="bar_linkertype" title='连线类型' class="toolbar_button drop_button">
-            <div class="ico linkertype_broken"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-linkertype_broken"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_beginarrow" title='起点' class="toolbar_button drop_button">
-            <div class="ico ico_arrow larrow_none"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-ico_arrow larrow_none"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_endarrow" title='终点' class="toolbar_button drop_button">
-            <div class="ico ico_arrow rarrow_none"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-ico_arrow rarrow_none"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
-        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button"><div class="ico ico_front"></div></div>
-        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button"><div class="ico ico_back"></div></div>
+        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button"><div class="fa fa-ico_front"></div></div>
+        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button"><div class="fa fa-ico_back"></div></div>
         <div class="toolbar_devider"></div>
-        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button"><div class="ico ico_lock"></div></div>
-        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button"><div class="ico ico_unlock"></div></div>
+        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button"><div class="fa fa-ico_lock"></div></div>
+        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button"><div class="fa fa-ico_unlock"></div></div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_link" title='插入链接' class="toolbar_button"><div class="ico ico_link"></div></div>
+        <div id="bar_link" title='插入链接' class="toolbar_button"><div class="fa fa-ico_link"></div></div>
         <div class="toolbar_right">
-            <div id="bar_collapse" class="toolbar_button"><div class="ico collapse"></div></div>
+            <div id="bar_collapse" class="toolbar_button"><div class="fa fa-collapse"></div></div>
         </div>
-        <a id="bar_return" class="toolbar_button" href="/diagraming/back?id=52c5096c0cf22b592924695d" title='返回'><span class="ico ico_goback"></span></a>
+        <a id="bar_return" class="toolbar_button" href="/diagraming/back?id=52c5096c0cf22b592924695d" title='返回'><span class="fa fa-ico_goback"></span></a>
     </div>
 </div>
 <div id="designer">
@@ -216,15 +218,15 @@
         <div id="designer_canvas">
             <canvas id="designer_grids"></canvas>
             <ul id="designer_contextmenu" class="menu list options_menu">
-                <li ac="cut"><div class="ico cut"></div>剪切<div class="extend">Ctrl+X</div></li>
-                <li ac="copy"><div class="ico copy"></div>复制<div class="extend">Ctrl+C</div></li>
-                <li ac="paste"><div class="ico paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
+                <li ac="cut"><div class="fa fa-cut"></div>剪切<div class="extend">Ctrl+X</div></li>
+                <li ac="copy"><div class="fa fa-copy"></div>复制<div class="extend">Ctrl+C</div></li>
+                <li ac="paste"><div class="fa fa-paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
                 <li ac="duplicate">复用<div class="extend">Ctrl+D</div></li>
                 <li class="devider devi_clip"></li>
-                <li ac="front"><div class="ico ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
-                <li ac="back"><div class="ico ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
-                <li ac="lock"><div class="ico ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
-                <li ac="unlock"><div class="ico ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+                <li ac="front"><div class="fa fa-ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
+                <li ac="back"><div class="fa fa-ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
+                <li ac="lock"><div class="fa fa-ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
+                <li ac="unlock"><div class="fa fa-ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
                 <li ac="group">组合<div class="extend">Ctrl+G</div></li>
                 <li ac="ungroup">取消组合<div class="extend">Ctrl+Shift+G</div></li>
                 <li id="ctxmenu_align">
@@ -240,13 +242,13 @@
                     </ul>
                 </li>
                 <li class="devider devi_shape"></li>
-                <li ac="changelink"><div class="ico ico_link"></div>修改链接</li>
-                <li ac="edit"><div class="ico edittext"></div>编辑文本<div class="extend">空格</div></li>
-                <li ac="delete"><div class="ico remove"></div>删除<div class="extend">Delete/Backspace</div></li>
+                <li ac="changelink"><div class="fa fa-ico_link"></div>修改链接</li>
+                <li ac="edit"><div class="fa fa-edittext"></div>编辑文本<div class="extend">空格</div></li>
+                <li ac="delete"><div class="fa fa-remove"></div>删除<div class="extend">Delete/Backspace</div></li>
                 <li class="devider devi_del"></li>
                 <li ac="selectall">全选<div class="extend">Ctrl+A</div></li>
                 <li class="devider devi_selectall"></li>
-                <li ac="drawline"><div class="ico linkertype_normal"></div>创建连线<div class="extend">L</div></li>
+                <li ac="drawline"><div class="fa fa-linkertype_normal"></div>创建连线<div class="extend">L</div></li>
             </ul>
         </div>
     </div>
@@ -257,18 +259,18 @@
 <div id="dock">
     <div class="dock_header"></div>
     <div class="dock_buttons">
-        <div id="dock_btn_navigator" title="导航" disableTitle="true" class="toolbar_button selected" onclick="Dock.showView('navigator')"><div class="ico ico_dock_nav"></div></div>
-        <div id="dock_btn_graphic" title="图形" disableTitle="true" class="toolbar_button" onclick="Dock.showView('graphic')"><div class="ico ico_dock_styles"></div></div>
-        <div id="dock_btn_metric" title="度量" disableTitle="true" class="toolbar_button" onclick="Dock.showView('metric')"><div class="ico ico_dock_metric"></div></div>
-        <div id="dock_btn_attribute" title="数据属性" disableTitle="true" class="toolbar_button" onclick="Dock.showView('attribute')"><div class="ico ico_dock_attribute"></div></div>
-        <div id="dock_btn_page" title="页面设置" disableTitle="true" class="toolbar_button" onclick="Dock.showView('page')"><div class="ico ico_dock_page"></div></div>
-        <div id="dock_btn_history" title="历史版本" disableTitle="true" class="toolbar_button" onclick="Dock.showView('history')"><div class="ico ico_history"></div></div>
+        <div id="dock_btn_navigator" title="导航" disableTitle="true" class="toolbar_button selected" onclick="Dock.showView('navigator')"><div class="fa fa-ico_dock_nav"></div></div>
+        <div id="dock_btn_graphic" title="图形" disableTitle="true" class="toolbar_button" onclick="Dock.showView('graphic')"><div class="fa fa-ico_dock_styles"></div></div>
+        <div id="dock_btn_metric" title="度量" disableTitle="true" class="toolbar_button" onclick="Dock.showView('metric')"><div class="fa fa-ico_dock_metric"></div></div>
+        <div id="dock_btn_attribute" title="数据属性" disableTitle="true" class="toolbar_button" onclick="Dock.showView('attribute')"><div class="fa fa-ico_dock_attribute"></div></div>
+        <div id="dock_btn_page" title="页面设置" disableTitle="true" class="toolbar_button" onclick="Dock.showView('page')"><div class="fa fa-ico_dock_page"></div></div>
+        <div id="dock_btn_history" title="历史版本" disableTitle="true" class="toolbar_button" onclick="Dock.showView('history')"><div class="fa fa-ico_history"></div></div>
     </div>
 </div>
 <div id="navigation_view" class="dock_view dock_view_navigator">
     <div class="dock_view_header">
         导航
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="navigation_bounding">
         <div class="navigation_view_container">
@@ -280,15 +282,15 @@
     <div class="navigation_view_bar">
         缩放：
         <div id="dock_zoom" class="spinner active"></div>
-        <div class="toolbar_button active" onclick="Dock.enterFullScreen()" title='全屏视图 (F11)'><div class="ico ico_fullscreen"></div></div>
-        <div class="toolbar_button active" onclick="Dock.enterPresentation()" title='演示视图 (F10)'><div class="ico ico_presentation"></div> </div>
+        <div class="toolbar_button active" onclick="Dock.enterFullScreen()" title='全屏视图 (F11)'><div class="fa fa-window-maximize"></div></div>
+        <div class="toolbar_button active" onclick="Dock.enterPresentation()" title='演示视图 (F10)'><div class="fa fa-ico_presentation"></div> </div>
     </div>
     <div id="fullscreen_tip" class="alert error">
-        <div class="ico dlg_close" onclick="$('#fullscreen_tip').hide();"></div>
+        <div class="fa fa-dlg_close" onclick="$('#fullscreen_tip').hide();"></div>
         <div class="t"></div>
         <div class="full_suggest"><span>我们推荐使用以下浏览器：</span>
-            <a href="http://www.google.com/chrome" target="_blank"><span class="ico chrome"></span></a>
-            <a href="http://www.firefox.com" target="_blank"><span class="ico firefox"></span></a>
+            <a href="http://www.google.com/chrome" target="_blank"><span class="fa fa-chrome"></span></a>
+            <a href="http://www.firefox.com" target="_blank"><span class="fa fa-firefox"></span></a>
         </div>
     </div>
 </div>
@@ -296,31 +298,31 @@
 <div class="dock_view dock_view_graphic">
     <div class="dock_view_header">
         图形
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="dock_content">
         <div class="dock_content_title">连线</div>
         <div id="dock_line_color" class="picker_btn btn_inline"></div>
         <div id="dock_line_style" class="toolbar_button drop_button active btn_inline" style="margin: 0px 0px 0px 10px">
-            <div class="ico linestyle linesolid"></div>
-            <div class="ico ico_dropdown"></div>
+            <i class="fa fa-linestyle linesolid"></i>
+            <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="dock_line_width" class="spinner active btn_inline" style="width: 82px; margin-left: 10px;"></div>
         <div style="clear: both"></div>
         <div class="dock_devider"></div>
         <div class="dock_content_title">填充样式</div>
-        <div id="dock_fill_type" class="toolbar_button active"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+        <div id="dock_fill_type" class="toolbar_button active"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
         <div class="fill_detail fill_detail_solid">
             <div id="fill_solid_btn" class="picker_btn"></div>
         </div>
         <div class="fill_detail fill_detail_gradient">
             <div id="fill_gradient_begin" c="255,255,255" class="picker_btn btn_inline"></div>
             <div id="gradient_swap" class="toolbar_button btn_normal btn_inline">
-                <div class="ico gradient_swap"></div>
+                <i class="fa fa-gradient_swap"></i>
             </div>
             <div id="fill_gradient_end" c="255,255,255" class="picker_btn btn_inline"></div>
             <div id="gradient_type" class="toolbar_button active btn_normal btn_inline" style="width: 100px;margin: 0px 0px 0px 10px;">
-                <div class="text_content"></div><div class="ico ico_dropdown"></div>
+                <text class="text_content"></text><div class="fa fa-angle-double-down"></div>
             </div>
             <div style="clear: both"></div>
             <div id="gradient_type_linear" class="gradient_details">
@@ -338,7 +340,7 @@
             <div style="height: 10px;"></div>
             显示方式：
             <div id="fill_img_display" class="toolbar_button active" style="width: 100px; display: inline-block;">
-                <div class="text_content"></div><div class="ico ico_dropdown"></div>
+                <text class="text_content"></text><div class="fa fa-angle-double-down"></div>
             </div>
         </div>
         <div class="dock_devider"></div>
@@ -349,7 +351,7 @@
 <div class="dock_view dock_view_metric">
     <div class="dock_view_header">
         度量
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="dock_content">
         <div class="dock_content_title">位置和大小</div>
@@ -371,15 +373,16 @@
 <div class="dock_view dock_view_page">
     <div class="dock_view_header">
         页面设置
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="dock_content">
         <div class="dock_content_title">页面</div>
         <div class="dock_label" style="width: 80px;">页面大小:</div>
-        <div id="dock_page_size" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+        <div id="dock_page_size" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;">
+             <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
         <div style="height: 10px; clear: both"></div>
         <div class="dock_label" style="width: 80px;">内边距:</div>
-        <div id="dock_page_padding" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+        <div id="dock_page_padding" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
         <div style="height: 10px; clear: both"></div>
         <div class="dock_label" style="width: 80px;">背景颜色:</div>
         <div id="dock_page_color" class="picker_btn btn_inline"></div>
@@ -389,7 +392,7 @@
         <input id="dock_page_showgrid" type="checkbox"/><label for="dock_page_showgrid">显示网格</label>
         <div id="dock_gridsize_box" style="margin-top: 10px;">
             <div class="dock_label">网格大小:</div>
-            <div id="dock_page_gridsize" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"><div class="text_content"></div><div class="ico ico_dropdown"></div></div>
+            <div id="dock_page_gridsize" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
             <div style="clear: both"></div>
         </div>
     </div>
@@ -397,7 +400,7 @@
 <div class="dock_view dock_view_attribute" style="width: 350px">
     <div class="dock_view_header">
         数据属性
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="dock_content" style="padding: 5px 0px 5px;">
         <div class="attr_add">
@@ -431,14 +434,14 @@
 <div class="dock_view dock_view_history">
     <div class="dock_view_header">
         历史版本
-        <div class="ico ico_dock_collapse"></div>
+        <i class="fa fa-ico_dock_collapse"></i>
     </div>
     <div class="dock_content" style="padding: 0px;">
         <div id="history_container" style="min-height: 120px;"></div>
         <div class="history_bar">
-            <div id="btn_history_restore" class="toolbar_button active disabled" title='恢复到此版本'><div class="ico ico_restore"></div></div>
+            <div id="btn_history_restore" class="toolbar_button active disabled" title='恢复到此版本'><div class="fa fa-ico_restore"></div></div>
             <div id="spinner_play_speed" class="spinner active disabled" style="width: 50px;"></div>
-            <div id="btn_history_play" class="toolbar_button active disabled" title='从此版本播放'><div class="ico ico_play"></div></div>
+            <div id="btn_history_play" class="toolbar_button active disabled" title='从此版本播放'><div class="fa fa-ico_play"></div></div>
         </div>
     </div>
 </div>
@@ -451,7 +454,7 @@
         </div>
         <div class="content_box">
             <div class="footer_left">
-                <div id="open_chat_btn" class="toolbar_button active" onclick="CLB.showChatWin()"><div class="ico ico_chat" style="float: left;"></div>聊天<div id="chat_prompt">0</div></div>
+                <div id="open_chat_btn" class="toolbar_button active" onclick="CLB.showChatWin()"><div class="fa fa-ico_chat" style="float: left;"></div>聊天<div id="chat_prompt">0</div></div>
 
                 <div class="footer_devider"></div>
                 <div id="collaborators">
@@ -462,13 +465,13 @@
                 </div>
 
 
-                <div class="toolbar_button" onclick="UI.showAddColla()"><div class="ico useradd" style="float: left;"></div>&nbsp;<b>邀请协作者</b></div>
+                <div class="toolbar_button" onclick="UI.showAddColla()"><div class="fa fa-useradd" style="float: left;"></div>&nbsp;<b>邀请协作者</b></div>
 
             </div>
             <ul class="footer_right">
-                <li class="footer_chrome"><a href="https://chrome.google.com/webstore/detail/processon-online-diagramm/pnggaliohjcaboolkcpjhfondbjlehkm" target="_blank"><span class="ico chrome"></span>安装到Chrome</a></li>
+                <li class="footer_chrome"><a href="https://chrome.google.com/webstore/detail/processon-online-diagramm/pnggaliohjcaboolkcpjhfondbjlehkm" target="_blank"><span class="fa fa-chrome"></span>安装到Chrome</a></li>
 
-                <li><a href="http://weibo.com/u/2711044785" target="_blank"><span class="ico weibo"></span>关注我们</a></li>
+                <li><a href="http://weibo.com/u/2711044785" target="_blank"><span class="fa fa-weibo"></span>关注我们</a></li>
 
                 <li><a href="/support" target="_blank">获取帮助</a></li>
                 <li class="footer_fb" onclick="UI.showFeedBack()">提交反馈</li>
@@ -497,21 +500,21 @@
     <li ac="close">关闭</li>
 </ul>
 <ul id="bar_list_edit" class="menu list options_menu">
-    <li ac="undo"><div class="ico undo"></div>撤销<div class="extend">Ctrl+Z</div></li>
-    <li ac="redo"><div class="ico redo"></div>恢复<div class="extend">Ctrl+Y</div></li>
+    <li ac="undo"><div class="fa fa-undo"></div>撤销<div class="extend">Ctrl+Z</div></li>
+    <li ac="redo"><div class="fa fa-redo"></div>恢复<div class="extend">Ctrl+Y</div></li>
     <li class="devider"></li>
-    <li ac="cut"><div class="ico cut"></div>剪切<div class="extend">Ctrl+X</div></li>
-    <li ac="copy"><div class="ico copy"></div>复制<div class="extend">Ctrl+C</div></li>
-    <li ac="paste"><div class="ico paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
+    <li ac="cut"><div class="fa fa-cut"></div>剪切<div class="extend">Ctrl+X</div></li>
+    <li ac="copy"><div class="fa fa-copy"></div>复制<div class="extend">Ctrl+C</div></li>
+    <li ac="paste"><div class="fa fa-paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
     <li ac="duplicate">复用<div class="extend">Ctrl+D</div></li>
-    <li ac="brush"><div class="ico brush"></div>格式刷<div class="extend">Ctrl+Shift+B</div></li>
+    <li ac="brush"><i class="fa fa-paint-brush"></i>格式刷<div class="extend">Ctrl+Shift+B</div></li>
     <li class="devider"></li>
     <li ac="selectall">全选<div class="extend">Ctrl+A</div></li>
-    <li ac="delete"><div class="ico remove"></div>删除<div class="extend">Delete/Backspace</div></li>
+    <li ac="delete"><div class="fa fa-remove"></div>删除<div class="extend">Delete/Backspace</div></li>
 </ul>
 <ul id="bar_list_view" class="menu list options_menu">
-    <li ac="zoom" zoom="in"><div class="ico zoomin"></div>放大<div class="extend">Ctrl+(&gt;)</div></li>
-    <li ac="zoom" zoom="out"><div class="ico zoomout"></div>缩小<div class="extend">Ctrl+(&lt;)</div></li>
+    <li ac="zoom" zoom="in"><div class="fa fa-zoomin"></div>放大<div class="extend">Ctrl+(&gt;)</div></li>
+    <li ac="zoom" zoom="out"><div class="fa fa-zoomout"></div>缩小<div class="extend">Ctrl+(&lt;)</div></li>
     <li class="devider"></li>
     <li ac="zoom" zoom="0.5" class="static">50%</li>
     <li ac="zoom" zoom="0.75" class="static">75%</li>
@@ -522,13 +525,13 @@
     <li ac="zoom" zoom="1">重置缩放</li>
 </ul>
 <ul id="bar_list_insert" class="menu list options_menu">
-    <li ac="insert" in="text"><div class="ico text"></div>文本<div class="extend">T</div></li>
-    <li ac="insert" in="image"><div class="ico ico_img"></div>图片<div class="extend">I</div></li>
-    <li ac="insert" in="line"><div class="ico linkertype_normal"></div>连线<div class="extend">L</div></li>
+    <li ac="insert" in="text"><div class="fa fa-text"></div>文本<div class="extend">T</div></li>
+    <li ac="insert" in="image"><div class="fa fa-ico_img"></div>图片<div class="extend">I</div></li>
+    <li ac="insert" in="line"><div class="fa fa-linkertype_normal"></div>连线<div class="extend">L</div></li>
 </ul>
 <ul id="bar_list_page" class="menu list options_menu">
     <li id="bar_page_color">
-        <div class="ico fillcolor"></div>
+        <i class="fa fa-fillcolor"></i>
         背景颜色<div class="extend ex_arrow">►</div>
     </li>
     <li>
@@ -544,7 +547,7 @@
         </ul>
     </li>
     <li>
-        <div class="ico padding"></div>
+        <i class="fa fa-padding"></i>
         内边距<div class="extend ex_arrow">►</div>
         <ul id="bar_list_padding" class="menu list extend_menu menu_ico">
             <li ac="set_page_padding" p="0">0px</li>
@@ -556,9 +559,9 @@
         </ul>
     </li>
     <li class="devider"></li>
-    <li ac="set_page_showgrid"><div class="ico ico_selected"></div>显示网格</li>
+    <li ac="set_page_showgrid"><div class="fa fa-ico_selected"></div>显示网格</li>
     <li>
-        <div class="ico gridsize"></div>
+        <i class="fa fa-gridsize"></i>
         网格大小<div class="extend ex_arrow">►</div>
         <ul id="bar_list_gridsize" class="menu list extend_menu menu_ico">
             <li ac="set_page_gridsize" s="10">小</li>
@@ -569,8 +572,8 @@
     </li>
 </ul>
 <ul id="bar_list_arrange" class="menu list options_menu">
-    <li ac="front"><div class="ico ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
-    <li ac="back"><div class="ico ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
+    <li ac="front"><div class="fa fa-ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
+    <li ac="back"><div class="fa fa-ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
     <li ac="forward">上移一层<div class="extend">Ctrl+Shift+]</div></li>
     <li ac="backward">下移一层<div class="extend">Ctrl+Shift+[</div></li>
     <li class="devider"></li>
@@ -603,8 +606,8 @@
         </ul>
     </li>
     <li class="devider"></li>
-    <li ac="lock"><div class="ico ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
-    <li ac="unlock"><div class="ico ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+    <li ac="lock"><div class="fa fa-ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
+    <li ac="unlock"><div class="fa fa-ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
     <li class="devider"></li>
     <li ac="group">组合<div class="extend">Ctrl+G</div></li>
     <li ac="ungroup">取消组合<div class="extend">Ctrl+Shift+G</div></li>
@@ -637,12 +640,12 @@
     <li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>14</li><li>18</li><li>24</li><li>30</li><li>36</li><li>48</li><li>60</li><li>72</li>
 </ul>
 <ul id="font_align_list" class="menu list" style="display: none;">
-    <li cate="textAlign" al="left"><div class="ico alignleft"></div></li>
-    <li cate="textAlign" al="center"><div class="ico aligncenter"></div></li>
-    <li cate="textAlign" al="right"><div class="ico alignright"></div></li>
-    <li cate="vAlign" al="top"><div class="ico aligntop"></div></li>
-    <li cate="vAlign" al="middle"><div class="ico alignmiddle"></div></li>
-    <li cate="vAlign" al="bottom"><div class="ico alignbottom"></div></li>
+    <li cate="textAlign" al="left"><div class="fa fa-alignleft"></div></li>
+    <li cate="textAlign" al="center"><div class="fa fa-aligncenter"></div></li>
+    <li cate="textAlign" al="right"><div class="fa fa-alignright"></div></li>
+    <li cate="vAlign" al="top"><div class="fa fa-aligntop"></div></li>
+    <li cate="vAlign" al="middle"><div class="fa fa-alignmiddle"></div></li>
+    <li cate="vAlign" al="bottom"><div class="fa fa-alignbottom"></div></li>
 </ul>
 <ul id="line_width_list" class="menu list menu_ico" style="display: none;">
     <li>0px</li>
@@ -656,37 +659,37 @@
     <li>10px</li>
 </ul>
 <ul id="line_style_list" class="menu list menu_ico" style="display: none;">
-    <li line="solid"><div class="ico linestyle linesolid"></div></li>
-    <li line="dashed"><div class="ico linestyle linedashed"></div></li>
-    <li line="dot"><div class="ico linestyle linedot"></div></li>
-    <li line="dashdot"><div class="ico linestyle linedashdot"></div></li>
+    <li line="solid"><div class="fa fa-linestyle linesolid"></div></li>
+    <li line="dashed"><div class="fa fa-linestyle linedashed"></div></li>
+    <li line="dot"><div class="fa fa-linestyle linedot"></div></li>
+    <li line="dashdot"><div class="fa fa-linestyle linedashdot"></div></li>
 </ul>
 <ul id="line_type_list" class="menu list" style="display: none;">
-    <li tp="broken"><div class="ico linkertype_broken"></div></li>
-    <li tp="curve"><div class="ico linkertype_curve"></div></li>
-    <li tp="normal"><div class="ico linkertype_normal"></div></li>
+    <li tp="broken"><div class="fa fa-linkertype_broken"></div></li>
+    <li tp="curve"><div class="fa fa-linkertype_curve"></div></li>
+    <li tp="normal"><div class="fa fa-linkertype_normal"></div></li>
 </ul>
 <ul id="beginarrow_list" class="menu list menu_ico" style="display: none;">
-    <li arrow="none"><div class="ico ico_arrow larrow_none"></div></li>
-    <li arrow="solidArrow"><div class="ico ico_arrow larrow_solidarrow"></div></li>
-    <li arrow="dashedArrow"><div class="ico ico_arrow larrow_dashedarrow"></div></li>
-    <li arrow="normal"><div class="ico ico_arrow larrow_normal"></div></li>
-    <li arrow="solidDiamond"><div class="ico ico_arrow larrow_soliddiamond"></div></li>
-    <li arrow="dashedDiamond"><div class="ico ico_arrow larrow_dasheddiamond"></div></li>
-    <li arrow="solidCircle"><div class="ico ico_arrow larrow_solidcircle"></div></li>
-    <li arrow="dashedCircle"><div class="ico ico_arrow larrow_dashedcircle"></div></li>
-    <li arrow="cross"><div class="ico ico_arrow larrow_cross"></div></li>
+    <li arrow="none"><div class="fa fa-ico_arrow larrow_none"></div></li>
+    <li arrow="solidArrow"><div class="fa fa-ico_arrow larrow_solidarrow"></div></li>
+    <li arrow="dashedArrow"><div class="fa fa-ico_arrow larrow_dashedarrow"></div></li>
+    <li arrow="normal"><div class="fa fa-ico_arrow larrow_normal"></div></li>
+    <li arrow="solidDiamond"><div class="fa fa-ico_arrow larrow_soliddiamond"></div></li>
+    <li arrow="dashedDiamond"><div class="fa fa-ico_arrow larrow_dasheddiamond"></div></li>
+    <li arrow="solidCircle"><div class="fa fa-ico_arrow larrow_solidcircle"></div></li>
+    <li arrow="dashedCircle"><div class="fa fa-ico_arrow larrow_dashedcircle"></div></li>
+    <li arrow="cross"><div class="fa fa-ico_arrow larrow_cross"></div></li>
 </ul>
 <ul id="endarrow_list" class="menu list menu_ico" style="display: none;">
-    <li arrow="none"><div class="ico ico_arrow rarrow_none"></div></li>
-    <li arrow="solidArrow"><div class="ico ico_arrow rarrow_solidarrow"></div></li>
-    <li arrow="dashedArrow"><div class="ico ico_arrow rarrow_dashedarrow"></div></li>
-    <li arrow="normal"><div class="ico ico_arrow rarrow_normal"></div></li>
-    <li arrow="solidDiamond"><div class="ico ico_arrow rarrow_soliddiamond"></div></li>
-    <li arrow="dashedDiamond"><div class="ico ico_arrow rarrow_dasheddiamond"></div></li>
-    <li arrow="solidCircle"><div class="ico ico_arrow rarrow_solidcircle"></div></li>
-    <li arrow="dashedCircle"><div class="ico ico_arrow rarrow_dashedcircle"></div></li>
-    <li arrow="cross"><div class="ico ico_arrow rarrow_cross"></div></li>
+    <li arrow="none"><div class="fa fa-ico_arrow rarrow_none"></div></li>
+    <li arrow="solidArrow"><div class="fa fa-ico_arrow rarrow_solidarrow"></div></li>
+    <li arrow="dashedArrow"><div class="fa fa-ico_arrow rarrow_dashedarrow"></div></li>
+    <li arrow="normal"><div class="fa fa-ico_arrow rarrow_normal"></div></li>
+    <li arrow="solidDiamond"><div class="fa fa-ico_arrow rarrow_soliddiamond"></div></li>
+    <li arrow="dashedDiamond"><div class="fa fa-ico_arrow rarrow_dasheddiamond"></div></li>
+    <li arrow="solidCircle"><div class="fa fa-ico_arrow rarrow_solidcircle"></div></li>
+    <li arrow="dashedCircle"><div class="fa fa-ico_arrow rarrow_dashedcircle"></div></li>
+    <li arrow="cross"><div class="fa fa-ico_arrow rarrow_cross"></div></li>
 </ul>
 <div id='hotkey_list' class='dialog'>
     <div class='dialog_header'>快捷键列表</div>
@@ -899,35 +902,35 @@
 <!-- Getting Started-->
 <div class="menu mark_content mark1_content">
     <div class="dialog_header">开始</div>
-    <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+    <div class="fa fa-dlg_close" onclick="UI.closeGettingStart()"></div>
     <div class="_content">把您想使用的图形拖到右侧画布上，创建图形就是如此简单。</div>
     <div class="arr-icon left"><div class="arr-border"></div><div class="inner-arr"></div></div>
     <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(2)">下一步</span></div>
 </div>
 <div class="menu mark_content mark2_content">
     <div class="dialog_header">菜单栏</div>
-    <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+    <div class="fa fa-dlg_close" onclick="UI.closeGettingStart()"></div>
     <div class="_content">通过这些菜单，您可以调整和设置图形的属性、样式，也可以管理您的文件。</div>
     <div class="arr-icon top"><div class="arr-border"></div><div class="inner-arr"></div></div>
     <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(3)">下一步</span></div>
 </div>
 <div class="menu mark_content mark3_content">
     <div class="dialog_header">属性工具栏</div>
-    <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+    <div class="fa fa-dlg_close" onclick="UI.closeGettingStart()"></div>
     <div class="_content">对选中的文本、图形、连线进行个性化设置，让他们看起来更漂亮。</div>
     <div class="arr-icon top"><div class="arr-border"></div><div class="inner-arr"></div></div>
     <div class="mark_next"><span class="designer_button normal" onclick="UI.showStartStep(4)">下一步</span></div>
 </div>
 <div class="menu mark_content mark4_content">
     <div class="dialog_header">属性面板</div>
-    <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+    <div class="fa fa-dlg_close" onclick="UI.closeGettingStart()"></div>
     <div class="_content">这些面板让您的绘制过程更方便、简单，使用之后，您一定会喜欢。</div>
     <div class="arr-icon right"><div class="arr-border"></div><div class="inner-arr"></div></div>
     <div class="mark_next"><span class="designer_button normal" onclick="UI.closeGettingStart()">关闭</span></div>
 </div>
 <div class="menu mark_content markcreated_content">
     <div class="dialog_header">编辑图形</div>
-    <div class="ico dlg_close" onclick="UI.closeGettingStart()"></div>
+    <div class="fa fa-dlg_close" onclick="UI.closeGettingStart()"></div>
     <div class="_content">
         <p>在图形边缘的任何地方点击并拖动，您可以创建出一条漂亮的连线。（小圆点是建议的连接点）</p><p>通过小的矩形控制点，您可以改变图形大小。（按住CTRL键可约束比例）</p><p>通过较大的圆点，对图形进行旋转。</p><p>双击可以编辑文本。（CTRL+ENTER保存文本）</p>
     </div>
