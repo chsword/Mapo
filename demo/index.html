@@ -5,12 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content='ProcessOn一款HTML5版的免费在线作图工具，无需下载和安装，点击即可使用；支持用户无延迟协作 和历史记录动画回放等，只需一个浏览器即可全部完成！轻松、简单、易用！' />
     <link type='text/css' rel='stylesheet' href="../lib/font-awesome/css/font-awesome.min.css"/>
-    <link type='text/css' rel='stylesheet' href="//at.alicdn.com/t/font_479180_1j6x9hr7jy8pvi.css"/>
-    
-
-
+    <link type='text/css' rel='stylesheet' href='//at.alicdn.com/t/font_479180_78kng56s8mm18aor.css'/>
     <link type='text/css' rel='stylesheet' href='../src/themes/default/global_zh.css?1387877189'/>
-
     <script type="text/javascript" src="../src/scripts/jquery.js"></script>
     <script type='text/javascript' charset='UTF-8' src='../src/js/util.js?1388393859'></script>
     <!-- <script type="text/javascript">
@@ -132,23 +128,36 @@
     </div>
     <div class="toolbar">
         <!-- Clipboard -->
-        <div id="bar_undo" class="toolbar_button" title='撤销 (Ctrl+Z)'><i class="fa fa-undo"></i></div>
-        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'><i class="iconfont icon-huifu"></i></div>
+        <div id="bar_undo" class="toolbar_button" title='撤销 (Ctrl+Z)'>
+            <i class="iconfont icon-undo"></i>
+        </div>
+        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'>
+            <i class="iconfont icon-redo"></i>
+        </div>
         <div id="bar_brush" class="toolbar_button" title='格式刷 (Ctrl+Shift+B)'>
-            <i class="iconfont icon-geshishua"></i></div>
+            <i class="iconfont icon-format"></i>
+            
+        </div>
         <div class="toolbar_devider"></div>
 
         <!-- Font -->
         <div id="bar_font_family" title='字体' class="toolbar_button" style="width: 80px;"><text class="text_content">Arial</text>
-            <i class="fa fa-angle-double-down"></i></div>
+            <i class="fa fa-angle-double-down"></i>
+        </div>
         <div class="toolbar_small_devider"></div>
         <div id="bar_font_size" title='字号' class="spinner" style="width: 50px;"></div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button"><i class="fa fa-bold"></i></div>
-        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button"><i class="fa fa-italic"></i></div>
-        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button"><i class="fa fa-underline"></i></div>
+        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button">
+            <i class="iconfont icon-bold"></i>
+        </div>
+        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button">
+            <i class="iconfont icon-italic"></i>
+        </div>
+        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button">
+            <i class="iconfont icon-underline"></i>
+        </div>
         <div id="bar_font_color" title='文本颜色' class="toolbar_button drop_button">
-            <i class="fa fa-font"></i>
+            <i class="iconfont icon-font"></i>
             <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
             <i class="fa fa-angle-double-down"></i>
         </div>
@@ -157,49 +166,58 @@
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
-
         <!-- Style -->
         <div id="bar_fill" title='填充样式' class="toolbar_button drop_button">
-            <i class="fa fa-fillcolor"></i>
+            <i class="iconfont icon-color"></i>            
             <div class="btn_color" style="background-color: rgb(255,255,255)"></div>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_color" title='线条颜色' class="toolbar_button drop_button">
-            <i class="fa fa-linecolor"></i>
+            <i class="iconfont icon-line-color"></i>
             <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_width" title='线宽' class="toolbar_button drop_button">
-            <i class="fa fa-linewidth"></i>
+            <i class="iconfont icon-line-width"></i>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_line_style" title='线条样式' class="toolbar_button drop_button">
-            <i class="fa fa-linedash"></i>
+            <i class="iconfont icon-line-style"></i>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
 
         <!-- Linker Style -->
         <div id="bar_linkertype" title='连线类型' class="toolbar_button drop_button">
-            <i class="fa fa-linkertype_broken"></i>
+            <i class="iconfont icon-line-link"></i>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_beginarrow" title='起点' class="toolbar_button drop_button">
-            <i class="fa fa-ico_arrow larrow_none"></i>
+            <i class="iconfont icon-line-start"></i>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div id="bar_endarrow" title='终点' class="toolbar_button drop_button">
-            <i class="fa fa-ico_arrow rarrow_none"></i>
+            <i class="iconfont icon-line-end"></i>
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
-        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button"><i class="fa fa-ico_front"></i></div>
-        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button"><i class="fa fa-ico_back"></i></div>
+        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button">
+            <i class="iconfont icon-control-top"></i>
+        </div>
+        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button">
+            <i class="iconfont icon-control-bottom"></i>
+        </div>
         <div class="toolbar_devider"></div>
-        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button"><i class="fa fa-ico_lock"></i></div>
-        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button"><i class="fa fa-ico_unlock"></i></div>
+        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button">
+            <i class="iconfont icon-lock"></i>
+        </div>
+        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button">
+            <i class="iconfont icon-unlock"></i>
+        </div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_link" title='插入链接' class="toolbar_button"><i class="fa fa-ico_link"></i></div>
+        <div id="bar_link" title='插入链接' class="toolbar_button">
+            <i class="iconfont icon-link"></i>
+        </div>
         <div class="toolbar_right">
             <div id="bar_collapse" class="toolbar_button"><i class="fa fa-collapse"></i></div>
         </div>
@@ -669,10 +687,10 @@
     <li>10px</li>
 </ul>
 <ul id="line_style_list" class="menu list menu_ico" style="display: none;">
-    <li line="solid"><i class="fa fa-linestyle linesolid"></i></li>
-    <li line="dashed"><i class="fa fa-linestyle linedashed"></i></li>
-    <li line="dot"><i class="fa fa-linestyle linedot"></i></li>
-    <li line="dashdot"><i class="fa fa-linestyle linedashdot"></i></li>
+    <li line="solid"><i class="iconfont icon-line-solid"></i></li>
+    <li line="dashed"><i class="iconfont icon-line-dashed"></i></li>
+    <li line="dot"><i class="iconfont icon-line-dotted"></i></li>
+    <li line="dashdot"><i class="iconfont icon-line-dashdot"></i></li>
 </ul>
 <ul id="line_type_list" class="menu list" style="display: none;">
     <li tp="broken"><i class="fa fa-linkertype_broken"></i></li>
