@@ -7,7 +7,7 @@
   "readme": "https://github.com/chsword/Mapo/blob/master/README.md",
   "description": "",
   "dependencies": {
-
+      "node-static":"0.7.10"
   },
   "devDependencies": {
 

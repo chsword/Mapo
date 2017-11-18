@@ -1,21 +1,19 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
-
     <title>未命名文件 - ProcessOn</title>
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content='ProcessOn一款HTML5版的免费在线作图工具，无需下载和安装，点击即可使用；支持用户无延迟协作 和历史记录动画回放等，只需一个浏览器即可全部完成！轻松、简单、易用！' />
     <link type='text/css' rel='stylesheet' href="../lib/font-awesome/css/font-awesome.min.css"/>
-
+    <link type='text/css' rel='stylesheet' href="//at.alicdn.com/t/font_479180_1j6x9hr7jy8pvi.css"/>
+    
 
 
     <link type='text/css' rel='stylesheet' href='../src/themes/default/global_zh.css?1387877189'/>
 
     <script type="text/javascript" src="../src/scripts/jquery.js"></script>
     <script type='text/javascript' charset='UTF-8' src='../src/js/util.js?1388393859'></script>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         //Google Anlytics
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-28802488-1']);
@@ -31,7 +29,7 @@
         if(isIE6){
             window.location.href="/browser_not_support";
         }
-    </script>
+    </script> -->
 
 
 
@@ -81,7 +79,7 @@
         var userName = "softfn";
         var time = "1388644792184";
     </script>
-    <!-- <script type='text/javascript' charset='UTF-8' src='../src/js/diagraming/collaboration.js?1388398162'></script> -->
+    <script type='text/javascript' charset='UTF-8' src='../src/js/diagraming/collaboration.js?1388398162'></script>
     <script type='text/javascript' charset='UTF-8' src='../src/js/diagraming/designer.core.js?1387181926'></script>
     <script type='text/javascript' charset='UTF-8' src='../src/js/diagraming/designer.methods.js?1384420314'></script>
     <script type='text/javascript' charset='UTF-8' src='../src/js/diagraming/designer.events.js?1386231406'></script>
@@ -135,9 +133,9 @@
     <div class="toolbar">
         <!-- Clipboard -->
         <div id="bar_undo" class="toolbar_button" title='撤销 (Ctrl+Z)'><i class="fa fa-undo"></i></div>
-        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'><i class="fa fa-redo"></i></div>
+        <div id="bar_redo" class="toolbar_button" title='恢复 (Ctrl+Y)'><i class="iconfont icon-huifu"></i></div>
         <div id="bar_brush" class="toolbar_button" title='格式刷 (Ctrl+Shift+B)'>
-            <i class="fa fa-paint-brush"></i></div>
+            <i class="iconfont icon-geshishua"></i></div>
         <div class="toolbar_devider"></div>
 
         <!-- Font -->
@@ -146,9 +144,9 @@
         <div class="toolbar_small_devider"></div>
         <div id="bar_font_size" title='字号' class="spinner" style="width: 50px;"></div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button"><div class="fa fa-bold"></div></div>
-        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button"><div class="fa fa-italic"></div></div>
-        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button"><div class="fa fa-underline"></div></div>
+        <div id="bar_font_bold" title='粗体 (Ctrl+B)' class="toolbar_button"><i class="fa fa-bold"></i></div>
+        <div id="bar_font_italic" title='斜体 (Ctrl+I)' class="toolbar_button"><i class="fa fa-italic"></i></div>
+        <div id="bar_font_underline" title='下划线 (Ctrl+U)' class="toolbar_button"><i class="fa fa-underline"></i></div>
         <div id="bar_font_color" title='文本颜色' class="toolbar_button drop_button">
             <i class="fa fa-font"></i>
             <div class="btn_color" style="background-color: rgb(50,50,50)"></div>
@@ -195,15 +193,15 @@
             <i class="fa fa-angle-double-down"></i>
         </div>
         <div class="toolbar_devider"></div>
-        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button"><div class="fa fa-ico_front"></div></div>
-        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button"><div class="fa fa-ico_back"></div></div>
+        <div id="bar_front" title='置于顶层 (Ctrl+] )' class="toolbar_button"><i class="fa fa-ico_front"></i></div>
+        <div id="bar_back" title='置于底层 (Ctrl+[ )' class="toolbar_button"><i class="fa fa-ico_back"></i></div>
         <div class="toolbar_devider"></div>
-        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button"><div class="fa fa-ico_lock"></div></div>
-        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button"><div class="fa fa-ico_unlock"></div></div>
+        <div id="bar_lock" title='锁定 (Ctrl+L)' class="toolbar_button"><i class="fa fa-ico_lock"></i></div>
+        <div id="bar_unlock" title='解锁 (Ctrl+Shift+L)' class="toolbar_button"><i class="fa fa-ico_unlock"></i></div>
         <div class="toolbar_small_devider"></div>
-        <div id="bar_link" title='插入链接' class="toolbar_button"><div class="fa fa-ico_link"></div></div>
+        <div id="bar_link" title='插入链接' class="toolbar_button"><i class="fa fa-ico_link"></i></div>
         <div class="toolbar_right">
-            <div id="bar_collapse" class="toolbar_button"><div class="fa fa-collapse"></div></div>
+            <div id="bar_collapse" class="toolbar_button"><i class="fa fa-collapse"></i></div>
         </div>
         <a id="bar_return" class="toolbar_button" href="/diagraming/back?id=52c5096c0cf22b592924695d" title='返回'><span class="fa fa-ico_goback"></span></a>
     </div>
@@ -218,15 +216,15 @@
         <div id="designer_canvas">
             <canvas id="designer_grids"></canvas>
             <ul id="designer_contextmenu" class="menu list options_menu">
-                <li ac="cut"><div class="fa fa-cut"></div>剪切<div class="extend">Ctrl+X</div></li>
-                <li ac="copy"><div class="fa fa-copy"></div>复制<div class="extend">Ctrl+C</div></li>
-                <li ac="paste"><div class="fa fa-paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
+                <li ac="cut"><i class="fa fa-cut"></i>剪切<div class="extend">Ctrl+X</div></li>
+                <li ac="copy"><i class="fa fa-copy"></i>复制<div class="extend">Ctrl+C</div></li>
+                <li ac="paste"><i class="fa fa-paste"></i>粘贴<div class="extend">Ctrl+V</div></li>
                 <li ac="duplicate">复用<div class="extend">Ctrl+D</div></li>
                 <li class="devider devi_clip"></li>
-                <li ac="front"><div class="fa fa-ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
-                <li ac="back"><div class="fa fa-ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
-                <li ac="lock"><div class="fa fa-ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
-                <li ac="unlock"><div class="fa fa-ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+                <li ac="front"><i class="fa fa-ico_front"></i>置于顶层<div class="extend">Ctrl+]</div></li>
+                <li ac="back"><i class="fa fa-ico_back"></i>置于底层<div class="extend">Ctrl+[</div></li>
+                <li ac="lock"><i class="fa fa-ico_lock"></i>锁定<div class="extend">Ctrl+L</div></li>
+                <li ac="unlock"><i class="fa fa-ico_unlock"></i>解锁<div class="extend">Ctrl+Shift+L</div></li>
                 <li ac="group">组合<div class="extend">Ctrl+G</div></li>
                 <li ac="ungroup">取消组合<div class="extend">Ctrl+Shift+G</div></li>
                 <li id="ctxmenu_align">
@@ -242,13 +240,13 @@
                     </ul>
                 </li>
                 <li class="devider devi_shape"></li>
-                <li ac="changelink"><div class="fa fa-ico_link"></div>修改链接</li>
-                <li ac="edit"><div class="fa fa-edittext"></div>编辑文本<div class="extend">空格</div></li>
-                <li ac="delete"><div class="fa fa-remove"></div>删除<div class="extend">Delete/Backspace</div></li>
+                <li ac="changelink"><i class="fa fa-ico_link"></i>修改链接</li>
+                <li ac="edit"><i class="fa fa-edittext"></i>编辑文本<div class="extend">空格</div></li>
+                <li ac="delete"><i class="fa fa-remove"></i>删除<div class="extend">Delete/Backspace</div></li>
                 <li class="devider devi_del"></li>
                 <li ac="selectall">全选<div class="extend">Ctrl+A</div></li>
                 <li class="devider devi_selectall"></li>
-                <li ac="drawline"><div class="fa fa-linkertype_normal"></div>创建连线<div class="extend">L</div></li>
+                <li ac="drawline"><i class="fa fa-linkertype_normal"></i>创建连线<div class="extend">L</div></li>
             </ul>
         </div>
     </div>
@@ -259,12 +257,24 @@
 <div id="dock">
     <div class="dock_header"></div>
     <div class="dock_buttons">
-        <div id="dock_btn_navigator" title="导航" disableTitle="true" class="toolbar_button selected" onclick="Dock.showView('navigator')"><div class="fa fa-ico_dock_nav"></div></div>
-        <div id="dock_btn_graphic" title="图形" disableTitle="true" class="toolbar_button" onclick="Dock.showView('graphic')"><div class="fa fa-ico_dock_styles"></div></div>
-        <div id="dock_btn_metric" title="度量" disableTitle="true" class="toolbar_button" onclick="Dock.showView('metric')"><div class="fa fa-ico_dock_metric"></div></div>
-        <div id="dock_btn_attribute" title="数据属性" disableTitle="true" class="toolbar_button" onclick="Dock.showView('attribute')"><div class="fa fa-ico_dock_attribute"></div></div>
-        <div id="dock_btn_page" title="页面设置" disableTitle="true" class="toolbar_button" onclick="Dock.showView('page')"><div class="fa fa-ico_dock_page"></div></div>
-        <div id="dock_btn_history" title="历史版本" disableTitle="true" class="toolbar_button" onclick="Dock.showView('history')"><div class="fa fa-ico_history"></div></div>
+        <div id="dock_btn_navigator" title="导航" disableTitle="true" class="toolbar_button selected" onclick="Dock.showView('navigator')">
+            <i class="fa fa-window-restore"></i>
+        </div>
+        <div id="dock_btn_graphic" title="图形" disableTitle="true" class="toolbar_button" onclick="Dock.showView('graphic')">
+            <i class="fa fa-credit-card"></i>
+        </div>
+        <div id="dock_btn_metric" title="度量" disableTitle="true" class="toolbar_button" onclick="Dock.showView('metric')">
+            <i class="fa fa-expand"></i>
+        </div>
+        <div id="dock_btn_attribute" title="数据属性" disableTitle="true" class="toolbar_button" onclick="Dock.showView('attribute')">
+            <i class="fa fa-code"></i>
+        </div>
+        <div id="dock_btn_page" title="页面设置" disableTitle="true" class="toolbar_button" onclick="Dock.showView('page')">
+            <i class="fa fa-cog"></i>
+        </div>
+        <div id="dock_btn_history" title="历史版本" disableTitle="true" class="toolbar_button" onclick="Dock.showView('history')">
+            <i class="fa fa-history"></i>
+        </div>
     </div>
 </div>
 <div id="navigation_view" class="dock_view dock_view_navigator">
@@ -282,8 +292,8 @@
     <div class="navigation_view_bar">
         缩放：
         <div id="dock_zoom" class="spinner active"></div>
-        <div class="toolbar_button active" onclick="Dock.enterFullScreen()" title='全屏视图 (F11)'><div class="fa fa-window-maximize"></div></div>
-        <div class="toolbar_button active" onclick="Dock.enterPresentation()" title='演示视图 (F10)'><div class="fa fa-ico_presentation"></div> </div>
+        <div class="toolbar_button active" onclick="Dock.enterFullScreen()" title='全屏视图 (F11)'><i class="fa fa-window-maximize"></i></div>
+        <div class="toolbar_button active" onclick="Dock.enterPresentation()" title='演示视图 (F10)'><i class="fa fa-ico_presentation"></i> </div>
     </div>
     <div id="fullscreen_tip" class="alert error">
         <div class="fa fa-dlg_close" onclick="$('#fullscreen_tip').hide();"></div>
@@ -311,7 +321,7 @@
         <div style="clear: both"></div>
         <div class="dock_devider"></div>
         <div class="dock_content_title">填充样式</div>
-        <div id="dock_fill_type" class="toolbar_button active"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
+        <div id="dock_fill_type" class="toolbar_button active"> <text class="text_content"></text><i class="fa fa-angle-double-down"></i></div>
         <div class="fill_detail fill_detail_solid">
             <div id="fill_solid_btn" class="picker_btn"></div>
         </div>
@@ -322,7 +332,7 @@
             </div>
             <div id="fill_gradient_end" c="255,255,255" class="picker_btn btn_inline"></div>
             <div id="gradient_type" class="toolbar_button active btn_normal btn_inline" style="width: 100px;margin: 0px 0px 0px 10px;">
-                <text class="text_content"></text><div class="fa fa-angle-double-down"></div>
+                <text class="text_content"></text><i class="fa fa-angle-double-down"></i>
             </div>
             <div style="clear: both"></div>
             <div id="gradient_type_linear" class="gradient_details">
@@ -340,7 +350,7 @@
             <div style="height: 10px;"></div>
             显示方式：
             <div id="fill_img_display" class="toolbar_button active" style="width: 100px; display: inline-block;">
-                <text class="text_content"></text><div class="fa fa-angle-double-down"></div>
+                <text class="text_content"></text><i class="fa fa-angle-double-down"></i>
             </div>
         </div>
         <div class="dock_devider"></div>
@@ -379,10 +389,10 @@
         <div class="dock_content_title">页面</div>
         <div class="dock_label" style="width: 80px;">页面大小:</div>
         <div id="dock_page_size" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;">
-             <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
+             <text class="text_content"></text><i class="fa fa-angle-double-down"></i></div>
         <div style="height: 10px; clear: both"></div>
         <div class="dock_label" style="width: 80px;">内边距:</div>
-        <div id="dock_page_padding" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
+        <div id="dock_page_padding" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><i class="fa fa-angle-double-down"></i></div>
         <div style="height: 10px; clear: both"></div>
         <div class="dock_label" style="width: 80px;">背景颜色:</div>
         <div id="dock_page_color" class="picker_btn btn_inline"></div>
@@ -392,7 +402,7 @@
         <input id="dock_page_showgrid" type="checkbox"/><label for="dock_page_showgrid">显示网格</label>
         <div id="dock_gridsize_box" style="margin-top: 10px;">
             <div class="dock_label">网格大小:</div>
-            <div id="dock_page_gridsize" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><div class="fa fa-angle-double-down"></div></div>
+            <div id="dock_page_gridsize" class="toolbar_button active btn_inline" style="width: 110px;display: inline-block;"> <text class="text_content"></text><i class="fa fa-angle-double-down"></i></div>
             <div style="clear: both"></div>
         </div>
     </div>
@@ -439,9 +449,9 @@
     <div class="dock_content" style="padding: 0px;">
         <div id="history_container" style="min-height: 120px;"></div>
         <div class="history_bar">
-            <div id="btn_history_restore" class="toolbar_button active disabled" title='恢复到此版本'><div class="fa fa-ico_restore"></div></div>
+            <div id="btn_history_restore" class="toolbar_button active disabled" title='恢复到此版本'><i class="fa fa-ico_restore"></i></div>
             <div id="spinner_play_speed" class="spinner active disabled" style="width: 50px;"></div>
-            <div id="btn_history_play" class="toolbar_button active disabled" title='从此版本播放'><div class="fa fa-ico_play"></div></div>
+            <div id="btn_history_play" class="toolbar_button active disabled" title='从此版本播放'><i class="fa fa-ico_play"></i></div>
         </div>
     </div>
 </div>
@@ -500,21 +510,21 @@
     <li ac="close">关闭</li>
 </ul>
 <ul id="bar_list_edit" class="menu list options_menu">
-    <li ac="undo"><div class="fa fa-undo"></div>撤销<div class="extend">Ctrl+Z</div></li>
-    <li ac="redo"><div class="fa fa-redo"></div>恢复<div class="extend">Ctrl+Y</div></li>
+    <li ac="undo"><i class="fa fa-undo"></i>撤销<div class="extend">Ctrl+Z</div></li>
+    <li ac="redo"><i class="fa fa-redo"></i>恢复<div class="extend">Ctrl+Y</div></li>
     <li class="devider"></li>
-    <li ac="cut"><div class="fa fa-cut"></div>剪切<div class="extend">Ctrl+X</div></li>
-    <li ac="copy"><div class="fa fa-copy"></div>复制<div class="extend">Ctrl+C</div></li>
-    <li ac="paste"><div class="fa fa-paste"></div>粘贴<div class="extend">Ctrl+V</div></li>
+    <li ac="cut"><i class="fa fa-cut"></i>剪切<div class="extend">Ctrl+X</div></li>
+    <li ac="copy"><i class="fa fa-copy"></i>复制<div class="extend">Ctrl+C</div></li>
+    <li ac="paste"><i class="fa fa-paste"></i>粘贴<div class="extend">Ctrl+V</div></li>
     <li ac="duplicate">复用<div class="extend">Ctrl+D</div></li>
     <li ac="brush"><i class="fa fa-paint-brush"></i>格式刷<div class="extend">Ctrl+Shift+B</div></li>
     <li class="devider"></li>
     <li ac="selectall">全选<div class="extend">Ctrl+A</div></li>
-    <li ac="delete"><div class="fa fa-remove"></div>删除<div class="extend">Delete/Backspace</div></li>
+    <li ac="delete"><i class="fa fa-remove"></i>删除<div class="extend">Delete/Backspace</div></li>
 </ul>
 <ul id="bar_list_view" class="menu list options_menu">
-    <li ac="zoom" zoom="in"><div class="fa fa-zoomin"></div>放大<div class="extend">Ctrl+(&gt;)</div></li>
-    <li ac="zoom" zoom="out"><div class="fa fa-zoomout"></div>缩小<div class="extend">Ctrl+(&lt;)</div></li>
+    <li ac="zoom" zoom="in"><i class="fa fa-zoomin"></i>放大<div class="extend">Ctrl+(&gt;)</div></li>
+    <li ac="zoom" zoom="out"><i class="fa fa-zoomout"></i>缩小<div class="extend">Ctrl+(&lt;)</div></li>
     <li class="devider"></li>
     <li ac="zoom" zoom="0.5" class="static">50%</li>
     <li ac="zoom" zoom="0.75" class="static">75%</li>
@@ -525,9 +535,9 @@
     <li ac="zoom" zoom="1">重置缩放</li>
 </ul>
 <ul id="bar_list_insert" class="menu list options_menu">
-    <li ac="insert" in="text"><div class="fa fa-text"></div>文本<div class="extend">T</div></li>
-    <li ac="insert" in="image"><div class="fa fa-ico_img"></div>图片<div class="extend">I</div></li>
-    <li ac="insert" in="line"><div class="fa fa-linkertype_normal"></div>连线<div class="extend">L</div></li>
+    <li ac="insert" in="text"><i class="fa fa-text"></i>文本<div class="extend">T</div></li>
+    <li ac="insert" in="image"><i class="fa fa-ico_img"></i>图片<div class="extend">I</div></li>
+    <li ac="insert" in="line"><i class="fa fa-linkertype_normal"></i>连线<div class="extend">L</div></li>
 </ul>
 <ul id="bar_list_page" class="menu list options_menu">
     <li id="bar_page_color">
@@ -559,7 +569,7 @@
         </ul>
     </li>
     <li class="devider"></li>
-    <li ac="set_page_showgrid"><div class="fa fa-ico_selected"></div>显示网格</li>
+    <li ac="set_page_showgrid"><i class="fa fa-ico_selected"></i>显示网格</li>
     <li>
         <i class="fa fa-gridsize"></i>
         网格大小<div class="extend ex_arrow">►</div>
@@ -572,8 +582,8 @@
     </li>
 </ul>
 <ul id="bar_list_arrange" class="menu list options_menu">
-    <li ac="front"><div class="fa fa-ico_front"></div>置于顶层<div class="extend">Ctrl+]</div></li>
-    <li ac="back"><div class="fa fa-ico_back"></div>置于底层<div class="extend">Ctrl+[</div></li>
+    <li ac="front"><i class="fa fa-ico_front"></i>置于顶层<div class="extend">Ctrl+]</div></li>
+    <li ac="back"><i class="fa fa-ico_back"></i>置于底层<div class="extend">Ctrl+[</div></li>
     <li ac="forward">上移一层<div class="extend">Ctrl+Shift+]</div></li>
     <li ac="backward">下移一层<div class="extend">Ctrl+Shift+[</div></li>
     <li class="devider"></li>
@@ -606,8 +616,8 @@
         </ul>
     </li>
     <li class="devider"></li>
-    <li ac="lock"><div class="fa fa-ico_lock"></div>锁定<div class="extend">Ctrl+L</div></li>
-    <li ac="unlock"><div class="fa fa-ico_unlock"></div>解锁<div class="extend">Ctrl+Shift+L</div></li>
+    <li ac="lock"><i class="fa fa-ico_lock"></i>锁定<div class="extend">Ctrl+L</div></li>
+    <li ac="unlock"><i class="fa fa-ico_unlock"></i>解锁<div class="extend">Ctrl+Shift+L</div></li>
     <li class="devider"></li>
     <li ac="group">组合<div class="extend">Ctrl+G</div></li>
     <li ac="ungroup">取消组合<div class="extend">Ctrl+Shift+G</div></li>
@@ -640,12 +650,12 @@
     <li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>14</li><li>18</li><li>24</li><li>30</li><li>36</li><li>48</li><li>60</li><li>72</li>
 </ul>
 <ul id="font_align_list" class="menu list" style="display: none;">
-    <li cate="textAlign" al="left"><div class="fa fa-alignleft"></div></li>
-    <li cate="textAlign" al="center"><div class="fa fa-aligncenter"></div></li>
-    <li cate="textAlign" al="right"><div class="fa fa-alignright"></div></li>
-    <li cate="vAlign" al="top"><div class="fa fa-aligntop"></div></li>
-    <li cate="vAlign" al="middle"><div class="fa fa-alignmiddle"></div></li>
-    <li cate="vAlign" al="bottom"><div class="fa fa-alignbottom"></div></li>
+    <li cate="textAlign" al="left"><i class="fa fa-align-left"></i></li>
+    <li cate="textAlign" al="center"><i class="fa fa-align-center"></i></li>
+    <li cate="textAlign" al="right"><i class="fa fa-align-right"></i></li>
+    <li cate="vAlign" al="top"><i class="iconfont icon-aligntop"></i></li>
+    <li cate="vAlign" al="middle"><i class="iconfont icon-alignmiddle"></i></li>
+    <li cate="vAlign" al="bottom"><i class="iconfont icon-alignbottom"></i></li>
 </ul>
 <ul id="line_width_list" class="menu list menu_ico" style="display: none;">
     <li>0px</li>
@@ -659,37 +669,37 @@
     <li>10px</li>
 </ul>
 <ul id="line_style_list" class="menu list menu_ico" style="display: none;">
-    <li line="solid"><div class="fa fa-linestyle linesolid"></div></li>
-    <li line="dashed"><div class="fa fa-linestyle linedashed"></div></li>
-    <li line="dot"><div class="fa fa-linestyle linedot"></div></li>
-    <li line="dashdot"><div class="fa fa-linestyle linedashdot"></div></li>
+    <li line="solid"><i class="fa fa-linestyle linesolid"></i></li>
+    <li line="dashed"><i class="fa fa-linestyle linedashed"></i></li>
+    <li line="dot"><i class="fa fa-linestyle linedot"></i></li>
+    <li line="dashdot"><i class="fa fa-linestyle linedashdot"></i></li>
 </ul>
 <ul id="line_type_list" class="menu list" style="display: none;">
-    <li tp="broken"><div class="fa fa-linkertype_broken"></div></li>
-    <li tp="curve"><div class="fa fa-linkertype_curve"></div></li>
-    <li tp="normal"><div class="fa fa-linkertype_normal"></div></li>
+    <li tp="broken"><i class="fa fa-linkertype_broken"></i></li>
+    <li tp="curve"><i class="fa fa-linkertype_curve"></i></li>
+    <li tp="normal"><i class="fa fa-linkertype_normal"></i></li>
 </ul>
 <ul id="beginarrow_list" class="menu list menu_ico" style="display: none;">
-    <li arrow="none"><div class="fa fa-ico_arrow larrow_none"></div></li>
-    <li arrow="solidArrow"><div class="fa fa-ico_arrow larrow_solidarrow"></div></li>
-    <li arrow="dashedArrow"><div class="fa fa-ico_arrow larrow_dashedarrow"></div></li>
-    <li arrow="normal"><div class="fa fa-ico_arrow larrow_normal"></div></li>
-    <li arrow="solidDiamond"><div class="fa fa-ico_arrow larrow_soliddiamond"></div></li>
-    <li arrow="dashedDiamond"><div class="fa fa-ico_arrow larrow_dasheddiamond"></div></li>
-    <li arrow="solidCircle"><div class="fa fa-ico_arrow larrow_solidcircle"></div></li>
-    <li arrow="dashedCircle"><div class="fa fa-ico_arrow larrow_dashedcircle"></div></li>
-    <li arrow="cross"><div class="fa fa-ico_arrow larrow_cross"></div></li>
+    <li arrow="none"><i class="fa fa-ico_arrow larrow_none"></i></li>
+    <li arrow="solidArrow"><i class="fa fa-ico_arrow larrow_solidarrow"></i></li>
+    <li arrow="dashedArrow"><i class="fa fa-ico_arrow larrow_dashedarrow"></i></li>
+    <li arrow="normal"><i class="fa fa-ico_arrow larrow_normal"></i></li>
+    <li arrow="solidDiamond"><i class="fa fa-ico_arrow larrow_soliddiamond"></i></li>
+    <li arrow="dashedDiamond"><i class="fa fa-ico_arrow larrow_dasheddiamond"></i></li>
+    <li arrow="solidCircle"><i class="fa fa-ico_arrow larrow_solidcircle"></i></li>
+    <li arrow="dashedCircle"><i class="fa fa-ico_arrow larrow_dashedcircle"></i></li>
+    <li arrow="cross"><i class="fa fa-ico_arrow larrow_cross"></i></li>
 </ul>
 <ul id="endarrow_list" class="menu list menu_ico" style="display: none;">
-    <li arrow="none"><div class="fa fa-ico_arrow rarrow_none"></div></li>
-    <li arrow="solidArrow"><div class="fa fa-ico_arrow rarrow_solidarrow"></div></li>
-    <li arrow="dashedArrow"><div class="fa fa-ico_arrow rarrow_dashedarrow"></div></li>
-    <li arrow="normal"><div class="fa fa-ico_arrow rarrow_normal"></div></li>
-    <li arrow="solidDiamond"><div class="fa fa-ico_arrow rarrow_soliddiamond"></div></li>
-    <li arrow="dashedDiamond"><div class="fa fa-ico_arrow rarrow_dasheddiamond"></div></li>
-    <li arrow="solidCircle"><div class="fa fa-ico_arrow rarrow_solidcircle"></div></li>
-    <li arrow="dashedCircle"><div class="fa fa-ico_arrow rarrow_dashedcircle"></div></li>
-    <li arrow="cross"><div class="fa fa-ico_arrow rarrow_cross"></div></li>
+    <li arrow="none"><i class="fa fa-ico_arrow rarrow_none"></i></li>
+    <li arrow="solidArrow"><i class="fa fa-ico_arrow rarrow_solidarrow"></i></li>
+    <li arrow="dashedArrow"><i class="fa fa-ico_arrow rarrow_dashedarrow"></i></li>
+    <li arrow="normal"><i class="fa fa-ico_arrow rarrow_normal"></i></li>
+    <li arrow="solidDiamond"><i class="fa fa-ico_arrow rarrow_soliddiamond"></i></li>
+    <li arrow="dashedDiamond"><i class="fa fa-ico_arrow rarrow_dasheddiamond"></i></li>
+    <li arrow="solidCircle"><i class="fa fa-ico_arrow rarrow_solidcircle"></i></li>
+    <li arrow="dashedCircle"><i class="fa fa-ico_arrow rarrow_dashedcircle"></i></li>
+    <li arrow="cross"><i class="fa fa-ico_arrow rarrow_cross"></i></li>
 </ul>
 <div id='hotkey_list' class='dialog'>
     <div class='dialog_header'>快捷键列表</div>

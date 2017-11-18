@@ -70,6 +70,7 @@ var CLB = {
 		if(CLB.connection != null){
 			return;
 		}
+		return;
 		CLB.connection = $.ajax({
 			url: "/diagraming/listen",
 			data: {
@@ -161,6 +162,7 @@ var CLB = {
 	 * @param {} 是否进入消息队列，进行等待处理
 	 */
 	send: function(msg, enterQueue){
+		return;
 		var params = {
 			userId: userId,
 			clientId: CLB.clientId,
@@ -183,6 +185,7 @@ var CLB = {
 	 * @param {} messages 发送的消息，如果不存在此参数，发送messageQueue中的消息，存在的话直接发送
 	 */
 	doSend: function(messages){
+		return;
 		var msgStr;
 		if(typeof messages == "undefined"){
 			if(this.messageQueue.length == 0){
@@ -217,6 +220,7 @@ var CLB = {
 	 * @param {} msg
 	 */
 	onMessage: function(messages){
+		return;
 		for(var i = 0; i < messages.length; i++){
 			var msg = messages[i];
 			var action = msg.action;
