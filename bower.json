@@ -2,8 +2,9 @@
   "name": "mapo",
   "private": true,
   "dependencies": {
-   "jquery": "*",
-   "font-awesome":"latest"
+   "jquery":"3.2.1",
+   "font-awesome":"4.7.0",
+   "vue":"2.5.8"
   },
   "devDependencies": {},
   "license": "https://github.com/chsword/Mapo/blob/master/LICENSE",
