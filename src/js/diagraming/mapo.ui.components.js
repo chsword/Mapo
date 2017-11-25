@@ -6,51 +6,59 @@
 	 * 按钮
 	 */
 	$.fn.button = function(options){
-		if(typeof options == "string"){
-			if(options == "disable"){
-				$(this).addClass("disabled");
-				$(this).find("input").attr("disabled", true);
-			}else if(options == "enable"){
-				$(this).removeClass("disabled");
-				$(this).find("input").attr("disabled", false);
-			}else if(options == "isDisabled"){
-				return $(this).hasClass("disabled");
-			}else if(options == "isSelected"){
-				return $(this).hasClass("selected");
-			}else if(options == "unselect"){
-				$(this).removeClass("selected");
-			}else if(options == "select"){
-				$(this).addClass("selected");
-			}else if(options == "setText"){
-				$(this).children(".text_content").html(arguments[1]);
-			}else if(options == "setColor"){
-				$(this).children(".btn_color").css("background-color", "rgb(" + arguments[1] + ")");
-			}else if(options == "getColor"){
-				var color = $(this).children(".btn_color").css("background-color").replace(/\s/g, "");
+		var target = $(this);
+		if (options) {
+			target.unbind("click").unbind("mousedown");
+			if (options.onClick) {
+				target.bind("click", function () {
+					if (target.button().isDisabled()) {
+						return;
+					}
+					options.onClick();
+				});
+			}
+			if (options.onMousedown) {
+				target.bind("mousedown", function (e) {
+					if (target.button().isDisabled()) {
+						return;
+					}
+					options.onMousedown();
+					e.stopPropagation();
+				});
+			}
+		}
+		return {
+			"disable": function () {
+				target.addClass("disabled");
+				target.find("input").prop("disabled", true);
+			},
+			"enable": function () {
+				target.removeClass("disabled");
+				target.find("input").prop("disabled", false);
+			},
+			"isDisabled": function () {
+				return target.hasClass("disabled");
+			},
+			"isSelected": function () {
+				return target.hasClass("selected");
+			},
+			 "unselect": function () {
+				target.removeClass("selected");
+			}, 
+			"select": function () {
+				target.addClass("selected");
+			},
+			 "setText": function (text) {
+				target.children(".text_content").html(text);//arguments[1]
+			},
+			 "setColor": function (color) {
+				target.children(".btn_color").css("background-color", "rgb(" + color + ")");//arguments[1]
+			}, 
+			"getColor": function () {
+				var color = target.children(".btn_color").css("background-color").replace(/\s/g, "");
 				return color.substring(4, color.length - 1);
 			}
-			return $(this);
-		}
-		var target = $(this);
-		target.unbind("click");
-		target.unbind("mousedown")
-		if(options.onClick){
-			target.bind("click", function(){
-				if(target.button("isDisabled")){
-					return;
-				}
-				options.onClick();
-			});
-		}
-		if(options.onMousedown){
-			target.bind("mousedown", function(e){
-				if(target.button("isDisabled")){
-					return;
-				}
-				options.onMousedown();
-				e.stopPropagation();
-			});
-		}
+		};
 	};
 	var currentMenu = null;
 	//下拉控件
@@ -152,36 +160,38 @@
 		if(options.extend){
 			$("#color_picker").append("<div class='color_extend'>"+options.extend+"</div>")
 		}
+		//return $(this);
 	};
 	//颜色按钮
 	$.fn.colorButton = function(opt){
 		var tar = $(this);
-		if(typeof opt == "string"){
-			if(opt == "setColor"){
-				tar.children(".picker_btn_holder").css("background-color", "rgb(" + arguments[1] + ")");
-			}
-			return;
-		}
-		tar.html("<div class='picker_btn_holder'></div><div class='ico ico_colordrop'></div>");
-		tar.bind("mousedown", function(e){
-			if(tar.button("isDisabled")){
-				return;
-			}
-			e.stopPropagation();
-			var options = $.extend({}, opt);
-			options.target = tar;
-			options.onSelect = function(color){
-				tar.colorButton("setColor", color);
-				if(opt.onSelect){
-					opt.onSelect(color);
+		if (opt) {
+			tar.html("<div class='picker_btn_holder'></div><div class='ico ico_colordrop'></div>");
+			tar.bind("mousedown", function (e) {
+				if (tar.button().isDisabled()) {
+					return;
 				}
-			};
-			var color = $(this).children(".picker_btn_holder").css("background-color");
-			color = color.replace(/\s/g, "");
-			color = color.substring(4, color.length - 1);
-			options.color = color;
-			$.colorpicker(options);
-		});
+				e.stopPropagation();
+				var options = $.extend({}, opt);
+				options.target = tar;
+				options.onSelect = function (color) {
+					tar.colorButton().setColor(color);
+					if (opt.onSelect) {
+						opt.onSelect(color);
+					}
+				};
+				var color = $(this).children(".picker_btn_holder").css("background-color");
+				color = color.replace(/\s/g, "");
+				color = color.substring(4, color.length - 1);
+				options.color = color;
+				$.colorpicker(options);
+			});
+		}
+		return {
+			"setColor":function(color){
+				tar.children(".picker_btn_holder").css("background-color", "rgb(" + color + ")");// arguments[1] 
+			}
+		};
 	};
 	/**
 	 * 数字框
@@ -225,7 +235,7 @@
 		var input = inputBox.find("input");
 		spinner.spinner("setValue", opt.min + opt.unit);
 		spinner.find(".spinner_up").bind("click", function(){
-			if(spinner.button("isDisabled")){
+			if(spinner.button().isDisabled()){
 				return;
 			}
 			var now = spinner.spinner("getValue");
@@ -233,7 +243,7 @@
 			setSpinnerValue(spinner, newVal, opt);
 		});
 		spinner.find(".spinner_down").bind("click", function(){
-			if(spinner.button("isDisabled")){
+			if(spinner.button().isDisabled()){
 				return;
 			}
 			var now = spinner.spinner("getValue");

@@ -80,7 +80,7 @@ var Dock = {
 					target: $("#dock_fill_type"),
 					onSelect: function(item){
 						var type = item.attr("ty");
-						$("#dock_fill_type").button("setText", item.text());
+						$("#dock_fill_type").button().setText( item.text());
 						if(type == "image"){
 							UI.showImageSelect(function(fileId, w, h){
 								Designer.setFillStyle({
@@ -132,8 +132,8 @@ var Dock = {
 			onClick: function(){
 				var begin = $("#fill_gradient_begin").attr("c");
 				var end = $("#fill_gradient_end").attr("c");
-				$("#fill_gradient_begin").attr("c", end).colorButton("setColor", end);
-				$("#fill_gradient_end").attr("c", begin).colorButton("setColor", begin);
+				$("#fill_gradient_begin").attr("c", end).colorButton().setColor(end);
+				$("#fill_gradient_end").attr("c", begin).colorButton().setColor(begin);
 				Designer.setFillStyle({beginColor: end, endColor: begin});
 			}
 		});
@@ -144,7 +144,7 @@ var Dock = {
 					target: $("#gradient_type"),
 					onSelect: function(item){
 						var type = item.attr("ty");
-						$("#gradient_type").button("setText", item.text());
+						$("#gradient_type").button().setText( item.text());
 						Designer.setFillStyle({gradientType: type});
 						$(".gradient_details").hide();
 						$("#gradient_type_" + type).show();
@@ -208,7 +208,7 @@ var Dock = {
 					target: $("#fill_img_display"),
 					onSelect: function(item){
 						var type = item.attr("ty");
-						$("#fill_img_display").button("setText", item.text());
+						$("#fill_img_display").button().setText( item.text());
 						Designer.setFillStyle({display: type});
 					}
 				});
@@ -282,7 +282,7 @@ var Dock = {
 						var w = parseInt(item.attr("w"));
 						var h = parseInt(item.attr("h"));
 						Designer.setPageStyle({width: w, height: h});
-						$("#dock_page_size").button("setText", item.text());
+						$("#dock_page_size").button().setText( item.text());
 					}
 				});
 				var item = $("#page_size_list").children("li[w="+Model.define.page.width+"][h="+Model.define.page.height+"]");
@@ -319,7 +319,7 @@ var Dock = {
 					onSelect: function(item){
 						var p = parseInt(item.attr("p"));
 						Designer.setPageStyle({padding: p})
-						$("#dock_page_padding").button("setText", item.text());
+						$("#dock_page_padding").button().setText( item.text());
 					}
 				});
 				var item = $("#page_padding_list").children("li[p="+Model.define.page.padding+"]");
@@ -351,7 +351,7 @@ var Dock = {
 					onSelect: function(item){
 						var s = parseInt(item.attr("s"));
 						Designer.setPageStyle({gridSize: s})
-						$("#dock_page_gridsize").button("setText", item.text());
+						$("#dock_page_gridsize").button().setText( item.text());
 					}
 				});
 				var item = $("#page_gridsize_list").children("li[s="+Model.define.page.gridSize+"]");
@@ -397,7 +397,7 @@ var Dock = {
 	 * @param {} name
 	 */
 	showView: function(name){
-		if($("#dock_btn_" + name).button("isDisabled")){
+		if($("#dock_btn_" + name).button().isDisabled()){
 			return;
 		}
 		$(".dock_view").hide();
@@ -415,18 +415,18 @@ var Dock = {
 	 * @param {} fillStyle
 	 */
 	setFillStyle: function(fillStyle){
-		$("#dock_fill_type").button("setText", $("#dock_fill_list").children("li[ty="+fillStyle.type+"]").text());
+		$("#dock_fill_type").button().setText( $("#dock_fill_list").children("li[ty="+fillStyle.type+"]").text());
 		$(".fill_detail").hide();
 		if(fillStyle.type == "solid"){
 			$(".fill_detail_solid").show();
-			$("#fill_solid_btn").colorButton("setColor", fillStyle.color);
+			$("#fill_solid_btn").colorButton().setColor(fillStyle.color);
 		}else if(fillStyle.type == "gradient"){
 			$(".fill_detail_gradient").show();
 			//渐变颜色
-			$("#fill_gradient_begin").attr("c", fillStyle.beginColor).colorButton("setColor", fillStyle.beginColor);
-			$("#fill_gradient_end").attr("c", fillStyle.endColor).colorButton("setColor", fillStyle.endColor);
+			$("#fill_gradient_begin").attr("c", fillStyle.beginColor).colorButton().setColor(fillStyle.beginColor);
+			$("#fill_gradient_end").attr("c", fillStyle.endColor).colorButton().setColor(fillStyle.endColor);
 			//渐变类型
-			$("#gradient_type").button("setText", $("#gradient_type_list").children("li[ty="+fillStyle.gradientType+"]").text());
+			$("#gradient_type").button().setText( $("#gradient_type_list").children("li[ty="+fillStyle.gradientType+"]").text());
 			$(".gradient_details").hide();
 			if(fillStyle.gradientType == "linear"){
 				$("#gradient_type_linear").show();
@@ -441,7 +441,7 @@ var Dock = {
 			if(fillStyle.display){
 				display = fillStyle.display;
 			}
-			$("#fill_img_display").button("setText", $("#img_display_list").children("li[ty="+display+"]").text());
+			$("#fill_img_display").button().setText( $("#img_display_list").children("li[ty="+display+"]").text());
 		}
 	},
 	/**
@@ -459,26 +459,26 @@ var Dock = {
 			var shapeIds = Utils.getSelectedShapeIds();
 			var shapeCount = shapeIds.length;
 			if(count == 0){
-				$("#dock_line_color").button("disable");
-				$("#dock_line_style").button("disable");
-				$("#dock_line_width").button("disable");
+				$("#dock_line_color").button().disable();
+				$("#dock_line_style").button().disable();
+				$("#dock_line_width").button().disable();
 			}else{
-				$("#dock_line_color").button("enable");
-				$("#dock_line_style").button("enable");
-				$("#dock_line_width").button("enable");
+				$("#dock_line_color").button().enable();
+				$("#dock_line_style").button().enable();
+				$("#dock_line_width").button().enable();
 				var shape = Model.getShapeById(selectedIds[0]);
-				$("#dock_line_color").colorButton("setColor", shape.lineStyle.lineColor);
+				$("#dock_line_color").colorButton().setColor(shape.lineStyle.lineColor);
 				var lineStyleCls = $("#line_style_list").children("li[line="+shape.lineStyle.lineStyle+"]").children().attr("class");
 				$("#dock_line_style").children(".linestyle").attr("class", lineStyleCls);
 				$("#dock_line_width").spinner("setValue", shape.lineStyle.lineWidth + "px");
 			}
 			if(shapeCount == 0){
-				$("#dock_fill_type").button("disable");
-				$("#spinner_opacity").button("disable");
+				$("#dock_fill_type").button().disable();
+				$("#spinner_opacity").button().disable();
 				Dock.setFillStyle({type: "none"});
 			}else{
-				$("#dock_fill_type").button("enable");
-				$("#spinner_opacity").button("enable");
+				$("#dock_fill_type").button().enable();
+				$("#spinner_opacity").button().enable();
 				var shape = Model.getShapeById(shapeIds[0]);
 				Dock.setFillStyle(shape.fillStyle);
 				$("#spinner_opacity").spinner("setValue", Math.round(shape.shapeStyle.alpha/1*100) + "%");
@@ -487,18 +487,18 @@ var Dock = {
 			var shapeIds = Utils.getSelectedShapeIds();
 			var shapeCount = shapeIds.length;
 			if(shapeCount == 0){
-				$("#dock_metric_x").button("disable");
-				$("#dock_metric_w").button("disable");
-				$("#dock_metric_y").button("disable");
-				$("#dock_metric_h").button("disable");
-				$("#dock_metric_angle").button("disable");
+				$("#dock_metric_x").button().disable();
+				$("#dock_metric_w").button().disable();
+				$("#dock_metric_y").button().disable();
+				$("#dock_metric_h").button().disable();
+				$("#dock_metric_angle").button().disable();
 			}else{
 				var shape = Model.getShapeById(shapeIds[0]);
-				$("#dock_metric_x").button("enable").spinner("setValue", Math.round(shape.props.x) + "px");
-				$("#dock_metric_w").button("enable").spinner("setValue", Math.round(shape.props.w) + "px");
-				$("#dock_metric_y").button("enable").spinner("setValue", Math.round(shape.props.y) + "px");
-				$("#dock_metric_h").button("enable").spinner("setValue", Math.round(shape.props.h) + "px");
-				$("#dock_metric_angle").button("enable").spinner("setValue", Math.round(shape.props.angle/Math.PI*180) + "°");
+				$("#dock_metric_x").button().enable().spinner("setValue", Math.round(shape.props.x) + "px");
+				$("#dock_metric_w").button().enable().spinner("setValue", Math.round(shape.props.w) + "px");
+				$("#dock_metric_y").button().enable().spinner("setValue", Math.round(shape.props.y) + "px");
+				$("#dock_metric_h").button().enable().spinner("setValue", Math.round(shape.props.h) + "px");
+				$("#dock_metric_angle").button().enable().spinner("setValue", Math.round(shape.props.angle/Math.PI*180) + "°");
 			}
 		}else if(this.currentView == "page"){
 			var page = Model.define.page;
@@ -511,9 +511,9 @@ var Dock = {
 			}else{
 				sizeText = $("#dock_size_custom").text();
 			}
-			$("#dock_page_size").button("setText", sizeText);
-			$("#dock_page_padding").button("setText", page.padding + "px");
-			$("#dock_page_color").colorButton("setColor", page.backgroundColor);
+			$("#dock_page_size").button().setText( sizeText);
+			$("#dock_page_padding").button().setText( page.padding + "px");
+			$("#dock_page_color").colorButton().setColor(page.backgroundColor);
 			$("#dock_page_showgrid").attr("checked", page.showGrid);
 			if(page.showGrid){
 				$("#dock_gridsize_box").show();
@@ -525,7 +525,7 @@ var Dock = {
 			if(gridItem.length > 0){
 				var gridText = gridItem.text();
 			}
-			$("#dock_page_gridsize").button("setText", gridText);
+			$("#dock_page_gridsize").button().setText( gridText);
 		}else if(this.currentView == "attribute"){
 			var selectedIds = Utils.getSelectedIds();
 			var count = selectedIds.length;
@@ -605,13 +605,13 @@ var Dock = {
 			}
 			var current = $("#history_versions").children(".selected");
 			if(current.length != 0 && current.attr("ind") != "0"){
-				$("#spinner_play_speed").button("enable");
-				$("#btn_history_play").button("enable");
-				$("#btn_history_restore").button("enable");
+				$("#spinner_play_speed").button().enable();
+				$("#btn_history_play").button().enable();
+				$("#btn_history_restore").button().enable();
 			}else{
-				$("#spinner_play_speed").button("disable");
-				$("#btn_history_play").button("disable");
-				$("#btn_history_restore").button("disable");
+				$("#spinner_play_speed").button().disable();
+				$("#btn_history_play").button().disable();
+				$("#btn_history_restore").button().disable();
 			}
 		});
 		$("#history_versions").height("auto");
@@ -669,9 +669,9 @@ var Dock = {
 	 * 展示历史版本
 	 */
 	showHistoryVersion: function(defId){
-		$("#spinner_play_speed").button("disable");
-		$("#btn_history_play").button("disable");
-		$("#btn_history_restore").button("disable");
+		$("#spinner_play_speed").button().disable();
+		$("#btn_history_play").button().disable();
+		$("#btn_history_restore").button().disable();
 		Dock.cancelHistoryRemark();
 		$.ajax({
 			url: "/diagraming/getdefinition",
@@ -679,9 +679,9 @@ var Dock = {
 			success: function(data){
 				Dock.openHistory(data.definition);
 				if($("#history_versions").children(".selected").attr("ind") != "0"){
-					$("#spinner_play_speed").button("enable");
-					$("#btn_history_play").button("enable");
-					$("#btn_history_restore").button("enable");
+					$("#spinner_play_speed").button().enable();
+					$("#btn_history_play").button().enable();
+					$("#btn_history_restore").button().enable();
 				}
 			}
 		});
@@ -713,13 +713,13 @@ var Dock = {
 		var current = $("#history_versions").children(".selected");
 		$("#history_versions").children(".playing").removeClass("playing");
 		if(current.length != 0 && current.attr("ind") != "0"){
-			$("#spinner_play_speed").button("enable");
-			$("#btn_history_play").button("enable");
-			$("#btn_history_restore").button("enable");
+			$("#spinner_play_speed").button().enable();
+			$("#btn_history_play").button().enable();
+			$("#btn_history_restore").button().enable();
 		}else{
-			$("#spinner_play_speed").button("disable");
-			$("#btn_history_play").button("disable");
-			$("#btn_history_restore").button("disable");
+			$("#spinner_play_speed").button().disable();
+			$("#btn_history_play").button().disable();
+			$("#btn_history_restore").button().disable();
 		}
 	},
 	playingTimeout: null,
@@ -974,7 +974,7 @@ var Dock = {
 					target: $("#attr_edit_showtype"),
 					onSelect: function(item){
 						var type = item.attr("ty");
-						$("#attr_edit_showtype").attr("ty", type).button("setText", item.text());
+						$("#attr_edit_showtype").attr("ty", type).button().setText( item.text());
 						Dock.setAttrDisplay(type);
 					}
 				});
@@ -987,7 +987,7 @@ var Dock = {
 				});
 			}
 		});
-		$("#attr_edit_showtype").attr("ty", showType).button("setText", $("#attr_display_list").children("li[ty="+showType+"]").html());
+		$("#attr_edit_showtype").attr("ty", showType).button().setText( $("#attr_display_list").children("li[ty="+showType+"]").html());
 		if(showType != "none"){
 			$("#attr_display_name").attr("checked", attr.showName);
 			if(showType == "icon"){
@@ -1002,9 +1002,9 @@ var Dock = {
 		if(attr.vertical){
 			vertical = attr.vertical;
 		}
-		$("#attr_location_h").button("setText", $("#attr_location_h_list").children("li[loc="+horizontal+"]").html());
+		$("#attr_location_h").button().setText( $("#attr_location_h_list").children("li[loc="+horizontal+"]").html());
 		$("#attr_location_h").attr("loc", horizontal);
-		$("#attr_location_v").button("setText", $("#attr_location_v_list").children("li[loc="+vertical+"]").html());
+		$("#attr_location_v").button().setText( $("#attr_location_v_list").children("li[loc="+vertical+"]").html());
 		$("#attr_location_v").attr("loc", vertical);
 		//添加保存按钮
 		item.append("<div class='attr_edit_btns'><div id='save_edit_attr' class='toolbar_button active'>确定</div><div id='cancel_edit_attr' class='toolbar_button active' style='margin-left: 5px;'>取消</div></div>");
@@ -1101,7 +1101,7 @@ var Dock = {
 				$("#attr_location_h_list").dropdown({
 					target: $("#attr_location_h"),
 					onSelect: function(item){
-						$("#attr_location_h").button("setText", item.html());
+						$("#attr_location_h").button().setText( item.html());
 						$("#attr_location_h").attr("loc", item.attr("loc"));
 					}
 				});
@@ -1112,7 +1112,7 @@ var Dock = {
 				$("#attr_location_v_list").dropdown({
 					target: $("#attr_location_v"),
 					onSelect: function(item){
-						$("#attr_location_v").button("setText", item.html());
+						$("#attr_location_v").button().setText( item.html());
 						$("#attr_location_v").attr("loc", item.attr("loc"));
 					}
 				});
@@ -1140,9 +1140,9 @@ var Dock = {
 	 * @param {} icon
 	 */
 	setAttrIcon: function(icon){
-		$("#attr_display_icon").attr("ico", icon).button("setText", "");
+		$("#attr_display_icon").attr("ico", icon).button().setText( "");
 		if(icon){
-			$("#attr_display_icon").button("setText", "<img src='/images/data-attr/"+icon+".png'/>");
+			$("#attr_display_icon").button().setText( "<img src='/images/data-attr/"+icon+".png'/>");
 		}
 	},
 	/**

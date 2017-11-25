@@ -52,9 +52,9 @@ var UI = {
 		//格式刷
 		$("#bar_brush").button({
 			onClick: function () {
-				if ($("#bar_brush").button("isSelected")) {
+				if ($("#bar_brush").button().isSelected()) {
 					//取消格式刷
-					$("#bar_brush").button("unselect");
+					$("#bar_brush").button().unselect();
 					$("#designer_op_help").hide();
 					$(document).unbind("keydown.cancelbrush");
 					Utils.selectCallback = null;
@@ -71,7 +71,7 @@ var UI = {
 					onSelect: function (item) {
 						var font = item.text();
 						Designer.setFontStyle({ fontFamily: font });
-						$("#bar_font_family").button("setText", font);
+						$("#bar_font_family").button().setText( font);
 					}
 				});
 				//选中
@@ -98,7 +98,7 @@ var UI = {
 		//加粗
 		$("#bar_font_bold").button({
 			onClick: function () {
-				var bold = !$("#bar_font_bold").button("isSelected");
+				var bold = !$("#bar_font_bold").button().isSelected();
 				Designer.setFontStyle({ bold: bold });
 				$("#bar_font_bold").toggleClass("selected");
 			}
@@ -106,7 +106,7 @@ var UI = {
 		//斜体
 		$("#bar_font_italic").button({
 			onClick: function () {
-				var italic = !$("#bar_font_italic").button("isSelected");
+				var italic = !$("#bar_font_italic").button().isSelected();
 				Designer.setFontStyle({ italic: italic });
 				$("#bar_font_italic").toggleClass("selected");
 			}
@@ -114,7 +114,7 @@ var UI = {
 		//下划线
 		$("#bar_font_underline").button({
 			onClick: function () {
-				var underline = !$("#bar_font_underline").button("isSelected");
+				var underline = !$("#bar_font_underline").button().isSelected();
 				Designer.setFontStyle({ underline: underline });
 				$("#bar_font_underline").toggleClass("selected");
 			}
@@ -122,12 +122,12 @@ var UI = {
 		//字体颜色
 		$("#bar_font_color").button({
 			onMousedown: function () {
-				var color = $("#bar_font_color").button("getColor");
+				var color = $("#bar_font_color").button().getColor();
 				$.colorpicker({
 					target: $("#bar_font_color"),
 					onSelect: function (color) {
 						Designer.setFontStyle({ color: color });
-						$("#bar_font_color").button("setColor", color)
+						$("#bar_font_color").button().setColor( color)
 					},
 					color: color
 				});
@@ -149,12 +149,12 @@ var UI = {
 		//填充
 		$("#bar_fill").button({
 			onMousedown: function () {
-				var color = $("#bar_fill").button("getColor");
+				var color = $("#bar_fill").button().getColor();
 				$.colorpicker({
 					target: $("#bar_fill"),
 					onSelect: function (color) {
 						Designer.setFillStyle({ type: "solid", color: color });
-						$("#bar_fill").button("setColor", color)
+						$("#bar_fill").button().setColor( color)
 					},
 					color: color,
 					extend: "<div id='bar_fill_gradient' title='渐变' class='toolbar_button active'><div class='ico gradient'></div></div><div id='bar_fill_img' title='图片...' class='toolbar_button active'><div class='ico ico_img'></div></div><div id='bar_fill_more' class='toolbar_button active'>More...</div>"
@@ -183,12 +183,12 @@ var UI = {
 		//线条颜色
 		$("#bar_line_color").button({
 			onMousedown: function () {
-				var color = $("#bar_line_color").button("getColor");
+				var color = $("#bar_line_color").button().getColor();
 				$.colorpicker({
 					target: $("#bar_line_color"),
 					onSelect: function (color) {
 						Designer.setLineStyle({ lineColor: color });
-						$("#bar_line_color").button("setColor", color)
+						$("#bar_line_color").button().setColor( color)
 					},
 					color: color
 				});
@@ -531,28 +531,28 @@ var UI = {
 			$(".toolbar").find(".selected").removeClass("selected");
 			//没有选中，让某些按钮失效
 			if ($("#designer_op_help").is(":visible")) {
-				$("#bar_brush").button("enable");
-				$("#bar_brush").button("select");
+				$("#bar_brush").button().enable();
+				$("#bar_brush").button().select();
 			} else {
-				$("#bar_brush").button("disable");
+				$("#bar_brush").button().disable();
 			}
 			//字体
-			$("#bar_font_family").button("disable");
-			$("#bar_font_size").button("disable");
-			$("#bar_font_bold").button("disable");
-			$("#bar_font_italic").button("disable");
-			$("#bar_font_underline").button("disable");
-			$("#bar_font_color").button("disable");
-			$("#bar_font_align").button("disable");
+			$("#bar_font_family").button().disable();
+			$("#bar_font_size").button().disable();
+			$("#bar_font_bold").button().disable();
+			$("#bar_font_italic").button().disable();
+			$("#bar_font_underline").button().disable();
+			$("#bar_font_color").button().disable();
+			$("#bar_font_align").button().disable();
 			//线条
-			$("#bar_line_color").button("disable");
-			$("#bar_line_width").button("disable");
-			$("#bar_line_style").button("disable");
+			$("#bar_line_color").button().disable();
+			$("#bar_line_width").button().disable();
+			$("#bar_line_style").button().disable();
 			//顶层底层
-			$("#bar_front").button("disable");
-			$("#bar_back").button("disable");
+			$("#bar_front").button().disable();
+			$("#bar_back").button().disable();
 			//锁定
-			$("#bar_lock").button("disable");
+			$("#bar_lock").button().disable();
 			//编辑菜单
 			var editMenu = $("#bar_list_edit");
 			editMenu.children("li[ac=cut]").menuitem("disable");
@@ -568,26 +568,26 @@ var UI = {
 			arrangeMenu.children("li[ac=lock]").menuitem("disable");
 		} else {
 			//选中，让某些按钮激活
-			$("#bar_brush").button("enable");
+			$("#bar_brush").button().enable();
 			if ($("#designer_op_help").is(":visible")) {
-				$("#bar_brush").button("select");
+				$("#bar_brush").button().select();
 			}
-			$("#bar_font_family").button("enable");
-			$("#bar_font_size").button("enable");
-			$("#bar_font_bold").button("enable");
-			$("#bar_font_italic").button("enable");
-			$("#bar_font_underline").button("enable");
-			$("#bar_font_color").button("enable");
-			$("#bar_font_align").button("enable");
+			$("#bar_font_family").button().enable();
+			$("#bar_font_size").button().enable();
+			$("#bar_font_bold").button().enable();
+			$("#bar_font_italic").button().enable();
+			$("#bar_font_underline").button().enable();
+			$("#bar_font_color").button().enable();
+			$("#bar_font_align").button().enable();
 			//线条
-			$("#bar_line_color").button("enable");
-			$("#bar_line_width").button("enable");
-			$("#bar_line_style").button("enable");
+			$("#bar_line_color").button().enable();
+			$("#bar_line_width").button().enable();
+			$("#bar_line_style").button().enable();
 			//顶层底层
-			$("#bar_front").button("enable");
-			$("#bar_back").button("enable");
+			$("#bar_front").button().enable();
+			$("#bar_back").button().enable();
 			//锁定
-			$("#bar_lock").button("enable");
+			$("#bar_lock").button().enable();
 			//编辑菜单
 			var editMenu = $("#bar_list_edit");
 			editMenu.children("li[ac=cut]").menuitem("enable");
@@ -603,53 +603,53 @@ var UI = {
 			arrangeMenu.children("li[ac=lock]").menuitem("enable");
 			//设置Toolbar样式
 			var shape = Model.getShapeById(selectedIds[0]);
-			$("#bar_font_family").button("setText", shape.fontStyle.fontFamily);
+			$("#bar_font_family").button().setText( shape.fontStyle.fontFamily);
 			$("#bar_font_size").spinner("setValue", shape.fontStyle.size + "px");
 			if (shape.fontStyle.bold) {
-				$("#bar_font_bold").button("select");
+				$("#bar_font_bold").button().select();
 			} else {
-				$("#bar_font_bold").button("unselect");
+				$("#bar_font_bold").button().unselect();
 			}
 			if (shape.fontStyle.italic) {
-				$("#bar_font_italic").button("select");
+				$("#bar_font_italic").button().select();
 			} else {
-				$("#bar_font_italic").button("unselect");
+				$("#bar_font_italic").button().unselect();
 			}
 			if (shape.fontStyle.underline) {
-				$("#bar_font_underline").button("select");
+				$("#bar_font_underline").button().select();
 			} else {
-				$("#bar_font_underline").button("unselect");
+				$("#bar_font_underline").button().unselect();
 			}
-			$("#bar_font_color").button("setColor", shape.fontStyle.color);
-			$("#bar_line_color").button("setColor", shape.lineStyle.lineColor);
+			$("#bar_font_color").button().setColor( shape.fontStyle.color);
+			$("#bar_line_color").button().setColor( shape.lineStyle.lineColor);
 		}
 		//通过图形的数量，判读是否可以填充
 		if (shapeCount == 0) {
-			$("#bar_fill").button("disable");
+			$("#bar_fill").button().disable();
 		} else {
-			$("#bar_fill").button("enable");
+			$("#bar_fill").button().enable();
 			var shape = Model.getShapeById(shapeIds[0]);
 			//图形填充
 			if (shape.fillStyle.type == "solid") {
-				$("#bar_fill").button("setColor", shape.fillStyle.color);
+				$("#bar_fill").button().setColor( shape.fillStyle.color);
 			} else if (shape.fillStyle.type == "gradient") {
-				$("#bar_fill").button("setColor", shape.fillStyle.endColor);
+				$("#bar_fill").button().setColor( shape.fillStyle.endColor);
 			}
 		}
 		if (shapeCount != 1) {
-			$("#bar_link").button("disable");
+			$("#bar_link").button().disable();
 		} else {
-			$("#bar_link").button("enable");
+			$("#bar_link").button().enable();
 		}
 		//通过连接线的数量，判断是否可以修改箭头等
 		if (linkerCount == 0) {
-			$("#bar_linkertype").button("disable");
-			$("#bar_beginarrow").button("disable");
-			$("#bar_endarrow").button("disable");
+			$("#bar_linkertype").button().disable();
+			$("#bar_beginarrow").button().disable();
+			$("#bar_endarrow").button().disable();
 		} else {
-			$("#bar_linkertype").button("enable");
-			$("#bar_beginarrow").button("enable");
-			$("#bar_endarrow").button("enable");
+			$("#bar_linkertype").button().enable();
+			$("#bar_beginarrow").button().enable();
+			$("#bar_endarrow").button().enable();
 			var shape = Model.getShapeById(linkerIds[0]);
 			//设置Toolbar的线条样式
 			$("#bar_linkertype").children("div:eq(0)").attr("class", "ico linkertype_" + shape.linkerType.toLowerCase());
@@ -658,10 +658,10 @@ var UI = {
 		}
 		//通过锁定的数量，判断是否可以解除锁定
 		if (lockedCount == 0) {
-			$("#bar_unlock").button("disable");
+			$("#bar_unlock").button().disable();
 			arrangeMenu.children("li[ac=unlock]").menuitem("disable");
 		} else {
-			$("#bar_unlock").button("enable");
+			$("#bar_unlock").button().enable();
 			arrangeMenu.children("li[ac=unlock]").menuitem("enable");
 		}
 		//是否激活组合、对齐，条件是选中图形要不少于2个
@@ -812,7 +812,7 @@ var UI = {
 			UI.searchImgByGoogle();
 		});
 		//完成按钮
-		$("#set_image_submit").button("enable");
+		$("#set_image_submit").button().enable();
 		$("#set_image_submit").button({
 			onClick: function () {
 				var currentTab = $(".image_sources").children(".active").attr("ty");
@@ -989,12 +989,12 @@ var UI = {
 	 */
 	setShapeImageByURL: function (url) {
 		$("#set_image_text").removeClass("errored").text("正在应用图片，请稍候...");
-		$("#set_image_submit").button("disable");
+		$("#set_image_submit").button().disable();
 		UI.fetchingRequest = $.ajax({
 			url: "/user_image/reference",
 			data: { url: url },
 			success: function (result) {
-				$("#set_image_submit").button("enable");
+				$("#set_image_submit").button().enable();
 				if (result.result == "exception") {
 					$("#set_image_text").addClass("errored").html("无法使用此图片，请选择其他图片");
 				} else {

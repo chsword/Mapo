@@ -3501,7 +3501,7 @@ var Designer = {
 					$.extend(brushStyles.fillStyle, shape.fillStyle);
 				}
 			}
-			$("#bar_brush").button("select");
+			$("#bar_brush").button().select();
 			//打开帮助
 			var help = $("#designer_op_help");
 			if(help.length == 0){
@@ -3511,11 +3511,11 @@ var Designer = {
 			$(document).unbind("keydown.cancelbrush").bind("keydown.cancelbrush", function(e){
 				//按Esc取消，并且停止brush
 				if(e.keyCode == 27){
-					$("#bar_brush").button("unselect");
+					$("#bar_brush").button().unselect();
 					help.hide();
 					$(document).unbind("keydown.cancelbrush");
 					Utils.selectCallback = null;
-					$("#bar_brush").button("disable");
+					$("#bar_brush").button().disable();
 				}
 			});
 			//设置选择后的回调事件，设置样式

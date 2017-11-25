@@ -302,11 +302,11 @@ var CLB = {
 	 * 打开聊天
 	 */
 	showChatWin: function(){
-		if($("#open_chat_btn").button("isSelected")){
+		if($("#open_chat_btn").button().isSelected()){
 			CLB.closeChatWin();
 			return;
 		}
-		$("#open_chat_btn").button("select");
+		$("#open_chat_btn").button().select();
 		$("#chattingbox").css("left", $("#shape_panel").outerWidth()).show();
 		$("#chatting_edit").focus().unbind().bind("keydown", function(e){
 			if(e.ctrlKey && e.keyCode == 13){
@@ -320,7 +320,7 @@ var CLB = {
 	 */
 	closeChatWin: function(){
 		$("#chattingbox").hide();
-		$("#open_chat_btn").button("unselect");
+		$("#open_chat_btn").button().unselect();
 	},
 	/**
 	 * 发送聊天消息
@@ -350,7 +350,7 @@ var CLB = {
 		msg = msg.replace(/\n/g, "<br/>")
 		$("#chat_messages").append("<li><span>"+name+"</span>:&nbsp;"+msg+"</li>");
 		$("#chat_messages").scrollTop(9999999);
-		if(isOther && !$("#open_chat_btn").button("isSelected")){
+		if(isOther && !$("#open_chat_btn").button().isSelected()){
 			//如果是别人发的消息，并且没有打开聊天窗口
 			var unread = parseInt($("#chat_prompt").text()) + 1;
 			$("#chat_prompt")
