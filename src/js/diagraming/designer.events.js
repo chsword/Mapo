@@ -59,9 +59,9 @@ Designer.events.addEventListener("selectChanged", function(){
  */
 Designer.events.addEventListener("clipboardChanged", function(clipboardLength){
 	if(clipboardLength > 0){
-		$("#bar_list_edit").children("li[ac=paste]").menuitem("enable");
+		$("#bar_list_edit").children("li[ac=paste]").menuitem().enable();
 	}else{
-		$("#bar_list_edit").children("li[ac=paste]").menuitem("disable");
+		$("#bar_list_edit").children("li[ac=paste]").menuitem().disable();
 	}
 });
 
@@ -70,10 +70,10 @@ Designer.events.addEventListener("clipboardChanged", function(clipboardLength){
  */
 Designer.events.addEventListener("undoStackChanged", function(stackLength){
 	if(stackLength == 0){
-		$("#bar_list_edit").children("li[ac=undo]").menuitem("disable");
+		$("#bar_list_edit").children("li[ac=undo]").menuitem().disable();
 		$("#bar_undo").button().disable();
 	}else{
-		$("#bar_list_edit").children("li[ac=undo]").menuitem("enable");
+		$("#bar_list_edit").children("li[ac=undo]").menuitem().enable();
 		$("#bar_undo").button().enable();
 	}
 });
@@ -82,10 +82,10 @@ Designer.events.addEventListener("undoStackChanged", function(stackLength){
  */
 Designer.events.addEventListener("redoStackChanged", function(stackLength){
 	if(stackLength == 0){
-		$("#bar_list_edit").children("li[ac=redo]").menuitem("disable");
+		$("#bar_list_edit").children("li[ac=redo]").menuitem().disable();
 		$("#bar_redo").button().disable();
 	}else{
-		$("#bar_list_edit").children("li[ac=redo]").menuitem("enable");
+		$("#bar_list_edit").children("li[ac=redo]").menuitem().enable();
 		$("#bar_redo").button().enable();
 	}
 });

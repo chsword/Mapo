@@ -94,7 +94,7 @@ var UI = {
 				Designer.setFontStyle({ size: val });
 			}
 		});
-		$("#bar_font_size").spinner("setValue", "13px");
+		$("#bar_font_size").spinner().setValue( "13px");
 		//加粗
 		$("#bar_font_bold").button({
 			onClick: function () {
@@ -343,8 +343,8 @@ var UI = {
 				} else {
 					$("#bar_list_pagesize").dropdown("select", $("#page_size_custom"));
 				}
-				$("#page_size_w").spinner("setValue", Model.define.page.width + "px");
-				$("#page_size_h").spinner("setValue", Model.define.page.height + "px");
+				$("#page_size_w").spinner().setValue( Model.define.page.width + "px");
+				$("#page_size_h").spinner().setValue( Model.define.page.height + "px");
 				item = $("#bar_list_padding").children("li[p=" + Model.define.page.padding + "]");
 				$("#bar_list_padding").dropdown("select", item);
 				item = $("#bar_list_gridsize").children("li[s=" + Model.define.page.gridSize + "]");
@@ -423,11 +423,11 @@ var UI = {
 				var p = parseInt(item.attr("p"));
 				Designer.setPageStyle({ padding: p })
 			} else if (action == "set_page_showgrid") {
-				if (item.menuitem("isSelected")) {
-					item.menuitem("unselect");
+				if (item.menuitem().isSelected()) {
+					item.menuitem().unselect();
 					Designer.setPageStyle({ showGrid: false });
 				} else {
-					item.menuitem("select");
+					item.menuitem().select();
 					Designer.setPageStyle({ showGrid: true });
 				}
 			} else if (action == "set_page_gridsize") {
@@ -555,17 +555,17 @@ var UI = {
 			$("#bar_lock").button().disable();
 			//编辑菜单
 			var editMenu = $("#bar_list_edit");
-			editMenu.children("li[ac=cut]").menuitem("disable");
-			editMenu.children("li[ac=copy]").menuitem("disable");
-			editMenu.children("li[ac=duplicate]").menuitem("disable");
-			editMenu.children("li[ac=brush]").menuitem("disable");
-			editMenu.children("li[ac=delete]").menuitem("disable");
+			editMenu.children("li[ac=cut]").menuitem().disable();
+			editMenu.children("li[ac=copy]").menuitem().disable();
+			editMenu.children("li[ac=duplicate]").menuitem().disable();
+			editMenu.children("li[ac=brush]").menuitem().disable();
+			editMenu.children("li[ac=delete]").menuitem().disable();
 			//排列菜单
-			arrangeMenu.children("li[ac=front]").menuitem("disable");
-			arrangeMenu.children("li[ac=back]").menuitem("disable");
-			arrangeMenu.children("li[ac=forward]").menuitem("disable");
-			arrangeMenu.children("li[ac=backward]").menuitem("disable");
-			arrangeMenu.children("li[ac=lock]").menuitem("disable");
+			arrangeMenu.children("li[ac=front]").menuitem().disable();
+			arrangeMenu.children("li[ac=back]").menuitem().disable();
+			arrangeMenu.children("li[ac=forward]").menuitem().disable();
+			arrangeMenu.children("li[ac=backward]").menuitem().disable();
+			arrangeMenu.children("li[ac=lock]").menuitem().disable();
 		} else {
 			//选中，让某些按钮激活
 			$("#bar_brush").button().enable();
@@ -590,21 +590,21 @@ var UI = {
 			$("#bar_lock").button().enable();
 			//编辑菜单
 			var editMenu = $("#bar_list_edit");
-			editMenu.children("li[ac=cut]").menuitem("enable");
-			editMenu.children("li[ac=copy]").menuitem("enable");
-			editMenu.children("li[ac=duplicate]").menuitem("enable");
-			editMenu.children("li[ac=brush]").menuitem("enable");
-			editMenu.children("li[ac=delete]").menuitem("enable");
+			editMenu.children("li[ac=cut]").menuitem().enable();
+			editMenu.children("li[ac=copy]").menuitem().enable();
+			editMenu.children("li[ac=duplicate]").menuitem().enable();
+			editMenu.children("li[ac=brush]").menuitem().enable();
+			editMenu.children("li[ac=delete]").menuitem().enable();
 			//排列菜单
-			arrangeMenu.children("li[ac=front]").menuitem("enable");
-			arrangeMenu.children("li[ac=back]").menuitem("enable");
-			arrangeMenu.children("li[ac=forward]").menuitem("enable");
-			arrangeMenu.children("li[ac=backward]").menuitem("enable");
-			arrangeMenu.children("li[ac=lock]").menuitem("enable");
+			arrangeMenu.children("li[ac=front]").menuitem().enable();
+			arrangeMenu.children("li[ac=back]").menuitem().enable();
+			arrangeMenu.children("li[ac=forward]").menuitem().enable();
+			arrangeMenu.children("li[ac=backward]").menuitem().enable();
+			arrangeMenu.children("li[ac=lock]").menuitem().enable();
 			//设置Toolbar样式
 			var shape = Model.getShapeById(selectedIds[0]);
 			$("#bar_font_family").button().setText( shape.fontStyle.fontFamily);
-			$("#bar_font_size").spinner("setValue", shape.fontStyle.size + "px");
+			$("#bar_font_size").spinner().setValue( shape.fontStyle.size + "px");
 			if (shape.fontStyle.bold) {
 				$("#bar_font_bold").button().select();
 			} else {
@@ -659,36 +659,36 @@ var UI = {
 		//通过锁定的数量，判断是否可以解除锁定
 		if (lockedCount == 0) {
 			$("#bar_unlock").button().disable();
-			arrangeMenu.children("li[ac=unlock]").menuitem("disable");
+			arrangeMenu.children("li[ac=unlock]").menuitem().disable();
 		} else {
 			$("#bar_unlock").button().enable();
-			arrangeMenu.children("li[ac=unlock]").menuitem("enable");
+			arrangeMenu.children("li[ac=unlock]").menuitem().enable();
 		}
 		//是否激活组合、对齐，条件是选中图形要不少于2个
 		if (count < 2) {
-			arrangeMenu.children("li[ac=group]").menuitem("disable");
-			$("#bar_arrange_align").menuitem("disable");
+			arrangeMenu.children("li[ac=group]").menuitem().disable();
+			$("#bar_arrange_align").menuitem().disable();
 		} else {
-			arrangeMenu.children("li[ac=group]").menuitem("enable");
-			$("#bar_arrange_align").menuitem("enable");
+			arrangeMenu.children("li[ac=group]").menuitem().enable();
+			$("#bar_arrange_align").menuitem().enable();
 		}
 		//是否激活匹配大小，条件是选中形状要不少于2个
 		if (shapeCount < 2) {
-			$("#bar_arrange_match").menuitem("disable");
+			$("#bar_arrange_match").menuitem().disable();
 		} else {
-			$("#bar_arrange_match").menuitem("enable");
+			$("#bar_arrange_match").menuitem().enable();
 		}
 		//是否激活排列图形菜单，条件是选中图形要不少于3个
 		if (count < 3) {
-			$("#bar_arrange_dist").menuitem("disable");
+			$("#bar_arrange_dist").menuitem().disable();
 		} else {
-			$("#bar_arrange_dist").menuitem("enable");
+			$("#bar_arrange_dist").menuitem().enable();
 		}
 		//通过组合的数量，判断是否可以取消组合
 		if (groupCount == 0) {
-			arrangeMenu.children("li[ac=ungroup]").menuitem("disable");
+			arrangeMenu.children("li[ac=ungroup]").menuitem().disable();
 		} else {
-			arrangeMenu.children("li[ac=ungroup]").menuitem("enable");
+			arrangeMenu.children("li[ac=ungroup]").menuitem().enable();
 		}
 	},
 	/**
@@ -824,14 +824,14 @@ var UI = {
 						var imageH = selectedImg.attr("h");
 						UI.setShapeImage(fileId, imageW, imageH);
 					} else {
-						$("#image_dialog").dlg("close");
+						$("#image_dialog").data("dlg").close();
 					}
 				} else if (currentTab == "url") {
 					if ($(".img_url_loaded").length > 0) {
 						var url = $(".img_url_loaded").attr("src");
 						UI.setShapeImageByURL(url);
 					} else {
-						$("#image_dialog").dlg("close");
+						$("#image_dialog").data("dlg").close();
 					}
 				} else {
 					//搜索
@@ -840,7 +840,7 @@ var UI = {
 						var url = selectedImg.attr("u");
 						UI.setShapeImageByURL(url);
 					} else {
-						$("#image_dialog").dlg("close");
+						$("#image_dialog").data("dlg").close();
 					}
 				}
 			}
@@ -848,7 +848,7 @@ var UI = {
 		//取消按钮
 		$("#set_image_cancel").button({
 			onClick: function () {
-				$("#image_dialog").dlg("close");
+				$("#image_dialog").data("dlg").close();
 			}
 		});
 		$("#set_image_text").empty();
@@ -976,7 +976,7 @@ var UI = {
 		if (this.imageSelectedCallback) {
 			this.imageSelectedCallback(fileId, w, h);
 		}
-		$("#image_dialog").dlg("close");
+		$("#image_dialog").data("dlg").close();
 	},
 	/**
 	 * 加载URL图片的ajax请求对象
@@ -1490,7 +1490,7 @@ var UI = {
 								//减少了tab
 								if (activeIndex > tabCount - 1) {
 									activeIndex = tabCount - 1;
-									$("#change_uitab_index").spinner("setValue", tabCount);
+									$("#change_uitab_index").spinner().setValue( tabCount);
 								}
 								shape.path = [];
 								var newBlock = [];
@@ -1528,7 +1528,7 @@ var UI = {
 								Schema.initShapeFunctions(shape);
 								Model.update(shape);
 								Designer.painter.renderShape(shape);
-								$("#change_uitab_index").spinner("setOptions", { max: tabCount });
+								$("#change_uitab_index").spinner().setOptions({ max: tabCount });
 							}
 						}
 					}, {
@@ -1602,7 +1602,7 @@ var UI = {
 						step: 1,
 						onChange: opt.onChange
 					});
-					spinner.spinner("setValue", opt.value);
+					spinner.spinner().setValue( opt.value);
 				}
 			}
 		}

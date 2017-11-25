@@ -152,9 +152,9 @@ var Dock = {
 						var shape = Model.getShapeById(shapeIds[0]);
 						var fillStyle = shape.fillStyle;
 						if(type == "linear"){
-							$("#gradient_angle").spinner("setValue", Math.round(fillStyle.angle/Math.PI * 180) + "°");
+							$("#gradient_angle").spinner().setValue( Math.round(fillStyle.angle/Math.PI * 180) + "°");
 						}else{
-							$("#gradient_radius").spinner("setValue", Math.round(fillStyle.radius * 100) + "%");
+							$("#gradient_radius").spinner().setValue( Math.round(fillStyle.radius * 100) + "%");
 						}
 					}
 				});
@@ -233,7 +233,7 @@ var Dock = {
 				Designer.setShapeProps({x: val});
 			}
 		});
-		$("#dock_metric_x").spinner("setValue", "0px");
+		$("#dock_metric_x").spinner().setValue( "0px");
 		//宽度
 		$("#dock_metric_w").spinner({
 			min: 20,
@@ -252,7 +252,7 @@ var Dock = {
 				Designer.setShapeProps({y: val});
 			}
 		});
-		$("#dock_metric_y").spinner("setValue", "0px");
+		$("#dock_metric_y").spinner().setValue( "0px");
 		//高度
 		$("#dock_metric_h").spinner({
 			min: 20,
@@ -291,8 +291,8 @@ var Dock = {
 				}else{
 					$("#page_size_list").dropdown("select", $("#dock_size_custom"));
 				}
-				$("#dock_size_w").spinner("setValue", Model.define.page.width + "px");
-				$("#dock_size_h").spinner("setValue", Model.define.page.height + "px");
+				$("#dock_size_w").spinner().setValue( Model.define.page.width + "px");
+				$("#dock_size_h").spinner().setValue( Model.define.page.height + "px");
 			}
 		});
 		$("#dock_size_w").spinner({
@@ -369,7 +369,7 @@ var Dock = {
 				
 			}
 		});
-		$("#spinner_play_speed").spinner("setValue", "2s");
+		$("#spinner_play_speed").spinner().setValue( "2s");
 		//版本播放
 		$("#btn_history_play").button({
 			onClick: function(){
@@ -430,10 +430,10 @@ var Dock = {
 			$(".gradient_details").hide();
 			if(fillStyle.gradientType == "linear"){
 				$("#gradient_type_linear").show();
-				$("#gradient_angle").spinner("setValue", Math.round(fillStyle.angle/Math.PI * 180) + "°");
+				$("#gradient_angle").spinner().setValue( Math.round(fillStyle.angle/Math.PI * 180) + "°");
 			}else{
 				$("#gradient_type_radial").show();
-				$("#gradient_radius").spinner("setValue", Math.round(fillStyle.radius * 100) + "%");
+				$("#gradient_radius").spinner().setValue( Math.round(fillStyle.radius * 100) + "%");
 			}
 		}else if(fillStyle.type == "image"){
 			$(".fill_detail_image").show();
@@ -452,7 +452,7 @@ var Dock = {
 			if(drawNav){
 				Navigator.draw();
 			}
-			$("#dock_zoom").spinner("setValue", Math.round(Designer.config.scale * 100) + "%");
+			$("#dock_zoom").spinner().setValue( Math.round(Designer.config.scale * 100) + "%");
 		}else if(this.currentView == "graphic"){
 			var selectedIds = Utils.getSelectedIds();
 			var count = selectedIds.length;
@@ -470,7 +470,7 @@ var Dock = {
 				$("#dock_line_color").colorButton().setColor(shape.lineStyle.lineColor);
 				var lineStyleCls = $("#line_style_list").children("li[line="+shape.lineStyle.lineStyle+"]").children().attr("class");
 				$("#dock_line_style").children(".linestyle").attr("class", lineStyleCls);
-				$("#dock_line_width").spinner("setValue", shape.lineStyle.lineWidth + "px");
+				$("#dock_line_width").spinner().setValue( shape.lineStyle.lineWidth + "px");
 			}
 			if(shapeCount == 0){
 				$("#dock_fill_type").button().disable();
@@ -481,7 +481,7 @@ var Dock = {
 				$("#spinner_opacity").button().enable();
 				var shape = Model.getShapeById(shapeIds[0]);
 				Dock.setFillStyle(shape.fillStyle);
-				$("#spinner_opacity").spinner("setValue", Math.round(shape.shapeStyle.alpha/1*100) + "%");
+				$("#spinner_opacity").spinner().setValue( Math.round(shape.shapeStyle.alpha/1*100) + "%");
 			}
 		}else if(this.currentView == "metric"){
 			var shapeIds = Utils.getSelectedShapeIds();
@@ -494,11 +494,11 @@ var Dock = {
 				$("#dock_metric_angle").button().disable();
 			}else{
 				var shape = Model.getShapeById(shapeIds[0]);
-				$("#dock_metric_x").button().enable().spinner("setValue", Math.round(shape.props.x) + "px");
-				$("#dock_metric_w").button().enable().spinner("setValue", Math.round(shape.props.w) + "px");
-				$("#dock_metric_y").button().enable().spinner("setValue", Math.round(shape.props.y) + "px");
-				$("#dock_metric_h").button().enable().spinner("setValue", Math.round(shape.props.h) + "px");
-				$("#dock_metric_angle").button().enable().spinner("setValue", Math.round(shape.props.angle/Math.PI*180) + "°");
+				$("#dock_metric_x").button().enable().spinner().setValue( Math.round(shape.props.x) + "px");
+				$("#dock_metric_w").button().enable().spinner().setValue( Math.round(shape.props.w) + "px");
+				$("#dock_metric_y").button().enable().spinner().setValue( Math.round(shape.props.y) + "px");
+				$("#dock_metric_h").button().enable().spinner().setValue( Math.round(shape.props.h) + "px");
+				$("#dock_metric_angle").button().enable().spinner().setValue( Math.round(shape.props.angle/Math.PI*180) + "°");
 			}
 		}else if(this.currentView == "page"){
 			var page = Model.define.page;
@@ -741,7 +741,7 @@ var Dock = {
 		if(top < 0){
 			$("#history_versions").scrollTop($("#history_versions").scrollTop() + top);
 		}
-		var time = $("#spinner_play_speed").spinner("getValue") * 1000;
+		var time = $("#spinner_play_speed").spinner().getValue() * 1000;
 		if(index == 0 && msgIndex == version.messages.length - 1){
 			this.pauseVersions();
 		}else{

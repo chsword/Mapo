@@ -154,9 +154,9 @@ var Designer = {
 				$("#designer_layout").scrollLeft(Designer.config.pageMargin - 10);
 			}
 			var domShowGrid = $("#bar_list_page").children("li[ac=set_page_showgrid]");
-			domShowGrid.menuitem("unselect");
+			domShowGrid.menuitem().unselect();
 			if(Model.define.page.showGrid){
-				domShowGrid.menuitem("select");
+				domShowGrid.menuitem().select();
 			}
 		},
 		/**
@@ -709,7 +709,7 @@ var Designer = {
 			});
 			$("#designer_contextmenu").find("li:not(.devider)").unbind("click").bind("click", function(){
 				var item = $(this);
-				if(!item.menuitem("isDisabled") && item.children(".extend_menu").length == 0){
+				if(!item.menuitem().isDisabled() && item.children(".extend_menu").length == 0){
 					Designer.contextMenu.execAction(item);
 					Designer.contextMenu.hide();
 				}
