@@ -298,10 +298,8 @@ Model.getShapeById = function (shapeId) {
 Model.getPersistenceById = function (shapeId) {
     return this.persistence.elements[shapeId];
 };
-/**
- * 对OrderList进行重新排序
- */
 Model.build = function () {
+    /// <summary>对OrderList进行重新排序</summary>
     this.orderList = [];
     this.linkerMap.empty();
     //先将图形都放到orderList中

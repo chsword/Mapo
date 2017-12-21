@@ -1,700 +1,703 @@
+"use strict";
 /**
 * 用户界面JS
 */
-class UI {}
+class UI {
+ 
+}
 
-	UI.init=function () {
-		//修改标题
-		$(".diagram_title").bind("click", function () {
-			if ($(this).hasClass("readonly")) {
-				return;
-			}
-			var title = $(this).text();
-			$(this).hide();
-			$("#title_container").append("<input type='text'/>");
-			$("#title_container").children("input").val(title).select();
-			$("#title_container").children("input").bind("blur", function () {
-				changeTitle();
-			}).bind("keydown", function (e) {
-				if (e.keyCode == 13) {
-					changeTitle();
-				}
-			});
-		});
-		function changeTitle() {
-			var newTitle = $.trim($("#title_container").children("input").val());
-			var oldTitle = $(".diagram_title").text();
-			if (newTitle != oldTitle && chartId != "") {
-				var msgObj = {
-					action: "changeTitle",
-					title: newTitle
-				};
-				CLB.send(msgObj);
-			}
-			var title = newTitle != "" ? newTitle : oldTitle;
-			$("title").text(title + " - ProcessOn");
-			$(".diagram_title").text(title).show();
-			$("#title_container").children("input").remove();
-		}
-		/** ############################Toolbar列表############################ */
-		//撤销
-		$("#bar_undo").button({
-			onClick: function () {
-				MessageSource.undo();
-			}
-		});
-		//恢复
-		$("#bar_redo").button({
-			onClick: function () {
-				MessageSource.redo();
-			}
-		});
-		//格式刷
-		$("#bar_brush").button({
-			onClick: function () {
-				if ($("#bar_brush").button().isSelected()) {
-					//取消格式刷
-					$("#bar_brush").button().unselect();
-					$("#designer_op_help").hide();
-					$(document).unbind("keydown.cancelbrush");
-					Utils.selectCallback = null;
-				} else {
-					Designer.clipboard.brush();
-				}
-			}
-		});
-		//字体
-		$("#bar_font_family").button({
-			onMousedown: function () {
-				$("#font_list").dropdown({
-					target: $("#bar_font_family"),
-					onSelect: function (item) {
-						var font = item.text();
-						Designer.setFontStyle({ fontFamily: font });
-						$("#bar_font_family").button().setText( font);
-					}
-				});
-				//选中
-				var family = $("#bar_font_family").text().trim();
-				$("#font_list").children().each(function () {
-					if ($(this).text() == family) {
-						$("#font_list").dropdown("select", $(this));
-						return false;
-					}
-				});
-			}
-		});
-		//字号
-		$("#bar_font_size").spinner({
-			min: 12,
-			max: 100,
-			step: 1,
-			unit: "px",
-			onChange: function (val) {
-				Designer.setFontStyle({ size: val });
-			}
-		});
-		$("#bar_font_size").spinner().setValue( "13px");
-		//加粗
-		$("#bar_font_bold").button({
-			onClick: function () {
-				var bold = !$("#bar_font_bold").button().isSelected();
-				Designer.setFontStyle({ bold: bold });
-				$("#bar_font_bold").toggleClass("selected");
-			}
-		});
-		//斜体
-		$("#bar_font_italic").button({
-			onClick: function () {
-				var italic = !$("#bar_font_italic").button().isSelected();
-				Designer.setFontStyle({ italic: italic });
-				$("#bar_font_italic").toggleClass("selected");
-			}
-		});
-		//下划线
-		$("#bar_font_underline").button({
-			onClick: function () {
-				var underline = !$("#bar_font_underline").button().isSelected();
-				Designer.setFontStyle({ underline: underline });
-				$("#bar_font_underline").toggleClass("selected");
-			}
-		});
-		//字体颜色
-		$("#bar_font_color").button({
-			onMousedown: function () {
-				var color = $("#bar_font_color").button().getColor();
-				$.colorpicker({
-					target: $("#bar_font_color"),
-					onSelect: function (color) {
-						Designer.setFontStyle({ color: color });
-						$("#bar_font_color").button().setColor( color)
-					},
-					color: color
-				});
-			}
-		});
-		//文本对齐
-		$("#bar_font_align").button({
-			onMousedown: function () {
-				$("#font_align_list").dropdown({
-					target: $("#bar_font_align"),
-					onSelect: function (item) {
-						var align = {};
-						align[item.attr("cate")] = item.attr("al");
-						Designer.setFontStyle(align);
-					}
-				});
-			}
-		});
-		//填充
-		$("#bar_fill").button({
-			onMousedown: function () {
-				var color = $("#bar_fill").button().getColor();
-				$.colorpicker({
-					target: $("#bar_fill"),
-					onSelect: function (color) {
-						Designer.setFillStyle({ type: "solid", color: color });
-						$("#bar_fill").button().setColor( color)
-					},
-					color: color,
-					extend: "<div id='bar_fill_gradient' title='渐变' class='toolbar_button active'><div class='ico gradient'></div></div><div id='bar_fill_img' title='图片...' class='toolbar_button active'><div class='ico ico_img'></div></div><div id='bar_fill_more' class='toolbar_button active'>More...</div>"
-				});
-				$("#bar_fill_gradient").unbind().bind("click", function () {
-					Designer.setFillStyle({ type: "gradient" });
-					$("#color_picker").dropdown("close");
-				});
-				$("#bar_fill_img").unbind().bind("click", function () {
-					UI.showImageSelect(function (fileId, w, h) {
-						Designer.setFillStyle({
-							type: "image",
-							fileId: fileId,
-							imageW: w,
-							imageH: h
-						});
-					});
-					$("#color_picker").dropdown("close");
-				});
-				$("#bar_fill_more").unbind().bind("click", function () {
-					Dock.showView("graphic");
-					$("#color_picker").dropdown("close");
-				});
-			}
-		});
-		//线条颜色
-		$("#bar_line_color").button({
-			onMousedown: function () {
-				var color = $("#bar_line_color").button().getColor();
-				$.colorpicker({
-					target: $("#bar_line_color"),
-					onSelect: function (color) {
-						Designer.setLineStyle({ lineColor: color });
-						$("#bar_line_color").button().setColor( color)
-					},
-					color: color
-				});
-			}
-		});
-		//线条宽度
-		$("#bar_line_width").button({
-			onMousedown: function () {
-				$("#line_width_list").dropdown({
-					target: $("#bar_line_width"),
-					onSelect: function (item) {
-						var width = parseInt(item.text());
-						Designer.setLineStyle({ lineWidth: width });
-					}
-				});
-				//选中
-				var width = Utils.getSelected()[0].lineStyle.lineWidth;
-				$("#line_width_list").children().each(function () {
-					if (parseInt($(this).text()) == width) {
-						$("#line_width_list").dropdown("select", $(this));
-					}
-				});
-			}
-		});
-		//线条样式
-		$("#bar_line_style").button({
-			onMousedown: function () {
-				$("#line_style_list").dropdown({
-					target: $("#bar_line_style"),
-					onSelect: function (item) {
-						var lineStyle = item.attr("line");
-						Designer.setLineStyle({ lineStyle: lineStyle });
-					}
-				});
-				//选中
-				var style = Utils.getSelected()[0].lineStyle.lineStyle;
-				var item = $("#line_style_list").children("li[line=" + style + "]");
-				$("#line_style_list").dropdown("select", item);
-			}
-		});
-		//连接线类型
-		$("#bar_linkertype").button({
-			onMousedown: function () {
-				$("#line_type_list").dropdown({
-					target: $("#bar_linkertype"),
-					onSelect: function (item) {
-						var type = item.attr("tp");
-						Designer.setLinkerType(type);
-						var cls = item.children("div").attr("class");
-						$("#bar_linkertype").children("div:eq(0)").attr("class", cls);
-					}
-				});
-			}
-		});
-		//开始箭头
-		$("#bar_beginarrow").button({
-			onMousedown: function () {
-				$("#beginarrow_list").dropdown({
-					target: $("#bar_beginarrow"),
-					onSelect: function (item) {
-						var arrow = item.attr("arrow");
-						Designer.setLineStyle({ beginArrowStyle: arrow });
-						var cls = item.children("div").attr("class");
-						$("#bar_beginarrow").children("div:eq(0)").attr("class", cls);
-					}
-				});
-				//选中
-				var style = Utils.getSelectedLinkers()[0].lineStyle.beginArrowStyle;
-				var item = $("#beginarrow_list").children("li[arrow=" + style + "]");
-				$("#beginarrow_list").dropdown("select", item);
-			}
-		});
-		//结束箭头
-		$("#bar_endarrow").button({
-			onMousedown: function () {
-				$("#endarrow_list").dropdown({
-					target: $("#bar_endarrow"),
-					onSelect: function (item) {
-						var arrow = item.attr("arrow");
-						Designer.setLineStyle({ endArrowStyle: arrow });
-						var cls = item.children("div").attr("class");
-						$("#bar_endarrow").children("div:eq(0)").attr("class", cls);
-					}
-				});
-				//选中
-				var style = Utils.getSelectedLinkers()[0].lineStyle.endArrowStyle;
-				var item = $("#endarrow_list").children("li[arrow=" + style + "]");
-				$("#endarrow_list").dropdown("select", item);
-			}
-		});
-		//顶层底层
-		$("#bar_front").button({
-			onClick: function () {
-				Designer.layerShapes("front");
-			}
-		});
-		$("#bar_back").button({
-			onClick: function () {
-				Designer.layerShapes("back");
-			}
-		});
-		//加解锁
-		$("#bar_lock").button({
-			onClick: function () {
-				Designer.lockShapes();
-			}
-		});
-		$("#bar_unlock").button({
-			onClick: function () {
-				Designer.unlockShapes();
-			}
-		});
-		$("#bar_link").button({
-			onClick: function () {
-				UI.showInsertLink();
-			}
-		});
-		$("#bar_collapse").button({
-			onClick: function () {
-				UI.toogleTitleBar();
-			}
-		});
-		/** ##############菜单列表############## */
-		$("#menu_bar").children().bind("mousedown", function (e) {
-			var tar = $(this);
-			showMenuBarList(tar);
-			e.stopPropagation();
-		});
-		$("#menu_bar").children().bind("mouseenter", function () {
-			var tar = $(this);
-			if ($("#ui_container").find(".options_menu:visible").length > 0) {
-				showMenuBarList(tar);
-			}
-		});
+UI.init = function () {
+    //修改标题
+    $(".diagram_title").bind("click", function () {
+        if ($(this).hasClass("readonly")) {
+            return;
+        }
+        var title = $(this).text();
+        $(this).hide();
+        $("#title_container").append("<input type='text'/>");
+        $("#title_container").children("input").val(title).select();
+        $("#title_container").children("input").bind("blur", function () {
+            changeTitle();
+        }).bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                changeTitle();
+            }
+        });
+    });
+    function changeTitle() {
+        var newTitle = $.trim($("#title_container").children("input").val());
+        var oldTitle = $(".diagram_title").text();
+        if (newTitle != oldTitle && chartId != "") {
+            var msgObj = {
+                action: "changeTitle",
+                title: newTitle
+            };
+            CLB.send(msgObj);
+        }
+        var title = newTitle != "" ? newTitle : oldTitle;
+        $("title").text(title + " - ProcessOn");
+        $(".diagram_title").text(title).show();
+        $("#title_container").children("input").remove();
+    }
+    /** ############################Toolbar列表############################ */
+    //撤销
+    $("#bar_undo").button({
+        onClick: function () {
+            MessageSource.undo();
+        }
+    });
+    //恢复
+    $("#bar_redo").button({
+        onClick: function () {
+            MessageSource.redo();
+        }
+    });
+    //格式刷
+    $("#bar_brush").button({
+        onClick: function () {
+            if ($("#bar_brush").button().isSelected()) {
+                //取消格式刷
+                $("#bar_brush").button().unselect();
+                $("#designer_op_help").hide();
+                $(document).unbind("keydown.cancelbrush");
+                Utils.selectCallback = null;
+            } else {
+                Designer.clipboard.brush();
+            }
+        }
+    });
+    //字体
+    $("#bar_font_family").button({
+        onMousedown: function () {
+            $("#font_list").dropdown({
+                target: $("#bar_font_family"),
+                onSelect: function (item) {
+                    var font = item.text();
+                    Designer.setFontStyle({ fontFamily: font });
+                    $("#bar_font_family").button().setText(font);
+                }
+            });
+            //选中
+            var family = $("#bar_font_family").text().trim();
+            $("#font_list").children().each(function () {
+                if ($(this).text() == family) {
+                    $("#font_list").dropdown("select", $(this));
+                    return false;
+                }
+            });
+        }
+    });
+    //字号
+    $("#bar_font_size").spinner({
+        min: 12,
+        max: 100,
+        step: 1,
+        unit: "px",
+        onChange: function (val) {
+            Designer.setFontStyle({ size: val });
+        }
+    });
+    $("#bar_font_size").spinner().setValue("13px");
+    //加粗
+    $("#bar_font_bold").button({
+        onClick: function () {
+            var bold = !$("#bar_font_bold").button().isSelected();
+            Designer.setFontStyle({ bold: bold });
+            $("#bar_font_bold").toggleClass("selected");
+        }
+    });
+    //斜体
+    $("#bar_font_italic").button({
+        onClick: function () {
+            var italic = !$("#bar_font_italic").button().isSelected();
+            Designer.setFontStyle({ italic: italic });
+            $("#bar_font_italic").toggleClass("selected");
+        }
+    });
+    //下划线
+    $("#bar_font_underline").button({
+        onClick: function () {
+            var underline = !$("#bar_font_underline").button().isSelected();
+            Designer.setFontStyle({ underline: underline });
+            $("#bar_font_underline").toggleClass("selected");
+        }
+    });
+    //字体颜色
+    $("#bar_font_color").button({
+        onMousedown: function () {
+            var color = $("#bar_font_color").button().getColor();
+            $.colorpicker({
+                target: $("#bar_font_color"),
+                onSelect: function (color) {
+                    Designer.setFontStyle({ color: color });
+                    $("#bar_font_color").button().setColor(color)
+                },
+                color: color
+            });
+        }
+    });
+    //文本对齐
+    $("#bar_font_align").button({
+        onMousedown: function () {
+            $("#font_align_list").dropdown({
+                target: $("#bar_font_align"),
+                onSelect: function (item) {
+                    var align = {};
+                    align[item.attr("cate")] = item.attr("al");
+                    Designer.setFontStyle(align);
+                }
+            });
+        }
+    });
+    //填充
+    $("#bar_fill").button({
+        onMousedown: function () {
+            var color = $("#bar_fill").button().getColor();
+            $.colorpicker({
+                target: $("#bar_fill"),
+                onSelect: function (color) {
+                    Designer.setFillStyle({ type: "solid", color: color });
+                    $("#bar_fill").button().setColor(color)
+                },
+                color: color,
+                extend: "<div id='bar_fill_gradient' title='渐变' class='toolbar_button active'><div class='ico gradient'></div></div><div id='bar_fill_img' title='图片...' class='toolbar_button active'><div class='ico ico_img'></div></div><div id='bar_fill_more' class='toolbar_button active'>More...</div>"
+            });
+            $("#bar_fill_gradient").unbind().bind("click", function () {
+                Designer.setFillStyle({ type: "gradient" });
+                $("#color_picker").dropdown("close");
+            });
+            $("#bar_fill_img").unbind().bind("click", function () {
+                UI.showImageSelect(function (fileId, w, h) {
+                    Designer.setFillStyle({
+                        type: "image",
+                        fileId: fileId,
+                        imageW: w,
+                        imageH: h
+                    });
+                });
+                $("#color_picker").dropdown("close");
+            });
+            $("#bar_fill_more").unbind().bind("click", function () {
+                Dock.showView("graphic");
+                $("#color_picker").dropdown("close");
+            });
+        }
+    });
+    //线条颜色
+    $("#bar_line_color").button({
+        onMousedown: function () {
+            var color = $("#bar_line_color").button().getColor();
+            $.colorpicker({
+                target: $("#bar_line_color"),
+                onSelect: function (color) {
+                    Designer.setLineStyle({ lineColor: color });
+                    $("#bar_line_color").button().setColor(color)
+                },
+                color: color
+            });
+        }
+    });
+    //线条宽度
+    $("#bar_line_width").button({
+        onMousedown: function () {
+            $("#line_width_list").dropdown({
+                target: $("#bar_line_width"),
+                onSelect: function (item) {
+                    var width = parseInt(item.text());
+                    Designer.setLineStyle({ lineWidth: width });
+                }
+            });
+            //选中
+            var width = Utils.getSelected()[0].lineStyle.lineWidth;
+            $("#line_width_list").children().each(function () {
+                if (parseInt($(this).text()) == width) {
+                    $("#line_width_list").dropdown("select", $(this));
+                }
+            });
+        }
+    });
+    //线条样式
+    $("#bar_line_style").button({
+        onMousedown: function () {
+            $("#line_style_list").dropdown({
+                target: $("#bar_line_style"),
+                onSelect: function (item) {
+                    var lineStyle = item.attr("line");
+                    Designer.setLineStyle({ lineStyle: lineStyle });
+                }
+            });
+            //选中
+            var style = Utils.getSelected()[0].lineStyle.lineStyle;
+            var item = $("#line_style_list").children("li[line=" + style + "]");
+            $("#line_style_list").dropdown("select", item);
+        }
+    });
+    //连接线类型
+    $("#bar_linkertype").button({
+        onMousedown: function () {
+            $("#line_type_list").dropdown({
+                target: $("#bar_linkertype"),
+                onSelect: function (item) {
+                    var type = item.attr("tp");
+                    Designer.setLinkerType(type);
+                    var cls = item.children("div").attr("class");
+                    $("#bar_linkertype").children("div:eq(0)").attr("class", cls);
+                }
+            });
+        }
+    });
+    //开始箭头
+    $("#bar_beginarrow").button({
+        onMousedown: function () {
+            $("#beginarrow_list").dropdown({
+                target: $("#bar_beginarrow"),
+                onSelect: function (item) {
+                    var arrow = item.attr("arrow");
+                    Designer.setLineStyle({ beginArrowStyle: arrow });
+                    var cls = item.children("div").attr("class");
+                    $("#bar_beginarrow").children("div:eq(0)").attr("class", cls);
+                }
+            });
+            //选中
+            var style = Utils.getSelectedLinkers()[0].lineStyle.beginArrowStyle;
+            var item = $("#beginarrow_list").children("li[arrow=" + style + "]");
+            $("#beginarrow_list").dropdown("select", item);
+        }
+    });
+    //结束箭头
+    $("#bar_endarrow").button({
+        onMousedown: function () {
+            $("#endarrow_list").dropdown({
+                target: $("#bar_endarrow"),
+                onSelect: function (item) {
+                    var arrow = item.attr("arrow");
+                    Designer.setLineStyle({ endArrowStyle: arrow });
+                    var cls = item.children("div").attr("class");
+                    $("#bar_endarrow").children("div:eq(0)").attr("class", cls);
+                }
+            });
+            //选中
+            var style = Utils.getSelectedLinkers()[0].lineStyle.endArrowStyle;
+            var item = $("#endarrow_list").children("li[arrow=" + style + "]");
+            $("#endarrow_list").dropdown("select", item);
+        }
+    });
+    //顶层底层
+    $("#bar_front").button({
+        onClick: function () {
+            Designer.layerShapes("front");
+        }
+    });
+    $("#bar_back").button({
+        onClick: function () {
+            Designer.layerShapes("back");
+        }
+    });
+    //加解锁
+    $("#bar_lock").button({
+        onClick: function () {
+            Designer.lockShapes();
+        }
+    });
+    $("#bar_unlock").button({
+        onClick: function () {
+            Designer.unlockShapes();
+        }
+    });
+    $("#bar_link").button({
+        onClick: function () {
+            UI.showInsertLink();
+        }
+    });
+    $("#bar_collapse").button({
+        onClick: function () {
+            UI.toogleTitleBar();
+        }
+    });
+    /** ##############菜单列表############## */
+    $("#menu_bar").children().bind("mousedown", function (e) {
+        var tar = $(this);
+        showMenuBarList(tar);
+        e.stopPropagation();
+    });
+    $("#menu_bar").children().bind("mouseenter", function () {
+        var tar = $(this);
+        if ($("#ui_container").find(".options_menu:visible").length > 0) {
+            showMenuBarList(tar);
+        }
+    });
 
-		function showMenuBarList(menuBar) {
-			var menuId = menuBar.attr("menu");
-			//只读
-			if (menuBar.hasClass("readonly")) {
-				return;
-			}
-			$("#" + menuId).dropdown({
-				target: menuBar,
-				onSelect: function (item) {
-					menuSelected(item);
-				}
-			});
-			if (menuId == "bar_list_page") {
-				var item = $("#bar_list_pagesize").children("li[w=" + Model.define.page.width + "][h=" + Model.define.page.height + "]");
-				if (item.length > 0) {
-					$("#bar_list_pagesize").dropdown("select", item);
-				} else {
-					$("#bar_list_pagesize").dropdown("select", $("#page_size_custom"));
-				}
-				$("#page_size_w").spinner().setValue( Model.define.page.width + "px");
-				$("#page_size_h").spinner().setValue( Model.define.page.height + "px");
-				item = $("#bar_list_padding").children("li[p=" + Model.define.page.padding + "]");
-				$("#bar_list_padding").dropdown("select", item);
-				item = $("#bar_list_gridsize").children("li[s=" + Model.define.page.gridSize + "]");
-				$("#bar_list_gridsize").dropdown("select", item);
-				if (Model.define.page.showGrid) {
-					$("#bar_list_page").dropdown("select", $("#bar_list_page").children("li[ac=set_page_showgrid]"));
-				} else {
-					$("#bar_list_page").dropdown("unselect", $("#bar_list_page").children("li[ac=set_page_showgrid]"));
-				}
-			} else if (menuId == "bar_list_view") {
-				var item = $("#bar_list_view").children(".static[zoom='" + Designer.config.scale + "']");
-				if (item.length) {
-					$("#bar_list_page").dropdown("select", item);
-				}
-			}
-		}
+    function showMenuBarList(menuBar) {
+        var menuId = menuBar.attr("menu");
+        //只读
+        if (menuBar.hasClass("readonly")) {
+            return;
+        }
+        $("#" + menuId).dropdown({
+            target: menuBar,
+            onSelect: function (item) {
+                menuSelected(item);
+            }
+        });
+        if (menuId == "bar_list_page") {
+            var item = $("#bar_list_pagesize").children("li[w=" + Model.define.page.width + "][h=" + Model.define.page.height + "]");
+            if (item.length > 0) {
+                $("#bar_list_pagesize").dropdown("select", item);
+            } else {
+                $("#bar_list_pagesize").dropdown("select", $("#page_size_custom"));
+            }
+            $("#page_size_w").spinner().setValue(Model.define.page.width + "px");
+            $("#page_size_h").spinner().setValue(Model.define.page.height + "px");
+            item = $("#bar_list_padding").children("li[p=" + Model.define.page.padding + "]");
+            $("#bar_list_padding").dropdown("select", item);
+            item = $("#bar_list_gridsize").children("li[s=" + Model.define.page.gridSize + "]");
+            $("#bar_list_gridsize").dropdown("select", item);
+            if (Model.define.page.showGrid) {
+                $("#bar_list_page").dropdown("select", $("#bar_list_page").children("li[ac=set_page_showgrid]"));
+            } else {
+                $("#bar_list_page").dropdown("unselect", $("#bar_list_page").children("li[ac=set_page_showgrid]"));
+            }
+        } else if (menuId == "bar_list_view") {
+            var item = $("#bar_list_view").children(".static[zoom='" + Designer.config.scale + "']");
+            if (item.length) {
+                $("#bar_list_page").dropdown("select", item);
+            }
+        }
+    }
 
-		function menuSelected(item) {
-			var action = item.attr("ac");
-			//编辑菜单
-			if (action == "rename") {
-				$(".diagram_title").trigger("click");
-			} else if (action == "close") {
-				window.location.href = "/diagraming/back?id=" + chartId;
-			} else if (action == "saveAs") {
-				UI.showSaveAs();
-			} else if (action == "export") {
-				$("#export_dialog").dlg();
-			} else if (action == "undo") {
-				MessageSource.undo();
-			} else if (action == "redo") {
-				MessageSource.redo();
-			} else if (action == "cut") {
-				Designer.clipboard.cut();
-			} else if (action == "copy") {
-				Designer.clipboard.copy();
-			} else if (action == "paste") {
-				Designer.clipboard.paste();
-			} else if (action == "duplicate") {
-				Designer.clipboard.duplicate();
-			} else if (action == "brush") {
-				Designer.clipboard.brush();
-			} else if (action == "selectall") {
-				Designer.selectAll();
-			} else if (action == "delete") {
-				Designer.op.removeShape();
-				//视图缩放
-			} else if (action == "zoom") {
-				var zoom = item.attr("zoom");
-				if (zoom == "in") {
-					Designer.zoomIn();
-				} else if (zoom == "out") {
-					Designer.zoomOut();
-				} else {
-					var zoomScale = parseFloat(zoom);
-					Designer.setZoomScale(zoomScale);
-				}
-				//插入
-			} else if (action == "insert") {
-				var insertType = item.attr("in");
-				if (insertType == "text") {
-					Designer.op.changeState("creating_free_text");
-				} else if (insertType == "image") {
-					UI.showImageSelect(function (fileId, w, h) {
-						UI.insertImage(fileId, w, h);
-					});
-				} else if (insertType == "line") {
-					Designer.op.changeState("creating_free_linker");
-				}
-				//页面
-			} else if (action == "set_page_size") {
-				var w = parseInt(item.attr("w"));
-				var h = parseInt(item.attr("h"));
-				Designer.setPageStyle({ width: w, height: h });
-			} else if (action == "set_page_padding") {
-				var p = parseInt(item.attr("p"));
-				Designer.setPageStyle({ padding: p })
-			} else if (action == "set_page_showgrid") {
-				if (item.menuitem().isSelected()) {
-					item.menuitem().unselect();
-					Designer.setPageStyle({ showGrid: false });
-				} else {
-					item.menuitem().select();
-					Designer.setPageStyle({ showGrid: true });
-				}
-			} else if (action == "set_page_gridsize") {
-				var s = parseInt(item.attr("s"));
-				Designer.setPageStyle({ gridSize: s })
-			}
-			//排列
-			else if (action == "front") {
-				Designer.layerShapes("front");
-			} else if (action == "back") {
-				Designer.layerShapes("back");
-			} else if (action == "forward") {
-				Designer.layerShapes("forward");
-			} else if (action == "backward") {
-				Designer.layerShapes("backward");
-			} else if (action == "align_shape") {
-				var align = item.attr("al");
-				Designer.alignShapes(align);
-			} else if (action == "distribute_shape") {
-				var type = item.attr("dis");
-				Designer.distributeShapes(type);
-			} else if (action == "match_size") {
-				if (item.attr("custom")) {
-					Dock.showView("metric");
-				} else {
-					var type = {};
-					var w = item.attr("w");
-					var h = item.attr("h");
-					if (w) {
-						type.w = w;
-					}
-					if (h) {
-						type.h = h;
-					}
-					Designer.matchSize(type);
-				}
-			} else if (action == "lock") {
-				Designer.lockShapes();
-			} else if (action == "unlock") {
-				Designer.unlockShapes();
-			} else if (action == "group") {
-				Designer.group();
-			} else if (action == "ungroup") {
-				Designer.ungroup();
-			} else if (action == "hotkey") {
-				UI.showHotKey();
-			} else if (action == "feedback") {
-				UI.showFeedBack();
-			} else if (action == "getting_started") {
-				UI.gettingStart();
-			}
-		}
-		$("#page_size_w").spinner({
-			min: 200,
-			unit: "px",
-			step: 100,
-			onChange: function (val) {
-				Designer.setPageStyle({ width: val });
-			}
-		});
-		$("#page_size_h").spinner({
-			min: 200,
-			unit: "px",
-			step: 100,
-			onChange: function (val) {
-				Designer.setPageStyle({ height: val });
-			}
-		});
-		//给设置页面背景色，放一个colorpicker
-		var pickerHtml = $("#color_picker").html();
-		var newPicker = $("<div class='menu color_picker extend_menu'>" + pickerHtml + "</div>").appendTo($("#bar_page_color"));
-		newPicker.css("right", "-179px");
-		newPicker.children(".color_items").children("div").unbind().bind("click", function () {
-			var color = $(this).css("background-color");
-			color = color.replace(/\s/g, "");
-			color = color.substring(4, color.length - 1);
-			Designer.setPageStyle({ backgroundColor: color });
-			$("#bar_list_page").dropdown("close");
-		});
-		//抛出事件，控制状态
-		Designer.events.push("selectChanged", 0);
-		Designer.events.push("clipboardChanged", 0);
-		Designer.events.push("undoStackChanged", 0);
-		Designer.events.push("redoStackChanged", 0);
-	};
-	/**
-	 * 更新UI
-	 */
-UI.update= function () {
-		var selectedIds = Utils.getSelectedIds();
-		var count = selectedIds.length;
-		var linkerIds = Utils.getSelectedLinkerIds();
-		var linkerCount = linkerIds.length;
-		var shapeIds = Utils.getSelectedShapeIds();
-		var shapeCount = shapeIds.length;
-		var lockedCount = Utils.getSelectedLockedIds().length;
-		var groupCount = Utils.getSelectedGroups().length;
-		//排列菜单
-		var arrangeMenu = $("#bar_list_arrange");
-		if (count == 0) {
-			$(".toolbar").find(".selected").removeClass("selected");
-			//没有选中，让某些按钮失效
-			if ($("#designer_op_help").is(":visible")) {
-				$("#bar_brush").button().enable();
-				$("#bar_brush").button().select();
-			} else {
-				$("#bar_brush").button().disable();
-			}
-			//字体
-			$("#bar_font_family").button().disable();
-			$("#bar_font_size").button().disable();
-			$("#bar_font_bold").button().disable();
-			$("#bar_font_italic").button().disable();
-			$("#bar_font_underline").button().disable();
-			$("#bar_font_color").button().disable();
-			$("#bar_font_align").button().disable();
-			//线条
-			$("#bar_line_color").button().disable();
-			$("#bar_line_width").button().disable();
-			$("#bar_line_style").button().disable();
-			//顶层底层
-			$("#bar_front").button().disable();
-			$("#bar_back").button().disable();
-			//锁定
-			$("#bar_lock").button().disable();
-			//编辑菜单
-			var editMenu = $("#bar_list_edit");
-			editMenu.children("li[ac=cut]").menuitem().disable();
-			editMenu.children("li[ac=copy]").menuitem().disable();
-			editMenu.children("li[ac=duplicate]").menuitem().disable();
-			editMenu.children("li[ac=brush]").menuitem().disable();
-			editMenu.children("li[ac=delete]").menuitem().disable();
-			//排列菜单
-			arrangeMenu.children("li[ac=front]").menuitem().disable();
-			arrangeMenu.children("li[ac=back]").menuitem().disable();
-			arrangeMenu.children("li[ac=forward]").menuitem().disable();
-			arrangeMenu.children("li[ac=backward]").menuitem().disable();
-			arrangeMenu.children("li[ac=lock]").menuitem().disable();
-		} else {
-			//选中，让某些按钮激活
-			$("#bar_brush").button().enable();
-			if ($("#designer_op_help").is(":visible")) {
-				$("#bar_brush").button().select();
-			}
-			$("#bar_font_family").button().enable();
-			$("#bar_font_size").button().enable();
-			$("#bar_font_bold").button().enable();
-			$("#bar_font_italic").button().enable();
-			$("#bar_font_underline").button().enable();
-			$("#bar_font_color").button().enable();
-			$("#bar_font_align").button().enable();
-			//线条
-			$("#bar_line_color").button().enable();
-			$("#bar_line_width").button().enable();
-			$("#bar_line_style").button().enable();
-			//顶层底层
-			$("#bar_front").button().enable();
-			$("#bar_back").button().enable();
-			//锁定
-			$("#bar_lock").button().enable();
-			//编辑菜单
-			var editMenu = $("#bar_list_edit");
-			editMenu.children("li[ac=cut]").menuitem().enable();
-			editMenu.children("li[ac=copy]").menuitem().enable();
-			editMenu.children("li[ac=duplicate]").menuitem().enable();
-			editMenu.children("li[ac=brush]").menuitem().enable();
-			editMenu.children("li[ac=delete]").menuitem().enable();
-			//排列菜单
-			arrangeMenu.children("li[ac=front]").menuitem().enable();
-			arrangeMenu.children("li[ac=back]").menuitem().enable();
-			arrangeMenu.children("li[ac=forward]").menuitem().enable();
-			arrangeMenu.children("li[ac=backward]").menuitem().enable();
-			arrangeMenu.children("li[ac=lock]").menuitem().enable();
-			//设置Toolbar样式
-			var shape = Model.getShapeById(selectedIds[0]);
-			$("#bar_font_family").button().setText( shape.fontStyle.fontFamily);
-			$("#bar_font_size").spinner().setValue( shape.fontStyle.size + "px");
-			if (shape.fontStyle.bold) {
-				$("#bar_font_bold").button().select();
-			} else {
-				$("#bar_font_bold").button().unselect();
-			}
-			if (shape.fontStyle.italic) {
-				$("#bar_font_italic").button().select();
-			} else {
-				$("#bar_font_italic").button().unselect();
-			}
-			if (shape.fontStyle.underline) {
-				$("#bar_font_underline").button().select();
-			} else {
-				$("#bar_font_underline").button().unselect();
-			}
-			$("#bar_font_color").button().setColor( shape.fontStyle.color);
-			$("#bar_line_color").button().setColor( shape.lineStyle.lineColor);
-		}
-		//通过图形的数量，判读是否可以填充
-		if (shapeCount == 0) {
-			$("#bar_fill").button().disable();
-		} else {
-			$("#bar_fill").button().enable();
-			var shape = Model.getShapeById(shapeIds[0]);
-			//图形填充
-			if (shape.fillStyle.type == "solid") {
-				$("#bar_fill").button().setColor( shape.fillStyle.color);
-			} else if (shape.fillStyle.type == "gradient") {
-				$("#bar_fill").button().setColor( shape.fillStyle.endColor);
-			}
-		}
-		if (shapeCount != 1) {
-			$("#bar_link").button().disable();
-		} else {
-			$("#bar_link").button().enable();
-		}
-		//通过连接线的数量，判断是否可以修改箭头等
-		if (linkerCount == 0) {
-			$("#bar_linkertype").button().disable();
-			$("#bar_beginarrow").button().disable();
-			$("#bar_endarrow").button().disable();
-		} else {
-			$("#bar_linkertype").button().enable();
-			$("#bar_beginarrow").button().enable();
-			$("#bar_endarrow").button().enable();
-			var shape = Model.getShapeById(linkerIds[0]);
-			//设置Toolbar的线条样式
-			$("#bar_linkertype").children("div:eq(0)").attr("class", "ico linkertype_" + shape.linkerType.toLowerCase());
-			$("#bar_beginarrow").children("div:eq(0)").attr("class", "ico ico_arrow larrow_" + shape.lineStyle.beginArrowStyle.toLowerCase());
-			$("#bar_endarrow").children("div:eq(0)").attr("class", "ico ico_arrow rarrow_" + shape.lineStyle.endArrowStyle.toLowerCase());
-		}
-		//通过锁定的数量，判断是否可以解除锁定
-		if (lockedCount == 0) {
-			$("#bar_unlock").button().disable();
-			arrangeMenu.children("li[ac=unlock]").menuitem().disable();
-		} else {
-			$("#bar_unlock").button().enable();
-			arrangeMenu.children("li[ac=unlock]").menuitem().enable();
-		}
-		//是否激活组合、对齐，条件是选中图形要不少于2个
-		if (count < 2) {
-			arrangeMenu.children("li[ac=group]").menuitem().disable();
-			$("#bar_arrange_align").menuitem().disable();
-		} else {
-			arrangeMenu.children("li[ac=group]").menuitem().enable();
-			$("#bar_arrange_align").menuitem().enable();
-		}
-		//是否激活匹配大小，条件是选中形状要不少于2个
-		if (shapeCount < 2) {
-			$("#bar_arrange_match").menuitem().disable();
-		} else {
-			$("#bar_arrange_match").menuitem().enable();
-		}
-		//是否激活排列图形菜单，条件是选中图形要不少于3个
-		if (count < 3) {
-			$("#bar_arrange_dist").menuitem().disable();
-		} else {
-			$("#bar_arrange_dist").menuitem().enable();
-		}
-		//通过组合的数量，判断是否可以取消组合
-		if (groupCount == 0) {
-			arrangeMenu.children("li[ac=ungroup]").menuitem().disable();
-		} else {
-			arrangeMenu.children("li[ac=ungroup]").menuitem().enable();
-		}
-	};
-	/**
-	 * 打开插入链接
-	 */
-UI.showInsertLink = function() {
+    function menuSelected(item) {
+        var action = item.attr("ac");
+        //编辑菜单
+        if (action == "rename") {
+            $(".diagram_title").trigger("click");
+        } else if (action == "close") {
+            window.location.href = "/diagraming/back?id=" + chartId;
+        } else if (action == "saveAs") {
+            UI.showSaveAs();
+        } else if (action == "export") {
+            $("#export_dialog").dlg();
+        } else if (action == "undo") {
+            MessageSource.undo();
+        } else if (action == "redo") {
+            MessageSource.redo();
+        } else if (action == "cut") {
+            Designer.clipboard.cut();
+        } else if (action == "copy") {
+            Designer.clipboard.copy();
+        } else if (action == "paste") {
+            Designer.clipboard.paste();
+        } else if (action == "duplicate") {
+            Designer.clipboard.duplicate();
+        } else if (action == "brush") {
+            Designer.clipboard.brush();
+        } else if (action == "selectall") {
+            Designer.selectAll();
+        } else if (action == "delete") {
+            Designer.op.removeShape();
+            //视图缩放
+        } else if (action == "zoom") {
+            var zoom = item.attr("zoom");
+            if (zoom == "in") {
+                Designer.zoomIn();
+            } else if (zoom == "out") {
+                Designer.zoomOut();
+            } else {
+                var zoomScale = parseFloat(zoom);
+                Designer.setZoomScale(zoomScale);
+            }
+            //插入
+        } else if (action == "insert") {
+            var insertType = item.attr("in");
+            if (insertType == "text") {
+                Designer.op.changeState("creating_free_text");
+            } else if (insertType == "image") {
+                UI.showImageSelect(function (fileId, w, h) {
+                    UI.insertImage(fileId, w, h);
+                });
+            } else if (insertType == "line") {
+                Designer.op.changeState("creating_free_linker");
+            }
+            //页面
+        } else if (action == "set_page_size") {
+            var w = parseInt(item.attr("w"));
+            var h = parseInt(item.attr("h"));
+            Designer.setPageStyle({ width: w, height: h });
+        } else if (action == "set_page_padding") {
+            var p = parseInt(item.attr("p"));
+            Designer.setPageStyle({ padding: p })
+        } else if (action == "set_page_showgrid") {
+            if (item.menuitem().isSelected()) {
+                item.menuitem().unselect();
+                Designer.setPageStyle({ showGrid: false });
+            } else {
+                item.menuitem().select();
+                Designer.setPageStyle({ showGrid: true });
+            }
+        } else if (action == "set_page_gridsize") {
+            var s = parseInt(item.attr("s"));
+            Designer.setPageStyle({ gridSize: s })
+        }
+        //排列
+        else if (action == "front") {
+            Designer.layerShapes("front");
+        } else if (action == "back") {
+            Designer.layerShapes("back");
+        } else if (action == "forward") {
+            Designer.layerShapes("forward");
+        } else if (action == "backward") {
+            Designer.layerShapes("backward");
+        } else if (action == "align_shape") {
+            var align = item.attr("al");
+            Designer.alignShapes(align);
+        } else if (action == "distribute_shape") {
+            var type = item.attr("dis");
+            Designer.distributeShapes(type);
+        } else if (action == "match_size") {
+            if (item.attr("custom")) {
+                Dock.showView("metric");
+            } else {
+                var type = {};
+                var w = item.attr("w");
+                var h = item.attr("h");
+                if (w) {
+                    type.w = w;
+                }
+                if (h) {
+                    type.h = h;
+                }
+                Designer.matchSize(type);
+            }
+        } else if (action == "lock") {
+            Designer.lockShapes();
+        } else if (action == "unlock") {
+            Designer.unlockShapes();
+        } else if (action == "group") {
+            Designer.group();
+        } else if (action == "ungroup") {
+            Designer.ungroup();
+        } else if (action == "hotkey") {
+            UI.showHotKey();
+        } else if (action == "feedback") {
+            UI.showFeedBack();
+        } else if (action == "getting_started") {
+            UI.gettingStart();
+        }
+    }
+    $("#page_size_w").spinner({
+        min: 200,
+        unit: "px",
+        step: 100,
+        onChange: function (val) {
+            Designer.setPageStyle({ width: val });
+        }
+    });
+    $("#page_size_h").spinner({
+        min: 200,
+        unit: "px",
+        step: 100,
+        onChange: function (val) {
+            Designer.setPageStyle({ height: val });
+        }
+    });
+    //给设置页面背景色，放一个colorpicker
+    var pickerHtml = $("#color_picker").html();
+    var newPicker = $("<div class='menu color_picker extend_menu'>" + pickerHtml + "</div>").appendTo($("#bar_page_color"));
+    newPicker.css("right", "-179px");
+    newPicker.children(".color_items").children("div").unbind().bind("click", function () {
+        var color = $(this).css("background-color");
+        color = color.replace(/\s/g, "");
+        color = color.substring(4, color.length - 1);
+        Designer.setPageStyle({ backgroundColor: color });
+        $("#bar_list_page").dropdown("close");
+    });
+    //抛出事件，控制状态
+    Designer.events.push("selectChanged", 0);
+    Designer.events.push("clipboardChanged", 0);
+    Designer.events.push("undoStackChanged", 0);
+    Designer.events.push("redoStackChanged", 0);
+};
+/**
+ * 更新UI
+ */
+UI.update = function () {
+    var selectedIds = Utils.getSelectedIds();
+    var count = selectedIds.length;
+    var linkerIds = Utils.getSelectedLinkerIds();
+    var linkerCount = linkerIds.length;
+    var shapeIds = Utils.getSelectedShapeIds();
+    var shapeCount = shapeIds.length;
+    var lockedCount = Utils.getSelectedLockedIds().length;
+    var groupCount = Utils.getSelectedGroups().length;
+    //排列菜单
+    var arrangeMenu = $("#bar_list_arrange");
+    if (count == 0) {
+        $(".toolbar").find(".selected").removeClass("selected");
+        //没有选中，让某些按钮失效
+        if ($("#designer_op_help").is(":visible")) {
+            $("#bar_brush").button().enable();
+            $("#bar_brush").button().select();
+        } else {
+            $("#bar_brush").button().disable();
+        }
+        //字体
+        $("#bar_font_family").button().disable();
+        $("#bar_font_size").button().disable();
+        $("#bar_font_bold").button().disable();
+        $("#bar_font_italic").button().disable();
+        $("#bar_font_underline").button().disable();
+        $("#bar_font_color").button().disable();
+        $("#bar_font_align").button().disable();
+        //线条
+        $("#bar_line_color").button().disable();
+        $("#bar_line_width").button().disable();
+        $("#bar_line_style").button().disable();
+        //顶层底层
+        $("#bar_front").button().disable();
+        $("#bar_back").button().disable();
+        //锁定
+        $("#bar_lock").button().disable();
+        //编辑菜单
+        var editMenu = $("#bar_list_edit");
+        editMenu.children("li[ac=cut]").menuitem().disable();
+        editMenu.children("li[ac=copy]").menuitem().disable();
+        editMenu.children("li[ac=duplicate]").menuitem().disable();
+        editMenu.children("li[ac=brush]").menuitem().disable();
+        editMenu.children("li[ac=delete]").menuitem().disable();
+        //排列菜单
+        arrangeMenu.children("li[ac=front]").menuitem().disable();
+        arrangeMenu.children("li[ac=back]").menuitem().disable();
+        arrangeMenu.children("li[ac=forward]").menuitem().disable();
+        arrangeMenu.children("li[ac=backward]").menuitem().disable();
+        arrangeMenu.children("li[ac=lock]").menuitem().disable();
+    } else {
+        //选中，让某些按钮激活
+        $("#bar_brush").button().enable();
+        if ($("#designer_op_help").is(":visible")) {
+            $("#bar_brush").button().select();
+        }
+        $("#bar_font_family").button().enable();
+        $("#bar_font_size").button().enable();
+        $("#bar_font_bold").button().enable();
+        $("#bar_font_italic").button().enable();
+        $("#bar_font_underline").button().enable();
+        $("#bar_font_color").button().enable();
+        $("#bar_font_align").button().enable();
+        //线条
+        $("#bar_line_color").button().enable();
+        $("#bar_line_width").button().enable();
+        $("#bar_line_style").button().enable();
+        //顶层底层
+        $("#bar_front").button().enable();
+        $("#bar_back").button().enable();
+        //锁定
+        $("#bar_lock").button().enable();
+        //编辑菜单
+        var editMenu = $("#bar_list_edit");
+        editMenu.children("li[ac=cut]").menuitem().enable();
+        editMenu.children("li[ac=copy]").menuitem().enable();
+        editMenu.children("li[ac=duplicate]").menuitem().enable();
+        editMenu.children("li[ac=brush]").menuitem().enable();
+        editMenu.children("li[ac=delete]").menuitem().enable();
+        //排列菜单
+        arrangeMenu.children("li[ac=front]").menuitem().enable();
+        arrangeMenu.children("li[ac=back]").menuitem().enable();
+        arrangeMenu.children("li[ac=forward]").menuitem().enable();
+        arrangeMenu.children("li[ac=backward]").menuitem().enable();
+        arrangeMenu.children("li[ac=lock]").menuitem().enable();
+        //设置Toolbar样式
+        var shape = Model.getShapeById(selectedIds[0]);
+        $("#bar_font_family").button().setText(shape.fontStyle.fontFamily);
+        $("#bar_font_size").spinner().setValue(shape.fontStyle.size + "px");
+        if (shape.fontStyle.bold) {
+            $("#bar_font_bold").button().select();
+        } else {
+            $("#bar_font_bold").button().unselect();
+        }
+        if (shape.fontStyle.italic) {
+            $("#bar_font_italic").button().select();
+        } else {
+            $("#bar_font_italic").button().unselect();
+        }
+        if (shape.fontStyle.underline) {
+            $("#bar_font_underline").button().select();
+        } else {
+            $("#bar_font_underline").button().unselect();
+        }
+        $("#bar_font_color").button().setColor(shape.fontStyle.color);
+        $("#bar_line_color").button().setColor(shape.lineStyle.lineColor);
+    }
+    //通过图形的数量，判读是否可以填充
+    if (shapeCount == 0) {
+        $("#bar_fill").button().disable();
+    } else {
+        $("#bar_fill").button().enable();
+        var shape = Model.getShapeById(shapeIds[0]);
+        //图形填充
+        if (shape.fillStyle.type == "solid") {
+            $("#bar_fill").button().setColor(shape.fillStyle.color);
+        } else if (shape.fillStyle.type == "gradient") {
+            $("#bar_fill").button().setColor(shape.fillStyle.endColor);
+        }
+    }
+    if (shapeCount != 1) {
+        $("#bar_link").button().disable();
+    } else {
+        $("#bar_link").button().enable();
+    }
+    //通过连接线的数量，判断是否可以修改箭头等
+    if (linkerCount == 0) {
+        $("#bar_linkertype").button().disable();
+        $("#bar_beginarrow").button().disable();
+        $("#bar_endarrow").button().disable();
+    } else {
+        $("#bar_linkertype").button().enable();
+        $("#bar_beginarrow").button().enable();
+        $("#bar_endarrow").button().enable();
+        var shape = Model.getShapeById(linkerIds[0]);
+        //设置Toolbar的线条样式
+        $("#bar_linkertype").children("div:eq(0)").attr("class", "ico linkertype_" + shape.linkerType.toLowerCase());
+        $("#bar_beginarrow").children("div:eq(0)").attr("class", "ico ico_arrow larrow_" + shape.lineStyle.beginArrowStyle.toLowerCase());
+        $("#bar_endarrow").children("div:eq(0)").attr("class", "ico ico_arrow rarrow_" + shape.lineStyle.endArrowStyle.toLowerCase());
+    }
+    //通过锁定的数量，判断是否可以解除锁定
+    if (lockedCount == 0) {
+        $("#bar_unlock").button().disable();
+        arrangeMenu.children("li[ac=unlock]").menuitem().disable();
+    } else {
+        $("#bar_unlock").button().enable();
+        arrangeMenu.children("li[ac=unlock]").menuitem().enable();
+    }
+    //是否激活组合、对齐，条件是选中图形要不少于2个
+    if (count < 2) {
+        arrangeMenu.children("li[ac=group]").menuitem().disable();
+        $("#bar_arrange_align").menuitem().disable();
+    } else {
+        arrangeMenu.children("li[ac=group]").menuitem().enable();
+        $("#bar_arrange_align").menuitem().enable();
+    }
+    //是否激活匹配大小，条件是选中形状要不少于2个
+    if (shapeCount < 2) {
+        $("#bar_arrange_match").menuitem().disable();
+    } else {
+        $("#bar_arrange_match").menuitem().enable();
+    }
+    //是否激活排列图形菜单，条件是选中图形要不少于3个
+    if (count < 3) {
+        $("#bar_arrange_dist").menuitem().disable();
+    } else {
+        $("#bar_arrange_dist").menuitem().enable();
+    }
+    //通过组合的数量，判断是否可以取消组合
+    if (groupCount == 0) {
+        arrangeMenu.children("li[ac=ungroup]").menuitem().disable();
+    } else {
+        arrangeMenu.children("li[ac=ungroup]").menuitem().enable();
+    }
+};
+/**
+ * 打开插入链接
+ */
+UI.showInsertLink = function () {
     $("#link_dialog").dlg();
     var addr = Utils.getSelected()[0].link;
     if (!addr) {
@@ -702,31 +705,31 @@ UI.showInsertLink = function() {
     }
     $("#linkto_addr").val(addr).select();
     $("#linkto_addr").unbind().bind("keydown",
-        function(e) {
+        function (e) {
             if (e.keyCode == 13) {
                 UI.setLink();
             }
         });
 };
-	/**
-	 * 设置连接
-	 */
-UI.setLink = function() {
+/**
+ * 设置连接
+ */
+UI.setLink = function () {
     var newLink = $("#linkto_addr").val();
     var shape = Utils.getSelected()[0];
     shape.link = newLink;
     Model.update(shape);
     $('#link_dialog').dlg('close');
 };
-	/**
-	 * 选中图片后的回调
-	 * @type {}
-	 */
+/**
+ * 选中图片后的回调
+ * @type {}
+ */
 UI.imageSelectedCallback = null;
-	/**
-	 * 打开图片选择
-	 */
-UI.showImageSelect = function(callback) {
+/**
+ * 打开图片选择
+ */
+UI.showImageSelect = function (callback) {
     if (callback) {
         this.imageSelectedCallback = callback;
     } else {
@@ -742,7 +745,7 @@ UI.showImageSelect = function(callback) {
     $(".image_list").height(height);
     //		this.showImageSelectContent("upload");
     $("#image_dialog").dlg({
-        onClose: function() {
+        onClose: function () {
             if (UI.fetchingRequest) {
                 UI.fetchingRequest.abort();
             }
@@ -754,16 +757,16 @@ UI.showImageSelect = function(callback) {
     };
     //左侧分类绑定事件
     $(".image_sources").children().unbind().bind("click",
-        function() {
+        function () {
             UI.showImageSelectContent($(this).attr("ty"));
         });
     //上传
     $("#upload_img_res").empty();
     $("#input_upload_image").unbind().bind("change",
-        function() {
+        function () {
             $("#upload_img_res").html("<span style='color: #666'>上传中...</span>");
             $("#frm_upload_image").submitForm({
-                success: function(result) {
+                success: function (result) {
                     if (result.result == "type_wrong") {
                         $("#upload_img_res").html("此文件不是图片，请重新选择");
                     } else if (result.result == "size_wrong") {
@@ -793,41 +796,41 @@ UI.showImageSelect = function(callback) {
                 $("#img_url_area").html("<span class='img_url_loading_tip'>正在加载预览...</span>");
                 var newImage = $("<img class='img_url_loading' src='" + url + "'/>").appendTo("#img_url_area");
                 newImage.unbind().bind("load",
-                    function() {
+                    function () {
                         newImage.show().addClass("img_url_loaded");
                         $(".img_url_loading_tip").remove();
                     }).bind("error",
-                    function() {
+                    function () {
                         $("#img_url_area")
                             .html(
-                                "<div class='img_url_error'>无法在此地址下加载图片。<ul><li>请检查图片地址是否输入正确。</li><li>确保图片地址是公开的。</li><ul></div>");
+                            "<div class='img_url_error'>无法在此地址下加载图片。<ul><li>请检查图片地址是否输入正确。</li><li>确保图片地址是公开的。</li><ul></div>");
                     });
             }
         }
     }
 
     $("#input_img_url").unbind().bind("paste",
-        function() {
+        function () {
             urlChanged();
         }).bind("keyup",
-        function() {
+        function () {
             urlChanged();
         });
     //搜索
     $("#input_img_search").unbind().bind("keydown",
-        function(e) {
+        function (e) {
             if (e.keyCode == 13) {
                 UI.searchImgByGoogle();
             }
         });
     $("#btn_img_search").unbind().bind("click",
-        function() {
+        function () {
             UI.searchImgByGoogle();
         });
     //完成按钮
     $("#set_image_submit").button().enable();
     $("#set_image_submit").button({
-        onClick: function() {
+        onClick: function () {
             var currentTab = $(".image_sources").children(".active").attr("ty");
             if (currentTab == "upload") {
                 var selectedImg = $("#user_image_items").children(".image_item_selected");
@@ -860,29 +863,29 @@ UI.showImageSelect = function(callback) {
     });
     //取消按钮
     $("#set_image_cancel").button({
-        onClick: function() {
+        onClick: function () {
             $("#image_dialog").data("dlg").close();
         }
     });
     $("#set_image_text").empty();
 };
-	/**
-	 * 显示图片设置类型
-	 */
-UI.showImageSelectContent = function(type) {
+/**
+ * 显示图片设置类型
+ */
+UI.showImageSelectContent = function (type) {
     $(".image_list").hide();
     $("#image_select_" + type).show().find("input[type=text]").select();
     $(".image_sources").children().removeClass("active");
     $(".image_sources").children("li[ty=" + type + "]").addClass("active");
 };
-	/**
-	 * 加载用户图片
-	 */
-UI.loadUserImages = function(refresh) {
+/**
+ * 加载用户图片
+ */
+UI.loadUserImages = function (refresh) {
     $("#user_image_items").empty();
     $.ajax({
         url: "/user_image/list",
-        success: function(data) {
+        success: function (data) {
             if (data.images) {
                 for (var i = 0; i < data.images.length; i++) {
                     var img = data.images[i];
@@ -896,10 +899,10 @@ UI.loadUserImages = function(refresh) {
 };
 UI.searchIndex = 0;
 UI.searchKeywords = "";
-	/**
-	 * 通过Google搜索图片
-	 */
-UI.searchImgByGoogle = function() {
+/**
+ * 通过Google搜索图片
+ */
+UI.searchImgByGoogle = function () {
     var keywords = $("#input_img_search").val();
     if (keywords.trim() != "") {
         $("#google_image_items").empty();
@@ -910,10 +913,10 @@ UI.searchImgByGoogle = function() {
         $("#input_img_search").focus();
     }
 };
-	/**
-	 * 加载Google图片 
-	 */
-UI.loadGoogleImg = function() {
+/**
+ * 加载Google图片 
+ */
+UI.loadGoogleImg = function () {
     $.getScript("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
         this.searchKeywords +
         "&rsz=8&start=" +
@@ -928,11 +931,11 @@ UI.loadGoogleImg = function() {
     $("#google_image_items").append("<div class='img_gg_loading_tip'>正在加载图片...</div>");
     this.searchIndex++;
 };
-	/**
-	 * Google搜索回调
-	 * @param {} data
-	 */
-UI.googleImgCallback = function(data) {
+/**
+ * Google搜索回调
+ * @param {} data
+ */
+UI.googleImgCallback = function (data) {
     var responseData = data.responseData;
     var results = responseData.results;
     for (var i = 0; i < results.length; i++) {
@@ -947,10 +950,10 @@ UI.googleImgCallback = function(data) {
             .append("<div onclick='UI.loadGoogleImg()' class='gg_img_more toolbar_button active'>显示更多结果...</div>");
     }
 };
-	/**
-	 * 添加一个用户图片
-	 */
-UI.appendUserImage = function(img) {
+/**
+ * 添加一个用户图片
+ */
+UI.appendUserImage = function (img) {
     var box = $("<div class='image_item' id='" +
         img.imageId +
         "' fileId='" +
@@ -961,16 +964,16 @@ UI.appendUserImage = function(img) {
         img.imageH +
         "'></div>").appendTo($("#user_image_items"));
     box.unbind().bind("click",
-        function() {
+        function () {
             $(".image_item_selected").removeClass('image_item_selected');
             $(this).addClass('image_item_selected');
         }).bind("mouseenter",
-        function() {
+        function () {
             var target = $(this);
             var remove = $("<div class='ico ico_remove_red'></div>").appendTo(target);
             var id = target.attr("id");
             remove.bind("click",
-                function() {
+                function () {
                     target.fadeOut();
                     $.ajax({
                         url: "/user_image/remove",
@@ -978,60 +981,60 @@ UI.appendUserImage = function(img) {
                     });
                 });
         }).bind("mouseleave",
-        function() {
+        function () {
             $(this).find(".ico_remove_red").remove();
         });
     var location = "/file/id/" + img.fileId + "/diagram_user_image";
     var newImage = $("<img src='" + location + "'/>").appendTo(box);
     newImage.bind("load",
-        function() {
+        function () {
             $(this).css("margin-top", (140 - $(this).height()) / 2);
         });
 };
-	/**
-	 * 添加一个Google搜索的图片
-	 */
-UI.appendGoogleImage = function(img) {
+/**
+ * 添加一个Google搜索的图片
+ */
+UI.appendGoogleImage = function (img) {
     var title = img.title + " (" + img.width + " × " + img.height + ")";
     var box = $("<div class='image_item' u='" + img.url + "' title='" + title + "'></div>")
         .appendTo($("#google_image_items"));
     box.unbind().bind("click",
-        function() {
+        function () {
             $(".image_item_selected").removeClass('image_item_selected');
             $(this).addClass('image_item_selected');
         });
     var newImage = $("<img src='" + img.tbUrl + "'/>").appendTo(box);
     newImage.bind("load",
-        function() {
+        function () {
             $(this).css("margin-top", (140 - $(this).height()) / 2);
         });
 };
-	/**
-	 * 设置形状的背景图片
-	 * @param {} source
-	 */
-UI.setShapeImage = function(fileId, w, h) {
+/**
+ * 设置形状的背景图片
+ * @param {} source
+ */
+UI.setShapeImage = function (fileId, w, h) {
     if (this.imageSelectedCallback) {
         this.imageSelectedCallback(fileId, w, h);
     }
     $("#image_dialog").data("dlg").close();
 };
-	/**
-	 * 加载URL图片的ajax请求对象
-	 * @type {}
-	 */
+/**
+ * 加载URL图片的ajax请求对象
+ * @type {}
+ */
 UI.fetchingRequest = null;
-	/**
-	 * 通过URL设置图片
-	 * @param {} url
-	 */
-UI.setShapeImageByURL = function(url) {
+/**
+ * 通过URL设置图片
+ * @param {} url
+ */
+UI.setShapeImageByURL = function (url) {
     $("#set_image_text").removeClass("errored").text("正在应用图片，请稍候...");
     $("#set_image_submit").button().disable();
     UI.fetchingRequest = $.ajax({
         url: "/user_image/reference",
         data: { url: url },
-        success: function(result) {
+        success: function (result) {
             $("#set_image_submit").button().enable();
             if (result.result == "exception") {
                 $("#set_image_text").addClass("errored").html("无法使用此图片，请选择其他图片");
@@ -1043,14 +1046,14 @@ UI.setShapeImageByURL = function(url) {
         }
     });
 };
-	/**
-	 * 插入图片
-	 * @param {} source
-	 * @param {} location
-	 * @param {} w
-	 * @param {} h
-	 */
-UI.insertImage = function(fileId, w, h) {
+/**
+ * 插入图片
+ * @param {} source
+ * @param {} location
+ * @param {} w
+ * @param {} h
+ */
+UI.insertImage = function (fileId, w, h) {
     w = parseInt(w);
     h = parseInt(h);
     var layout = $("#designer_layout");
@@ -1066,20 +1069,20 @@ UI.insertImage = function(fileId, w, h) {
     Utils.unselect();
     Utils.selectShape(shape.id);
 };
-	/**
-	 * 执行导出
-	 */
-UI.doExport = function() {
+/**
+ * 执行导出
+ */
+UI.doExport = function () {
     var definition = JSON.stringify(Model.define);
     $("#export_definition").val(definition);
     $("#export_title").val($(".diagram_title").text());
     $("#export_form").submit();
     $('#export_dialog').dlg('close');
 };
-	/**
-	 * 展示hotkey列表
-	 */
-UI.showHotKey = function() {
+/**
+ * 展示hotkey列表
+ */
+UI.showHotKey = function () {
     var height = $(window).height() - 175;
     if (height > 500) {
         height = 500 + "px";
@@ -1088,10 +1091,10 @@ UI.showHotKey = function() {
     $("#hotkey_list").css({ "top": "28px" });
     $("#hotkey_list .dialog_content").css({ "height": height });
 };
-	/**
-	 * 显示反馈dialog
-	 */
-UI.showFeedBack = function() {
+/**
+ * 显示反馈dialog
+ */
+UI.showFeedBack = function () {
     $("#send_feedback").css({
         width: "auto",
         height: "auto"
@@ -1103,10 +1106,10 @@ UI.showFeedBack = function() {
     $(".feedback_error_email_format").hide();
     $(".feedback_error_msg").hide();
 };
-	/**
-	 * 发送反馈
-	 */
-UI.sendFeedBack = function(dom) {
+/**
+ * 发送反馈
+ */
+UI.sendFeedBack = function (dom) {
     $(".feedback_error_email_format").hide();
     $(".feedback_error_msg").hide();
     var email = $.trim($("#feedback_email").val());
@@ -1130,7 +1133,7 @@ UI.sendFeedBack = function(dom) {
             email: email,
             url: location.href
         },
-        success: function(data) {
+        success: function (data) {
             $(".dlg_mask").remove();
             $("#send_feedback").animate({
                 left: $(window).width(),
@@ -1142,13 +1145,13 @@ UI.sendFeedBack = function(dom) {
         }
     });
 };
-	/**
-	 * 打开开始向导
-	 */
-UI.	gettingStart= function (delay) {
-		this.showStartStep(1);
-	};
-UI.showStartStep = function(step, dom) {
+/**
+ * 打开开始向导
+ */
+UI.gettingStart = function (delay) {
+    this.showStartStep(1);
+};
+UI.showStartStep = function (step, dom) {
     $(".mark_content").hide();
     var content = $(".mark" + step + "_content");
     content.show();
@@ -1178,91 +1181,91 @@ UI.showStartStep = function(step, dom) {
     }
     content.css({ top: top, left: left });
 };
-	/**
-	 * 关闭开始向导
-	 * @param {} dom
-	 */
-UI.closeGettingStart = function(dom) {
+/**
+ * 关闭开始向导
+ * @param {} dom
+ */
+UI.closeGettingStart = function (dom) {
     $(".mark_content").hide();
 };
-	/**
-	 * Getting Start END--
-	 */
+/**
+ * Getting Start END--
+ */
 
-UI.	showAddColla= function () {
-		Util.ajax({
-			url: "/collaboration/get_colla_role_list",
-			data: { chartId: chartId },
-			success: function (data) {
-				$("#colla_dialog").find(".role_list").html(data).scrollTop(999);
-				$("#colla_dialog").removeClass("_update");
-				$("#colla_dialog").css({ "top": ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
-				$("#colla_dialog").dlg();
-				$("#colla_suggest_box").empty();
-				$("#add_prompt4").hide();
-				$("#add_prompt3").hide();
-				$("#add_prompt2").hide();
-				$("#add_prompt1").show();
-			}
-		});
+UI.showAddColla = function () {
+    Util.ajax({
+        url: "/collaboration/get_colla_role_list",
+        data: { chartId: chartId },
+        success: function (data) {
+            $("#colla_dialog").find(".role_list").html(data).scrollTop(999);
+            $("#colla_dialog").removeClass("_update");
+            $("#colla_dialog").css({ "top": ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
+            $("#colla_dialog").dlg();
+            $("#colla_suggest_box").empty();
+            $("#add_prompt4").hide();
+            $("#add_prompt3").hide();
+            $("#add_prompt2").hide();
+            $("#add_prompt1").show();
+        }
+    });
 
-		var lastVal = "";
-		$("#input_add_colla").val("").unbind().bind("keyup", function () {
-			//加载信息
-			var value = $(this).val();
-			if (value == lastVal) {
-				return;
-			}
-			lastVal = value;
-			if (value == "") {
-				$("#colla_suggest_box").empty();
-				$("#add_prompt4").hide();
-				$("#add_prompt3").hide();
-				$("#add_prompt2").hide();
-				$("#add_prompt1").show();
-				return;
-			}
-			Util.ajax({
-				url: "/collaboration/get_new_members",
-				data: { value: value },
-				success: function (data) {
-					$("#colla_suggest_box").html(data);
-					if ($("#colla_suggest_box").find("ul").length > 0) {
-						$("#add_prompt4").hide();
-						$("#add_prompt3").hide();
-						$("#add_prompt2").show();
-						$("#add_prompt1").hide();
-					} else {
-						$("#add_prompt4").hide();
-						$("#add_prompt3").hide();
-						$("#add_prompt2").hide();
-						$("#add_prompt1").show();
-					}
-					$(".colla_suggest").find("li").unbind().bind("click", function () {
-						$("#add_prompt4").hide();
-						$("#add_prompt3").hide();
-						$("#add_prompt2").show();
-						$("#add_prompt1").hide();
-						var value = $.trim($("#input_add_colla").val());
-						$(".colla_suggest").find("li").removeClass("seled");
-						$(this).addClass("seled");
-						var type = $(this).attr("joinType");
-						var target = $(this).attr("target");
-						if (type == "user") {
-							var userName = $(this).attr("username");
-							$("#input_add_colla").val(userName);
-							$("#add_userid").val(target);
-						} else {
-							$("#input_add_colla").val(target);
-							$("#add_userid").val(target);
-						}
-						$("#add_type").val(type);
-					});
-				}
-			});
-		});
-	};
-UI.doAddCollaboration = function() {
+    var lastVal = "";
+    $("#input_add_colla").val("").unbind().bind("keyup", function () {
+        //加载信息
+        var value = $(this).val();
+        if (value == lastVal) {
+            return;
+        }
+        lastVal = value;
+        if (value == "") {
+            $("#colla_suggest_box").empty();
+            $("#add_prompt4").hide();
+            $("#add_prompt3").hide();
+            $("#add_prompt2").hide();
+            $("#add_prompt1").show();
+            return;
+        }
+        Util.ajax({
+            url: "/collaboration/get_new_members",
+            data: { value: value },
+            success: function (data) {
+                $("#colla_suggest_box").html(data);
+                if ($("#colla_suggest_box").find("ul").length > 0) {
+                    $("#add_prompt4").hide();
+                    $("#add_prompt3").hide();
+                    $("#add_prompt2").show();
+                    $("#add_prompt1").hide();
+                } else {
+                    $("#add_prompt4").hide();
+                    $("#add_prompt3").hide();
+                    $("#add_prompt2").hide();
+                    $("#add_prompt1").show();
+                }
+                $(".colla_suggest").find("li").unbind().bind("click", function () {
+                    $("#add_prompt4").hide();
+                    $("#add_prompt3").hide();
+                    $("#add_prompt2").show();
+                    $("#add_prompt1").hide();
+                    var value = $.trim($("#input_add_colla").val());
+                    $(".colla_suggest").find("li").removeClass("seled");
+                    $(this).addClass("seled");
+                    var type = $(this).attr("joinType");
+                    var target = $(this).attr("target");
+                    if (type == "user") {
+                        var userName = $(this).attr("username");
+                        $("#input_add_colla").val(userName);
+                        $("#add_userid").val(target);
+                    } else {
+                        $("#input_add_colla").val(target);
+                        $("#add_userid").val(target);
+                    }
+                    $("#add_type").val(type);
+                });
+            }
+        });
+    });
+};
+UI.doAddCollaboration = function () {
     if ($(".colla_suggest").length > 0) {
         if ($(".colla_suggest").find(".seled").length == 0) {
             $("#add_prompt1").hide();
@@ -1289,7 +1292,7 @@ UI.doAddCollaboration = function() {
             $(".add_new_button").find(".designer_button").text("发送中...");
             var target_item = null;
             if (type == "email") {
-                $(".role_list").find(".role_item").each(function() {
+                $(".role_list").find(".role_item").each(function () {
                     if ($(this).attr("type") == type && $(this).attr("target") == target) {
                         target_item = $(this);
                         $(this).find(".inviting_").text("再次邀请");
@@ -1306,7 +1309,7 @@ UI.doAddCollaboration = function() {
             Util.ajax({
                 url: "/collaboration/add",
                 data: paramOuter,
-                success: function(data) {
+                success: function (data) {
                     var result = data.result;
                     if (result == "exists") {
                         $("#add_prompt2").hide();
@@ -1317,7 +1320,7 @@ UI.doAddCollaboration = function() {
                         Util.ajax({
                             url: "/collaboration/get_colla_role_list",
                             data: { chartId: chartId },
-                            success: function(data) {
+                            success: function (data) {
                                 $(".role_list").html(data).scrollTop(999);
                             }
                         });
@@ -1326,35 +1329,35 @@ UI.doAddCollaboration = function() {
                     $("#colla_dialog").addClass("_update")
                         .css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
                     if (result != "exists") {
-                        setTimeout(function() {
-                                $("#add_prompt3").hide();
-                                $("#add_prompt2").hide();
-                                $("#add_prompt1").hide();
-                                $("#add_prompt4").show();
-                            },
-                            400);
-                    }
-                    setTimeout(function() {
+                        setTimeout(function () {
                             $("#add_prompt3").hide();
                             $("#add_prompt2").hide();
-                            $("#add_prompt4").hide();
-                            $("#add_prompt1").show();
-                            $("#input_add_colla").val("");
-                            $("#colla_suggest_box").html("");
+                            $("#add_prompt1").hide();
+                            $("#add_prompt4").show();
                         },
+                            400);
+                    }
+                    setTimeout(function () {
+                        $("#add_prompt3").hide();
+                        $("#add_prompt2").hide();
+                        $("#add_prompt4").hide();
+                        $("#add_prompt1").show();
+                        $("#input_add_colla").val("");
+                        $("#colla_suggest_box").html("");
+                    },
                         1000);
                 }
             });
         }
     }
 };
-UI.deleteCollaRole = function(dom) {
+UI.deleteCollaRole = function (dom) {
     var parent = $(dom).parent(".role_item");
     var collaborationId = parent.attr("collaborationId");
     Util.ajax({
         url: "/collaboration/delete",
         data: { collaborationId: collaborationId },
-        success: function(data) {
+        success: function (data) {
             if (data.result == "success") parent.remove();
         }
     });
@@ -1362,11 +1365,11 @@ UI.deleteCollaRole = function(dom) {
     $("#colla_dialog").addClass("_update")
         .css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
 };
-UI.changeCollaRole = function(collaborationId, dom) {
+UI.changeCollaRole = function (collaborationId, dom) {
     Util.ajax({
         url: "/collaboration/set_role",
         data: { collaborationId: collaborationId, role: $(dom).val() },
-        success: function(data) {
+        success: function (data) {
             if (data.result == "success") {
                 $(dom).parent(".given_role").find(".change_success").stop().animate({ "left": "-38px" }, 200).delay(400)
                     .animate({ "left": "0px" }, 200);
@@ -1374,36 +1377,36 @@ UI.changeCollaRole = function(collaborationId, dom) {
         }
     });
 };
-	/**
-	 * 打开图形管理
-	 */
-UI.showShapesManage = function() {
+/**
+ * 打开图形管理
+ */
+UI.showShapesManage = function () {
     $("#shapes_dialog").dlg();
     $("#shape_manage_list").children("li").unbind().bind("click",
-        function() {
+        function () {
             var chkbox = $(this).find("input");
             var checked = !chkbox.is(":checked");
             chkbox.attr("checked", checked);
             cateChanged(chkbox);
         });
     $("#shape_manage_list").find("input").unbind().bind("click",
-        function(e) {
+        function (e) {
             e.stopPropagation();
             cateChanged($(this));
-        }).each(function() {
-        var categorys = $(this).val();
-        var arr = categorys.split(",");
-        var exists = true;
-        for (var i = 0; i < arr.length; i++) {
-            var cate = arr[i];
-            if (!CategoryMapping[cate]) {
-                //此分类下的图形，没有在当前使用中
-                exists = false;
-                break;
+        }).each(function () {
+            var categorys = $(this).val();
+            var arr = categorys.split(",");
+            var exists = true;
+            for (var i = 0; i < arr.length; i++) {
+                var cate = arr[i];
+                if (!CategoryMapping[cate]) {
+                    //此分类下的图形，没有在当前使用中
+                    exists = false;
+                    break;
+                }
             }
-        }
-        $(this).attr("checked", exists);
-    });
+            $(this).attr("checked", exists);
+        });
 
     function cateChanged(chk) {
         var value = chk.val();
@@ -1411,7 +1414,7 @@ UI.showShapesManage = function() {
         var chked = chk.is(":checked");
         if (arr.length > 1) {
             //是父级节点
-            $("#shape_manage_list").find("input").each(function() {
+            $("#shape_manage_list").find("input").each(function () {
                 var cate = $(this).val();
                 if (arr.indexOf(cate) >= 0) {
                     //是选择父级的子节点
@@ -1420,7 +1423,7 @@ UI.showShapesManage = function() {
             });
         } else {
             //选择的是子节点
-            $("#shape_manage_list").find(".cate_parent").each(function() {
+            $("#shape_manage_list").find(".cate_parent").each(function () {
                 //获取所有的父节点，判断子节点是否都全部选中了
                 var cates = $(this).val().split(",");
                 var allChked = true;
@@ -1436,11 +1439,12 @@ UI.showShapesManage = function() {
         }
     }
 };
-	/**
-	 * 保存图形管理
-	 */
-UI.saveShapesManage = function() {
-    var checked = $("#shape_manage_list").find("input:checked:not(.cate_parent)").map(function() {
+/**
+ * 保存图形管理
+ */
+UI.saveShapesManage = function () {
+
+    var checked = $("#shape_manage_list").find("input:checked:not(.cate_parent)").map(function () {
         return $(this).val();
     }).get();
     var a = "";
@@ -1451,19 +1455,19 @@ UI.saveShapesManage = function() {
     };
     CLB.send(msgObj);
     Designer.setSchema(checked,
-        function() {
+        function () {
             $('#shapes_dialog').dlg('close');
         });
 };
-	/**
-	 * 打开用户菜单
-	 */
-UI.showUserMenu = function(e) {
+/**
+ * 打开用户菜单
+ */
+UI.showUserMenu = function (e) {
     e.stopPropagation();
     $("#user_menu").dropdown({
         target: $(".user"),
         position: "right",
-        onSelect: function(item) {
+        onSelect: function (item) {
             var action = item.attr("ac");
             if (action == "dia") {
                 location.href = "/diagrams";
@@ -1475,14 +1479,14 @@ UI.showUserMenu = function(e) {
         }
     });
 };
-	/**
-	 * 打开另存为
-	 */
-UI.showSaveAs = function() {
+/**
+ * 打开另存为
+ */
+UI.showSaveAs = function () {
     $("#saveas_dialog").dlg();
     $("#saveas_title").val($(".diagram_title").text()).select();
 };
-UI.doSaveAs = function() {
+UI.doSaveAs = function () {
     if ($("#saveas_title").val().trim() == "") {
         $("#saveas_title").focus();
         return;
@@ -1491,11 +1495,11 @@ UI.doSaveAs = function() {
     $("#saveas_form").submit();
     $("#btn_dosaveas").removeAttr("onclick");
 };
-	/**
-	 * 打开形状的选项
-	 * @param {} options
-	 */
-UI.showShapeOptions = function() {
+/**
+ * 打开形状的选项
+ * @param {} options
+ */
+UI.showShapeOptions = function () {
     var shapeIds = Utils.getSelectedShapeIds();
     UI.hideShapeOptions();
     if (shapeIds.length == 1) {
@@ -1518,7 +1522,7 @@ UI.showShapeOptions = function() {
                         label: "Tabs:",
                         type: "spinner",
                         value: shape.path.length - 1,
-                        onChange: function(tabCount) {
+                        onChange: function (tabCount) {
                             console.log("tabcount change");
                             //先查找当前第几个是激活的tab
                             var activeIndex = 0;
@@ -1600,7 +1604,7 @@ UI.showShapeOptions = function() {
                         type: "spinner",
                         value: activeTab,
                         max: shape.path.length - 1,
-                        onChange: function(active) {
+                        onChange: function (active) {
                             console.log("select change");
                             //先查找当前第几个是激活的tab
                             var activeIndex = 0;
@@ -1635,11 +1639,11 @@ UI.showShapeOptions = function() {
             box = $("<div id='shape_opt_box'><div class='shape_opts'></div><div class='ico dlg_close'></div></div>")
                 .appendTo("#designer_canvas");
             box.bind("mousedown",
-                function(e) {
+                function (e) {
                     e.stopPropagation();
                 });
             box.children(".dlg_close").bind("click",
-                function(e) {
+                function (e) {
                     box.hide();
                 });
         }
@@ -1674,28 +1678,28 @@ UI.showShapeOptions = function() {
         }
     }
 };
-UI.hideShapeOptions = function() {
+UI.hideShapeOptions = function () {
     $("#shape_opt_box").hide();
 };
-	/**
-	 * 收缩、展开标题栏
-	 */
-UI.	toogleTitleBar= function () {
-		var ico = $("#bar_collapse").children("div");
-		if (ico.hasClass("collapse")) {
-			ico.attr("class", "ico expand");
-			$(".titlebar").slideUp(200);
-			$(".layout").animate({
-				height: $(window).height() - 73
-			}, 200);
-			$("#bar_return").show();
-		} else {
-			ico.attr("class", "ico collapse");
-			$(".titlebar").slideDown(200);
-			$(".layout").animate({
-				height: $(window).height() - 143
-			}, 200);
-			$("#bar_return").hide();
-		}
-	
+/**
+ * 收缩、展开标题栏
+ */
+UI.toogleTitleBar = function () {
+    var ico = $("#bar_collapse").children("div");
+    if (ico.hasClass("collapse")) {
+        ico.attr("class", "ico expand");
+        $(".titlebar").slideUp(200);
+        $(".layout").animate({
+            height: $(window).height() - 73
+        }, 200);
+        $("#bar_return").show();
+    } else {
+        ico.attr("class", "ico collapse");
+        $(".titlebar").slideDown(200);
+        $(".layout").animate({
+            height: $(window).height() - 143
+        }, 200);
+        $("#bar_return").hide();
+    }
+
 };

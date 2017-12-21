@@ -34,7 +34,7 @@ Designer.events.addEventListener("created", function(shape){
 /**
  * 连接线创建时
  */
-Designer.events.addEventListener("linkerCreating", function(linker){
+Designer.events.addEventListener("linkerCreating", function (linker){
 	
 });
 
