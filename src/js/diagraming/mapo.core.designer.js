@@ -1,9 +1,8 @@
+"use strict";
 
 /**
  * 核心JS
  */
-
-
 var Designer = {
 	/**
 	 * 配置信息
