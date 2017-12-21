@@ -1,9 +1,9 @@
 /**
 * 用户界面JS
 */
+class UI {}
 
-var UI = {
-	init: function () {
+	UI.init=function () {
 		//修改标题
 		$(".diagram_title").bind("click", function () {
 			if ($(this).hasClass("readonly")) {
@@ -512,11 +512,11 @@ var UI = {
 		Designer.events.push("clipboardChanged", 0);
 		Designer.events.push("undoStackChanged", 0);
 		Designer.events.push("redoStackChanged", 0);
-	},
+	};
 	/**
 	 * 更新UI
 	 */
-	update: function () {
+UI.update= function () {
 		var selectedIds = Utils.getSelectedIds();
 		var count = selectedIds.length;
 		var linkerIds = Utils.getSelectedLinkerIds();
@@ -690,321 +690,359 @@ var UI = {
 		} else {
 			arrangeMenu.children("li[ac=ungroup]").menuitem().enable();
 		}
-	},
+	};
 	/**
 	 * 打开插入链接
 	 */
-	showInsertLink: function () {
-		$("#link_dialog").dlg();
-		var addr = Utils.getSelected()[0].link;
-		if (!addr) {
-			addr = "";
-		}
-		$("#linkto_addr").val(addr).select();
-		$("#linkto_addr").unbind().bind("keydown", function (e) {
-			if (e.keyCode == 13) {
-				UI.setLink();
-			}
-		});
-	},
+UI.showInsertLink = function() {
+    $("#link_dialog").dlg();
+    var addr = Utils.getSelected()[0].link;
+    if (!addr) {
+        addr = "";
+    }
+    $("#linkto_addr").val(addr).select();
+    $("#linkto_addr").unbind().bind("keydown",
+        function(e) {
+            if (e.keyCode == 13) {
+                UI.setLink();
+            }
+        });
+};
 	/**
 	 * 设置连接
 	 */
-	setLink: function () {
-		var newLink = $("#linkto_addr").val();
-		var shape = Utils.getSelected()[0];
-		shape.link = newLink;
-		Model.update(shape);
-		$('#link_dialog').dlg('close');
-	},
+UI.setLink = function() {
+    var newLink = $("#linkto_addr").val();
+    var shape = Utils.getSelected()[0];
+    shape.link = newLink;
+    Model.update(shape);
+    $('#link_dialog').dlg('close');
+};
 	/**
 	 * 选中图片后的回调
 	 * @type {}
 	 */
-	imageSelectedCallback: null,
+UI.imageSelectedCallback = null;
 	/**
 	 * 打开图片选择
 	 */
-	showImageSelect: function (callback) {
-		if (callback) {
-			this.imageSelectedCallback = callback;
-		} else {
-			this.imageSelectedCallback = null;
-		}
-		this.fetchingRequest = null;
-		var height = $(window).height() - 200;
-		if (height > 550) {
-			height = 550;
-		} else if (height < 200) {
-			height = 200;
-		}
-		$(".image_list").height(height);
-		//		this.showImageSelectContent("upload");
-		$("#image_dialog").dlg({
-			onClose: function () {
-				if (UI.fetchingRequest) {
-					UI.fetchingRequest.abort();
-				}
-			}
-		});
-		//加载用户图片
-		if ($("#image_select_upload").is(":visible")) {
-			UI.loadUserImages();
-		};
-		//左侧分类绑定事件
-		$(".image_sources").children().unbind().bind("click", function () {
-			UI.showImageSelectContent($(this).attr("ty"));
-		});
-		//上传
-		$("#upload_img_res").empty();
-		$("#input_upload_image").unbind().bind("change", function () {
-			$("#upload_img_res").html("<span style='color: #666'>上传中...</span>");
-			$("#frm_upload_image").submitForm({
-				success: function (result) {
-					if (result.result == "type_wrong") {
-						$("#upload_img_res").html("此文件不是图片，请重新选择");
-					} else if (result.result == "size_wrong") {
-						$("#upload_img_res").html("文件大小超出要求，最大2M");
-					} else if (result.result == "exception") {
-						$("#upload_img_res").html("无法使用此图片，请选择其他图片");
-					} else {
-						var img = result.image;
-						UI.setShapeImage(img.fileId, img.imageW, img.imageH);
-					}
-				}
-			});
-		});
-		//输入URL
-		$("#input_img_url").val("");
-		$("#img_url_area").empty();
-		var oldUrl = "";
-		function urlChanged() {
-			var url = $("#input_img_url").val().trim();
-			if (url != oldUrl) {
-				oldUrl = url
-				if (url != "") {
-					if (url.indexOf("http") < 0) {
-						url = "http://" + url;
-					}
-					$("#img_url_area").html("<span class='img_url_loading_tip'>正在加载预览...</span>");
-					var newImage = $("<img class='img_url_loading' src='" + url + "'/>").appendTo("#img_url_area");
-					newImage.unbind().bind("load", function () {
-						newImage.show().addClass("img_url_loaded");
-						$(".img_url_loading_tip").remove();
-					}).bind("error", function () {
-						$("#img_url_area").html("<div class='img_url_error'>无法在此地址下加载图片。<ul><li>请检查图片地址是否输入正确。</li><li>确保图片地址是公开的。</li><ul></div>");
-					});
-				}
-			}
-		}
-		$("#input_img_url").unbind().bind("paste", function () {
-			urlChanged();
-		}).bind("keyup", function () {
-			urlChanged();
-		});
-		//搜索
-		$("#input_img_search").unbind().bind("keydown", function (e) {
-			if (e.keyCode == 13) {
-				UI.searchImgByGoogle();
-			}
-		});
-		$("#btn_img_search").unbind().bind("click", function () {
-			UI.searchImgByGoogle();
-		});
-		//完成按钮
-		$("#set_image_submit").button().enable();
-		$("#set_image_submit").button({
-			onClick: function () {
-				var currentTab = $(".image_sources").children(".active").attr("ty");
-				if (currentTab == "upload") {
-					var selectedImg = $("#user_image_items").children(".image_item_selected");
-					if (selectedImg.length > 0) {
-						var fileId = selectedImg.attr("fileId");
-						var imageW = selectedImg.attr("w");
-						var imageH = selectedImg.attr("h");
-						UI.setShapeImage(fileId, imageW, imageH);
-					} else {
-						$("#image_dialog").data("dlg").close();
-					}
-				} else if (currentTab == "url") {
-					if ($(".img_url_loaded").length > 0) {
-						var url = $(".img_url_loaded").attr("src");
-						UI.setShapeImageByURL(url);
-					} else {
-						$("#image_dialog").data("dlg").close();
-					}
-				} else {
-					//搜索
-					var selectedImg = $("#google_image_items").children(".image_item_selected");
-					if (selectedImg.length > 0) {
-						var url = selectedImg.attr("u");
-						UI.setShapeImageByURL(url);
-					} else {
-						$("#image_dialog").data("dlg").close();
-					}
-				}
-			}
-		});
-		//取消按钮
-		$("#set_image_cancel").button({
-			onClick: function () {
-				$("#image_dialog").data("dlg").close();
-			}
-		});
-		$("#set_image_text").empty();
-	},
+UI.showImageSelect = function(callback) {
+    if (callback) {
+        this.imageSelectedCallback = callback;
+    } else {
+        this.imageSelectedCallback = null;
+    }
+    this.fetchingRequest = null;
+    var height = $(window).height() - 200;
+    if (height > 550) {
+        height = 550;
+    } else if (height < 200) {
+        height = 200;
+    }
+    $(".image_list").height(height);
+    //		this.showImageSelectContent("upload");
+    $("#image_dialog").dlg({
+        onClose: function() {
+            if (UI.fetchingRequest) {
+                UI.fetchingRequest.abort();
+            }
+        }
+    });
+    //加载用户图片
+    if ($("#image_select_upload").is(":visible")) {
+        UI.loadUserImages();
+    };
+    //左侧分类绑定事件
+    $(".image_sources").children().unbind().bind("click",
+        function() {
+            UI.showImageSelectContent($(this).attr("ty"));
+        });
+    //上传
+    $("#upload_img_res").empty();
+    $("#input_upload_image").unbind().bind("change",
+        function() {
+            $("#upload_img_res").html("<span style='color: #666'>上传中...</span>");
+            $("#frm_upload_image").submitForm({
+                success: function(result) {
+                    if (result.result == "type_wrong") {
+                        $("#upload_img_res").html("此文件不是图片，请重新选择");
+                    } else if (result.result == "size_wrong") {
+                        $("#upload_img_res").html("文件大小超出要求，最大2M");
+                    } else if (result.result == "exception") {
+                        $("#upload_img_res").html("无法使用此图片，请选择其他图片");
+                    } else {
+                        var img = result.image;
+                        UI.setShapeImage(img.fileId, img.imageW, img.imageH);
+                    }
+                }
+            });
+        });
+    //输入URL
+    $("#input_img_url").val("");
+    $("#img_url_area").empty();
+    var oldUrl = "";
+
+    function urlChanged() {
+        var url = $("#input_img_url").val().trim();
+        if (url != oldUrl) {
+            oldUrl = url
+            if (url != "") {
+                if (url.indexOf("http") < 0) {
+                    url = "http://" + url;
+                }
+                $("#img_url_area").html("<span class='img_url_loading_tip'>正在加载预览...</span>");
+                var newImage = $("<img class='img_url_loading' src='" + url + "'/>").appendTo("#img_url_area");
+                newImage.unbind().bind("load",
+                    function() {
+                        newImage.show().addClass("img_url_loaded");
+                        $(".img_url_loading_tip").remove();
+                    }).bind("error",
+                    function() {
+                        $("#img_url_area")
+                            .html(
+                                "<div class='img_url_error'>无法在此地址下加载图片。<ul><li>请检查图片地址是否输入正确。</li><li>确保图片地址是公开的。</li><ul></div>");
+                    });
+            }
+        }
+    }
+
+    $("#input_img_url").unbind().bind("paste",
+        function() {
+            urlChanged();
+        }).bind("keyup",
+        function() {
+            urlChanged();
+        });
+    //搜索
+    $("#input_img_search").unbind().bind("keydown",
+        function(e) {
+            if (e.keyCode == 13) {
+                UI.searchImgByGoogle();
+            }
+        });
+    $("#btn_img_search").unbind().bind("click",
+        function() {
+            UI.searchImgByGoogle();
+        });
+    //完成按钮
+    $("#set_image_submit").button().enable();
+    $("#set_image_submit").button({
+        onClick: function() {
+            var currentTab = $(".image_sources").children(".active").attr("ty");
+            if (currentTab == "upload") {
+                var selectedImg = $("#user_image_items").children(".image_item_selected");
+                if (selectedImg.length > 0) {
+                    var fileId = selectedImg.attr("fileId");
+                    var imageW = selectedImg.attr("w");
+                    var imageH = selectedImg.attr("h");
+                    UI.setShapeImage(fileId, imageW, imageH);
+                } else {
+                    $("#image_dialog").data("dlg").close();
+                }
+            } else if (currentTab == "url") {
+                if ($(".img_url_loaded").length > 0) {
+                    var url = $(".img_url_loaded").attr("src");
+                    UI.setShapeImageByURL(url);
+                } else {
+                    $("#image_dialog").data("dlg").close();
+                }
+            } else {
+                //搜索
+                var selectedImg = $("#google_image_items").children(".image_item_selected");
+                if (selectedImg.length > 0) {
+                    var url = selectedImg.attr("u");
+                    UI.setShapeImageByURL(url);
+                } else {
+                    $("#image_dialog").data("dlg").close();
+                }
+            }
+        }
+    });
+    //取消按钮
+    $("#set_image_cancel").button({
+        onClick: function() {
+            $("#image_dialog").data("dlg").close();
+        }
+    });
+    $("#set_image_text").empty();
+};
 	/**
 	 * 显示图片设置类型
 	 */
-	showImageSelectContent: function (type) {
-		$(".image_list").hide();
-		$("#image_select_" + type).show().find("input[type=text]").select();
-		$(".image_sources").children().removeClass("active");
-		$(".image_sources").children("li[ty=" + type + "]").addClass("active");
-	},
+UI.showImageSelectContent = function(type) {
+    $(".image_list").hide();
+    $("#image_select_" + type).show().find("input[type=text]").select();
+    $(".image_sources").children().removeClass("active");
+    $(".image_sources").children("li[ty=" + type + "]").addClass("active");
+};
 	/**
 	 * 加载用户图片
 	 */
-	loadUserImages: function (refresh) {
-		$("#user_image_items").empty();
-		$.ajax({
-			url: "/user_image/list",
-			success: function (data) {
-				if (data.images) {
-					for (var i = 0; i < data.images.length; i++) {
-						var img = data.images[i];
-						UI.appendUserImage(img);
-					}
-					$("#user_image_items").append("<div style='clear: both'></div>");
-				}
-			}
-		});
-		$("#user_image_items").attr("loaded", "true");
-	},
-	searchIndex: 0,
-	searchKeywords: "",
+UI.loadUserImages = function(refresh) {
+    $("#user_image_items").empty();
+    $.ajax({
+        url: "/user_image/list",
+        success: function(data) {
+            if (data.images) {
+                for (var i = 0; i < data.images.length; i++) {
+                    var img = data.images[i];
+                    UI.appendUserImage(img);
+                }
+                $("#user_image_items").append("<div style='clear: both'></div>");
+            }
+        }
+    });
+    $("#user_image_items").attr("loaded", "true");
+};
+UI.searchIndex = 0;
+UI.searchKeywords = "";
 	/**
 	 * 通过Google搜索图片
 	 */
-	searchImgByGoogle: function () {
-		var keywords = $("#input_img_search").val();
-		if (keywords.trim() != "") {
-			$("#google_image_items").empty();
-			this.searchKeywords = encodeURI(keywords);
-			this.searchIndex = 0;
-			this.loadGoogleImg();
-		} else {
-			$("#input_img_search").focus();
-		}
-	},
+UI.searchImgByGoogle = function() {
+    var keywords = $("#input_img_search").val();
+    if (keywords.trim() != "") {
+        $("#google_image_items").empty();
+        this.searchKeywords = encodeURI(keywords);
+        this.searchIndex = 0;
+        this.loadGoogleImg();
+    } else {
+        $("#input_img_search").focus();
+    }
+};
 	/**
 	 * 加载Google图片 
 	 */
-	loadGoogleImg: function () {
-		$.getScript("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + this.searchKeywords + "&rsz=8&start=" + (this.searchIndex * 16) + "&callback=UI.googleImgCallback");
-		$.getScript("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + this.searchKeywords + "&rsz=8&start=" + (this.searchIndex * 16 + 8) + "&callback=UI.googleImgCallback");
-		$(".gg_img_more").remove();
-		$("#google_image_items").append("<div class='img_gg_loading_tip'>正在加载图片...</div>");
-		this.searchIndex++;
-	},
+UI.loadGoogleImg = function() {
+    $.getScript("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
+        this.searchKeywords +
+        "&rsz=8&start=" +
+        (this.searchIndex * 16) +
+        "&callback=UI.googleImgCallback");
+    $.getScript("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" +
+        this.searchKeywords +
+        "&rsz=8&start=" +
+        (this.searchIndex * 16 + 8) +
+        "&callback=UI.googleImgCallback");
+    $(".gg_img_more").remove();
+    $("#google_image_items").append("<div class='img_gg_loading_tip'>正在加载图片...</div>");
+    this.searchIndex++;
+};
 	/**
 	 * Google搜索回调
 	 * @param {} data
 	 */
-	googleImgCallback: function (data) {
-		var responseData = data.responseData;
-		var results = responseData.results;
-		for (var i = 0; i < results.length; i++) {
-			var item = results[i];
-			UI.appendGoogleImage(item);
-		}
-		$("#google_image_items").append("<div style='clear: both'></div>");
-		$(".img_gg_loading_tip").remove();
-		$(".gg_img_more").remove();
-		if (this.searchIndex <= 3) {
-			$("#google_image_items").append("<div onclick='UI.loadGoogleImg()' class='gg_img_more toolbar_button active'>显示更多结果...</div>");
-		}
-	},
+UI.googleImgCallback = function(data) {
+    var responseData = data.responseData;
+    var results = responseData.results;
+    for (var i = 0; i < results.length; i++) {
+        var item = results[i];
+        UI.appendGoogleImage(item);
+    }
+    $("#google_image_items").append("<div style='clear: both'></div>");
+    $(".img_gg_loading_tip").remove();
+    $(".gg_img_more").remove();
+    if (this.searchIndex <= 3) {
+        $("#google_image_items")
+            .append("<div onclick='UI.loadGoogleImg()' class='gg_img_more toolbar_button active'>显示更多结果...</div>");
+    }
+};
 	/**
 	 * 添加一个用户图片
 	 */
-	appendUserImage: function (img) {
-		var box = $("<div class='image_item' id='" + img.imageId + "' fileId='" + img.fileId + "' w='" + img.imageW + "' h='" + img.imageH + "'></div>").appendTo($("#user_image_items"));
-		box.unbind().bind("click", function () {
-			$(".image_item_selected").removeClass('image_item_selected');
-			$(this).addClass('image_item_selected');
-		}).bind("mouseenter", function () {
-			var target = $(this);
-			var remove = $("<div class='ico ico_remove_red'></div>").appendTo(target);
-			var id = target.attr("id");
-			remove.bind("click", function () {
-				target.fadeOut();
-				$.ajax({
-					url: "/user_image/remove",
-					data: { imageId: id }
-				});
-			});
-		}).bind("mouseleave", function () {
-			$(this).find(".ico_remove_red").remove();
-		});
-		var location = "/file/id/" + img.fileId + "/diagram_user_image";
-		var newImage = $("<img src='" + location + "'/>").appendTo(box);
-		newImage.bind("load", function () {
-			$(this).css("margin-top", (140 - $(this).height()) / 2);
-		});
-	},
+UI.appendUserImage = function(img) {
+    var box = $("<div class='image_item' id='" +
+        img.imageId +
+        "' fileId='" +
+        img.fileId +
+        "' w='" +
+        img.imageW +
+        "' h='" +
+        img.imageH +
+        "'></div>").appendTo($("#user_image_items"));
+    box.unbind().bind("click",
+        function() {
+            $(".image_item_selected").removeClass('image_item_selected');
+            $(this).addClass('image_item_selected');
+        }).bind("mouseenter",
+        function() {
+            var target = $(this);
+            var remove = $("<div class='ico ico_remove_red'></div>").appendTo(target);
+            var id = target.attr("id");
+            remove.bind("click",
+                function() {
+                    target.fadeOut();
+                    $.ajax({
+                        url: "/user_image/remove",
+                        data: { imageId: id }
+                    });
+                });
+        }).bind("mouseleave",
+        function() {
+            $(this).find(".ico_remove_red").remove();
+        });
+    var location = "/file/id/" + img.fileId + "/diagram_user_image";
+    var newImage = $("<img src='" + location + "'/>").appendTo(box);
+    newImage.bind("load",
+        function() {
+            $(this).css("margin-top", (140 - $(this).height()) / 2);
+        });
+};
 	/**
 	 * 添加一个Google搜索的图片
 	 */
-	appendGoogleImage: function (img) {
-		var title = img.title + " (" + img.width + " × " + img.height + ")";
-		var box = $("<div class='image_item' u='" + img.url + "' title='" + title + "'></div>").appendTo($("#google_image_items"));
-		box.unbind().bind("click", function () {
-			$(".image_item_selected").removeClass('image_item_selected');
-			$(this).addClass('image_item_selected');
-		});
-		var newImage = $("<img src='" + img.tbUrl + "'/>").appendTo(box);
-		newImage.bind("load", function () {
-			$(this).css("margin-top", (140 - $(this).height()) / 2);
-		});
-	},
+UI.appendGoogleImage = function(img) {
+    var title = img.title + " (" + img.width + " × " + img.height + ")";
+    var box = $("<div class='image_item' u='" + img.url + "' title='" + title + "'></div>")
+        .appendTo($("#google_image_items"));
+    box.unbind().bind("click",
+        function() {
+            $(".image_item_selected").removeClass('image_item_selected');
+            $(this).addClass('image_item_selected');
+        });
+    var newImage = $("<img src='" + img.tbUrl + "'/>").appendTo(box);
+    newImage.bind("load",
+        function() {
+            $(this).css("margin-top", (140 - $(this).height()) / 2);
+        });
+};
 	/**
 	 * 设置形状的背景图片
 	 * @param {} source
 	 */
-	setShapeImage: function (fileId, w, h) {
-		if (this.imageSelectedCallback) {
-			this.imageSelectedCallback(fileId, w, h);
-		}
-		$("#image_dialog").data("dlg").close();
-	},
+UI.setShapeImage = function(fileId, w, h) {
+    if (this.imageSelectedCallback) {
+        this.imageSelectedCallback(fileId, w, h);
+    }
+    $("#image_dialog").data("dlg").close();
+};
 	/**
 	 * 加载URL图片的ajax请求对象
 	 * @type {}
 	 */
-	fetchingRequest: null,
+UI.fetchingRequest = null;
 	/**
 	 * 通过URL设置图片
 	 * @param {} url
 	 */
-	setShapeImageByURL: function (url) {
-		$("#set_image_text").removeClass("errored").text("正在应用图片，请稍候...");
-		$("#set_image_submit").button().disable();
-		UI.fetchingRequest = $.ajax({
-			url: "/user_image/reference",
-			data: { url: url },
-			success: function (result) {
-				$("#set_image_submit").button().enable();
-				if (result.result == "exception") {
-					$("#set_image_text").addClass("errored").html("无法使用此图片，请选择其他图片");
-				} else {
-					$("#set_image_text").empty();
-					var img = result.image;
-					UI.setShapeImage(img.fileId, img.imageW, img.imageH);
-				}
-			}
-		});
-	},
+UI.setShapeImageByURL = function(url) {
+    $("#set_image_text").removeClass("errored").text("正在应用图片，请稍候...");
+    $("#set_image_submit").button().disable();
+    UI.fetchingRequest = $.ajax({
+        url: "/user_image/reference",
+        data: { url: url },
+        success: function(result) {
+            $("#set_image_submit").button().enable();
+            if (result.result == "exception") {
+                $("#set_image_text").addClass("errored").html("无法使用此图片，请选择其他图片");
+            } else {
+                $("#set_image_text").empty();
+                var img = result.image;
+                UI.setShapeImage(img.fileId, img.imageW, img.imageH);
+            }
+        }
+    });
+};
 	/**
 	 * 插入图片
 	 * @param {} source
@@ -1012,146 +1050,146 @@ var UI = {
 	 * @param {} w
 	 * @param {} h
 	 */
-	insertImage: function (fileId, w, h) {
-		w = parseInt(w);
-		h = parseInt(h);
-		var layout = $("#designer_layout");
-		var centerX = layout.width() / 2 + layout.offset().left;
-		var centerY = layout.height() / 2 + layout.offset().top;
-		var pos = Utils.getRelativePos(centerX, centerY, $("#designer_canvas"));
-		var shape = Model.create("standardImage", pos.x.restoreScale() - w / 2, pos.y.restoreScale() - h / 2);
-		shape.props.w = w;
-		shape.props.h = h;
-		shape.fillStyle = { type: "image", fileId: fileId, display: "fill", imageW: w, imageH: h };
-		Model.add(shape);
-		Designer.painter.renderShape(shape);
-		Utils.unselect();
-		Utils.selectShape(shape.id);
-	},
+UI.insertImage = function(fileId, w, h) {
+    w = parseInt(w);
+    h = parseInt(h);
+    var layout = $("#designer_layout");
+    var centerX = layout.width() / 2 + layout.offset().left;
+    var centerY = layout.height() / 2 + layout.offset().top;
+    var pos = Utils.getRelativePos(centerX, centerY, $("#designer_canvas"));
+    var shape = Model.create("standardImage", pos.x.restoreScale() - w / 2, pos.y.restoreScale() - h / 2);
+    shape.props.w = w;
+    shape.props.h = h;
+    shape.fillStyle = { type: "image", fileId: fileId, display: "fill", imageW: w, imageH: h };
+    Model.add(shape);
+    Designer.painter.renderShape(shape);
+    Utils.unselect();
+    Utils.selectShape(shape.id);
+};
 	/**
 	 * 执行导出
 	 */
-	doExport: function () {
-		var definition = JSON.stringify(Model.define);
-		$("#export_definition").val(definition);
-		$("#export_title").val($(".diagram_title").text());
-		$("#export_form").submit();
-		$('#export_dialog').dlg('close');
-	},
+UI.doExport = function() {
+    var definition = JSON.stringify(Model.define);
+    $("#export_definition").val(definition);
+    $("#export_title").val($(".diagram_title").text());
+    $("#export_form").submit();
+    $('#export_dialog').dlg('close');
+};
 	/**
 	 * 展示hotkey列表
 	 */
-	showHotKey: function () {
-		var height = $(window).height() - 175;
-		if (height > 500) {
-			height = 500 + "px";
-		}
-		$("#hotkey_list").dlg();
-		$("#hotkey_list").css({ "top": "28px" });
-		$("#hotkey_list .dialog_content").css({ "height": height });
-	},
+UI.showHotKey = function() {
+    var height = $(window).height() - 175;
+    if (height > 500) {
+        height = 500 + "px";
+    }
+    $("#hotkey_list").dlg();
+    $("#hotkey_list").css({ "top": "28px" });
+    $("#hotkey_list .dialog_content").css({ "height": height });
+};
 	/**
 	 * 显示反馈dialog
 	 */
-	showFeedBack: function () {
-		$("#send_feedback").css({
-			width: "auto",
-			height: "auto"
-		});
-		var sendFeedBack = $("#send_feedback");
-		sendFeedBack.dlg();
-		$("#feedback_email").focus();
-		$("#feedback_message").val("");
-		$(".feedback_error_email_format").hide();
-		$(".feedback_error_msg").hide();
-	},
+UI.showFeedBack = function() {
+    $("#send_feedback").css({
+        width: "auto",
+        height: "auto"
+    });
+    var sendFeedBack = $("#send_feedback");
+    sendFeedBack.dlg();
+    $("#feedback_email").focus();
+    $("#feedback_message").val("");
+    $(".feedback_error_email_format").hide();
+    $(".feedback_error_msg").hide();
+};
 	/**
 	 * 发送反馈
 	 */
-	sendFeedBack: function (dom) {
-		$(".feedback_error_email_format").hide();
-		$(".feedback_error_msg").hide();
-		var email = $.trim($("#feedback_email").val());
-		var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-		if (!reg.test(email)) {
-			$("#feedback_email").focus();
-			$(".feedback_error_email_format").show();
-			return;
-		}
-		var feedbackMessage = $.trim($("#feedback_message").val());
-		if (feedbackMessage == "") {
-			$("#feedback_message").val("").focus();
-			$(".feedback_error_msg").show();
-			return;
-		}
-		Util.ajax({
-			url: "/support/save_ask",
-			data: {
-				content: feedbackMessage,
-				username: $("#feedback_name").val(),
-				email: email,
-				url: location.href
-			},
-			success: function (data) {
-				$(".dlg_mask").remove();
-				$("#send_feedback").animate({
-					left: $(window).width(),
-					top: $(window).height(),
-					width: 0,
-					height: 0,
-					opacty: 0.2
-				});
-			}
-		});
-	},
+UI.sendFeedBack = function(dom) {
+    $(".feedback_error_email_format").hide();
+    $(".feedback_error_msg").hide();
+    var email = $.trim($("#feedback_email").val());
+    var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+    if (!reg.test(email)) {
+        $("#feedback_email").focus();
+        $(".feedback_error_email_format").show();
+        return;
+    }
+    var feedbackMessage = $.trim($("#feedback_message").val());
+    if (feedbackMessage == "") {
+        $("#feedback_message").val("").focus();
+        $(".feedback_error_msg").show();
+        return;
+    }
+    Util.ajax({
+        url: "/support/save_ask",
+        data: {
+            content: feedbackMessage,
+            username: $("#feedback_name").val(),
+            email: email,
+            url: location.href
+        },
+        success: function(data) {
+            $(".dlg_mask").remove();
+            $("#send_feedback").animate({
+                left: $(window).width(),
+                top: $(window).height(),
+                width: 0,
+                height: 0,
+                opacty: 0.2
+            });
+        }
+    });
+};
 	/**
 	 * 打开开始向导
 	 */
-	gettingStart: function (delay) {
+UI.	gettingStart= function (delay) {
 		this.showStartStep(1);
-	},
-	showStartStep: function (step, dom) {
-		$(".mark_content").hide();
-		var content = $(".mark" + step + "_content");
-		content.show();
-		var top;
-		var left;
-		if (step == 1) {
-			top = $("#shape_panel").offset().top + 70;
-			left = $("#shape_panel").offset().left + $("#shape_panel").width() + 10;
-		} else if (step == 2) {
-			top = $(".row2").offset().top + 30;
-			left = $("#menu_bar_insert").offset().left + $("#menu_bar_insert").width() - content.outerWidth() / 2;
-		} else if (step == 3) {
-			top = $(".toolbar").offset().top + 40;
-			left = 270;
-		} else if (step == 4) {
-			top = $("#dock").offset().top + 10;
-			left = $("#dock").offset().left - content.outerWidth() - 10
-		} else if (step == "created") {
-			top = dom.offset().top + dom.height() / 2 - content.outerHeight() / 2;
-			if (top <= 0) {
-				top = 0;
-			}
-			if (top + content.outerHeight() > $(window).height()) {
-				top = $(window).height() - content.outerHeight();
-			}
-			left = dom.offset().left + dom.width() + 10;
-		}
-		content.css({ top: top, left: left });
-	},
+	};
+UI.showStartStep = function(step, dom) {
+    $(".mark_content").hide();
+    var content = $(".mark" + step + "_content");
+    content.show();
+    var top;
+    var left;
+    if (step == 1) {
+        top = $("#shape_panel").offset().top + 70;
+        left = $("#shape_panel").offset().left + $("#shape_panel").width() + 10;
+    } else if (step == 2) {
+        top = $(".row2").offset().top + 30;
+        left = $("#menu_bar_insert").offset().left + $("#menu_bar_insert").width() - content.outerWidth() / 2;
+    } else if (step == 3) {
+        top = $(".toolbar").offset().top + 40;
+        left = 270;
+    } else if (step == 4) {
+        top = $("#dock").offset().top + 10;
+        left = $("#dock").offset().left - content.outerWidth() - 10
+    } else if (step == "created") {
+        top = dom.offset().top + dom.height() / 2 - content.outerHeight() / 2;
+        if (top <= 0) {
+            top = 0;
+        }
+        if (top + content.outerHeight() > $(window).height()) {
+            top = $(window).height() - content.outerHeight();
+        }
+        left = dom.offset().left + dom.width() + 10;
+    }
+    content.css({ top: top, left: left });
+};
 	/**
 	 * 关闭开始向导
 	 * @param {} dom
 	 */
-	closeGettingStart: function (dom) {
-		$(".mark_content").hide();
-	},
+UI.closeGettingStart = function(dom) {
+    $(".mark_content").hide();
+};
 	/**
 	 * Getting Start END--
 	 */
 
-	showAddColla: function () {
+UI.	showAddColla= function () {
 		Util.ajax({
 			url: "/collaboration/get_colla_role_list",
 			data: { chartId: chartId },
@@ -1223,397 +1261,426 @@ var UI = {
 				}
 			});
 		});
-	},
-	doAddCollaboration: function () {
-		if ($(".colla_suggest").length > 0) {
-			if ($(".colla_suggest").find(".seled").length == 0) {
-				$("#add_prompt1").hide();
-				$("#add_prompt2").show();
-				$("#add_prompt3").hide();
-				$("#add_prompt4").hide();
-				var top = ($(window).outerHeight() - 104) * 0.5 + 100;
-				var left = ($(window).outerWidth() - 272) * 0.5;
-				$("#confirm_dlg").removeClass("newSize").css({ top: top + "px", left: left + "px" });
-				$("#confirm_dlg").addClass("newSize").css({
-					top: ($(window).outerHeight() - $("#confirm_dlg").height()) * 0.5 + "px",
-					left: ($(window).outerWidth() - $("#confirm_dlg").width()) * 0.5 + "px",
-					display: "block"
-				});
-			} else {
-				var imgSrc = $(".colla_suggest").find(".seled").find("img").attr("src");
-				var userFullName = $("#input_add_colla").val();
-				if (userFullName.length > 30) {
-					userFullName = userFullName.substr(0, 30) + "...";
-				}
-				var target = $("#add_userid").val();
-				var role = $("#invit_role").val();
-				var type = $("#add_type").val();
-				$(".add_new_button").find(".designer_button").text("发送中...");
-				var target_item = null;
-				if (type == "email") {
-					$(".role_list").find(".role_item").each(function () {
-						if ($(this).attr("type") == type && $(this).attr("target") == target) {
-							target_item = $(this);
-							$(this).find(".inviting_").text("再次邀请");
-						}
-					});
-				}
+	};
+UI.doAddCollaboration = function() {
+    if ($(".colla_suggest").length > 0) {
+        if ($(".colla_suggest").find(".seled").length == 0) {
+            $("#add_prompt1").hide();
+            $("#add_prompt2").show();
+            $("#add_prompt3").hide();
+            $("#add_prompt4").hide();
+            var top = ($(window).outerHeight() - 104) * 0.5 + 100;
+            var left = ($(window).outerWidth() - 272) * 0.5;
+            $("#confirm_dlg").removeClass("newSize").css({ top: top + "px", left: left + "px" });
+            $("#confirm_dlg").addClass("newSize").css({
+                top: ($(window).outerHeight() - $("#confirm_dlg").height()) * 0.5 + "px",
+                left: ($(window).outerWidth() - $("#confirm_dlg").width()) * 0.5 + "px",
+                display: "block"
+            });
+        } else {
+            var imgSrc = $(".colla_suggest").find(".seled").find("img").attr("src");
+            var userFullName = $("#input_add_colla").val();
+            if (userFullName.length > 30) {
+                userFullName = userFullName.substr(0, 30) + "...";
+            }
+            var target = $("#add_userid").val();
+            var role = $("#invit_role").val();
+            var type = $("#add_type").val();
+            $(".add_new_button").find(".designer_button").text("发送中...");
+            var target_item = null;
+            if (type == "email") {
+                $(".role_list").find(".role_item").each(function() {
+                    if ($(this).attr("type") == type && $(this).attr("target") == target) {
+                        target_item = $(this);
+                        $(this).find(".inviting_").text("再次邀请");
+                    }
+                });
+            }
 
-				var paramOuter = {
-					type: type,
-					target: target,
-					role: role,
-					chartId: chartId
-				};
-				Util.ajax({
-					url: "/collaboration/add",
-					data: paramOuter,
-					success: function (data) {
-						var result = data.result;
-						if (result == "exists") {
-							$("#add_prompt2").hide();
-							$("#add_prompt1").hide();
-							$("#add_prompt4").hide();
-							$("#add_prompt3").show();
-						} else {
-							Util.ajax({
-								url: "/collaboration/get_colla_role_list",
-								data: { chartId: chartId },
-								success: function (data) {
-									$(".role_list").html(data).scrollTop(999);
-								}
-							});
-						}
-						$(".add_new_button").find(".designer_button").text("发送邀请");
-						$("#colla_dialog").addClass("_update")
-							.css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
-						if (result != "exists") {
-							setTimeout(function () {
-								$("#add_prompt3").hide();
-								$("#add_prompt2").hide();
-								$("#add_prompt1").hide();
-								$("#add_prompt4").show();
-							}, 400);
-						}
-						setTimeout(function () {
-							$("#add_prompt3").hide();
-							$("#add_prompt2").hide();
-							$("#add_prompt4").hide();
-							$("#add_prompt1").show();
-							$("#input_add_colla").val("");
-							$("#colla_suggest_box").html("");
-						}, 1000);
-					}
-				});
-			}
-		}
-	},
-	deleteCollaRole: function (dom) {
-		var parent = $(dom).parent(".role_item");
-		var collaborationId = parent.attr("collaborationId");
-		Util.ajax({
-			url: "/collaboration/delete",
-			data: { collaborationId: collaborationId },
-			success: function (data) {
-				if (data.result == "success") parent.remove();
-			}
-		});
+            var paramOuter = {
+                type: type,
+                target: target,
+                role: role,
+                chartId: chartId
+            };
+            Util.ajax({
+                url: "/collaboration/add",
+                data: paramOuter,
+                success: function(data) {
+                    var result = data.result;
+                    if (result == "exists") {
+                        $("#add_prompt2").hide();
+                        $("#add_prompt1").hide();
+                        $("#add_prompt4").hide();
+                        $("#add_prompt3").show();
+                    } else {
+                        Util.ajax({
+                            url: "/collaboration/get_colla_role_list",
+                            data: { chartId: chartId },
+                            success: function(data) {
+                                $(".role_list").html(data).scrollTop(999);
+                            }
+                        });
+                    }
+                    $(".add_new_button").find(".designer_button").text("发送邀请");
+                    $("#colla_dialog").addClass("_update")
+                        .css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
+                    if (result != "exists") {
+                        setTimeout(function() {
+                                $("#add_prompt3").hide();
+                                $("#add_prompt2").hide();
+                                $("#add_prompt1").hide();
+                                $("#add_prompt4").show();
+                            },
+                            400);
+                    }
+                    setTimeout(function() {
+                            $("#add_prompt3").hide();
+                            $("#add_prompt2").hide();
+                            $("#add_prompt4").hide();
+                            $("#add_prompt1").show();
+                            $("#input_add_colla").val("");
+                            $("#colla_suggest_box").html("");
+                        },
+                        1000);
+                }
+            });
+        }
+    }
+};
+UI.deleteCollaRole = function(dom) {
+    var parent = $(dom).parent(".role_item");
+    var collaborationId = parent.attr("collaborationId");
+    Util.ajax({
+        url: "/collaboration/delete",
+        data: { collaborationId: collaborationId },
+        success: function(data) {
+            if (data.result == "success") parent.remove();
+        }
+    });
 
-		$("#colla_dialog").addClass("_update")
-			.css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
-	},
-	changeCollaRole: function (collaborationId, dom) {
-		Util.ajax({
-			url: "/collaboration/set_role",
-			data: { collaborationId: collaborationId, role: $(dom).val() },
-			success: function (data) {
-				if (data.result == "success") {
-					$(dom).parent(".given_role").find(".change_success").stop().animate({ "left": "-38px" }, 200).delay(400).animate({ "left": "0px" }, 200);
-				}
-			}
-		});
-	},
+    $("#colla_dialog").addClass("_update")
+        .css({ top: ($(window).height() - $("#colla_dialog").outerHeight()) * 0.5 + "px" });
+};
+UI.changeCollaRole = function(collaborationId, dom) {
+    Util.ajax({
+        url: "/collaboration/set_role",
+        data: { collaborationId: collaborationId, role: $(dom).val() },
+        success: function(data) {
+            if (data.result == "success") {
+                $(dom).parent(".given_role").find(".change_success").stop().animate({ "left": "-38px" }, 200).delay(400)
+                    .animate({ "left": "0px" }, 200);
+            }
+        }
+    });
+};
 	/**
 	 * 打开图形管理
 	 */
-	showShapesManage: function () {
-		$("#shapes_dialog").dlg();
-		$("#shape_manage_list").children("li").unbind().bind("click", function () {
-			var chkbox = $(this).find("input");
-			var checked = !chkbox.is(":checked");
-			chkbox.attr("checked", checked);
-			cateChanged(chkbox);
-		});
-		$("#shape_manage_list").find("input").unbind().bind("click", function (e) {
-			e.stopPropagation();
-			cateChanged($(this));
-		}).each(function () {
-			var categorys = $(this).val();
-			var arr = categorys.split(",");
-			var exists = true;
-			for (var i = 0; i < arr.length; i++) {
-				var cate = arr[i];
-				if (!CategoryMapping[cate]) {
-					//此分类下的图形，没有在当前使用中
-					exists = false;
-					break;
-				}
-			}
-			$(this).attr("checked", exists);
-		});
+UI.showShapesManage = function() {
+    $("#shapes_dialog").dlg();
+    $("#shape_manage_list").children("li").unbind().bind("click",
+        function() {
+            var chkbox = $(this).find("input");
+            var checked = !chkbox.is(":checked");
+            chkbox.attr("checked", checked);
+            cateChanged(chkbox);
+        });
+    $("#shape_manage_list").find("input").unbind().bind("click",
+        function(e) {
+            e.stopPropagation();
+            cateChanged($(this));
+        }).each(function() {
+        var categorys = $(this).val();
+        var arr = categorys.split(",");
+        var exists = true;
+        for (var i = 0; i < arr.length; i++) {
+            var cate = arr[i];
+            if (!CategoryMapping[cate]) {
+                //此分类下的图形，没有在当前使用中
+                exists = false;
+                break;
+            }
+        }
+        $(this).attr("checked", exists);
+    });
 
-		function cateChanged(chk) {
-			var value = chk.val();
-			var arr = value.split(",");
-			var chked = chk.is(":checked");
-			if (arr.length > 1) {
-				//是父级节点
-				$("#shape_manage_list").find("input").each(function () {
-					var cate = $(this).val();
-					if (arr.indexOf(cate) >= 0) {
-						//是选择父级的子节点
-						$(this).attr("checked", chked);
-					}
-				});
-			} else {
-				//选择的是子节点
-				$("#shape_manage_list").find(".cate_parent").each(function () {
-					//获取所有的父节点，判断子节点是否都全部选中了
-					var cates = $(this).val().split(",");
-					var allChked = true;
-					for (var i = 0; i < cates.length; i++) {
-						var cate = cates[i];
-						if (!$("#shape_manage_list").find("input[value=" + cate + "]").is(":checked")) {
-							allChked = false;
-							break;
-						}
-					}
-					$(this).attr("checked", allChked);
-				});
-			}
-		}
-	},
+    function cateChanged(chk) {
+        var value = chk.val();
+        var arr = value.split(",");
+        var chked = chk.is(":checked");
+        if (arr.length > 1) {
+            //是父级节点
+            $("#shape_manage_list").find("input").each(function() {
+                var cate = $(this).val();
+                if (arr.indexOf(cate) >= 0) {
+                    //是选择父级的子节点
+                    $(this).attr("checked", chked);
+                }
+            });
+        } else {
+            //选择的是子节点
+            $("#shape_manage_list").find(".cate_parent").each(function() {
+                //获取所有的父节点，判断子节点是否都全部选中了
+                var cates = $(this).val().split(",");
+                var allChked = true;
+                for (var i = 0; i < cates.length; i++) {
+                    var cate = cates[i];
+                    if (!$("#shape_manage_list").find("input[value=" + cate + "]").is(":checked")) {
+                        allChked = false;
+                        break;
+                    }
+                }
+                $(this).attr("checked", allChked);
+            });
+        }
+    }
+};
 	/**
 	 * 保存图形管理
 	 */
-	saveShapesManage: function () {
-		var checked = $("#shape_manage_list").find("input:checked:not(.cate_parent)").map(function () {
-			return $(this).val();
-		}).get();
-		var a = "";
-		//发送消息
-		var msgObj = {
-			action: "changeSchema",
-			categories: checked.join(",")
-		};
-		CLB.send(msgObj);
-		Designer.setSchema(checked, function () {
-			$('#shapes_dialog').dlg('close');
-		});
-	},
+UI.saveShapesManage = function() {
+    var checked = $("#shape_manage_list").find("input:checked:not(.cate_parent)").map(function() {
+        return $(this).val();
+    }).get();
+    var a = "";
+    //发送消息
+    var msgObj = {
+        action: "changeSchema",
+        categories: checked.join(",")
+    };
+    CLB.send(msgObj);
+    Designer.setSchema(checked,
+        function() {
+            $('#shapes_dialog').dlg('close');
+        });
+};
 	/**
 	 * 打开用户菜单
 	 */
-	showUserMenu: function (e) {
-		e.stopPropagation();
-		$("#user_menu").dropdown({
-			target: $(".user"),
-			position: "right",
-			onSelect: function (item) {
-				var action = item.attr("ac");
-				if (action == "dia") {
-					location.href = "/diagrams";
-				} else if (action == "net") {
-					location.href = "/network";
-				} else if (action == "out") {
-					location.href = "/login/out";
-				}
-			}
-		});
-	},
+UI.showUserMenu = function(e) {
+    e.stopPropagation();
+    $("#user_menu").dropdown({
+        target: $(".user"),
+        position: "right",
+        onSelect: function(item) {
+            var action = item.attr("ac");
+            if (action == "dia") {
+                location.href = "/diagrams";
+            } else if (action == "net") {
+                location.href = "/network";
+            } else if (action == "out") {
+                location.href = "/login/out";
+            }
+        }
+    });
+};
 	/**
 	 * 打开另存为
 	 */
-	showSaveAs: function () {
-		$("#saveas_dialog").dlg();
-		$("#saveas_title").val($(".diagram_title").text()).select();
-	},
-	doSaveAs: function () {
-		if ($("#saveas_title").val().trim() == "") {
-			$("#saveas_title").focus();
-			return;
-		}
-		$("#hid_saveas_id").val(chartId);
-		$("#saveas_form").submit();
-		$("#btn_dosaveas").removeAttr("onclick");
-	},
+UI.showSaveAs = function() {
+    $("#saveas_dialog").dlg();
+    $("#saveas_title").val($(".diagram_title").text()).select();
+};
+UI.doSaveAs = function() {
+    if ($("#saveas_title").val().trim() == "") {
+        $("#saveas_title").focus();
+        return;
+    }
+    $("#hid_saveas_id").val(chartId);
+    $("#saveas_form").submit();
+    $("#btn_dosaveas").removeAttr("onclick");
+};
 	/**
 	 * 打开形状的选项
 	 * @param {} options
 	 */
-	showShapeOptions: function () {
-		var shapeIds = Utils.getSelectedShapeIds();
-		UI.hideShapeOptions();
-		if (shapeIds.length == 1) {
-			//只选中了一个图形，显示图形的选项
-			var shape = Model.getShapeById(shapeIds[0]);
-			if (shape.name == "uiTab") {
-				//UI > Tab标签页
-				//先查找当前第几个是激活的tab
-				var activeTab = 0;
-				for (var i = 0; i < shape.path.length - 1; i++) {
-					var path = shape.path[i];
-					if (typeof path.fillStyle == "undefined") {
-						activeTab = i + 1;
-						break;
-					}
-				}
-				showOptions(shape, [
-					{
-						label: "Tabs:",
-						type: "spinner",
-						value: shape.path.length - 1,
-						onChange: function (tabCount) {
-							console.log("tabcount change");
-							//先查找当前第几个是激活的tab
-							var activeIndex = 0;
-							for (var i = 0; i < shape.path.length - 1; i++) {
-								var path = shape.path[i];
-								if (typeof path.fillStyle == "undefined") {
-									activeIndex = i;
-									break;
-								}
-							}
-							//先记录最后一节画法
-							var last = shape.path[shape.path.length - 1];
-							if (tabCount != shape.path.length - 1) {
-								//减少了tab
-								if (activeIndex > tabCount - 1) {
-									activeIndex = tabCount - 1;
-									$("#change_uitab_index").spinner().setValue( tabCount);
-								}
-								shape.path = [];
-								var newBlock = [];
-								for (var i = 0; i < tabCount; i++) {
-									var pathCmd = {
-										actions: [
-											{ action: "move", x: "w/" + tabCount + "*" + i, y: "h" },
-											{ action: "line", x: "w/" + tabCount + "*" + i, y: 7 },
-											{ action: "quadraticCurve", x1: "w/" + tabCount + "*" + i, y1: 0, x: "w/" + tabCount + "*" + i + "+7", y: 0 },
-											{ action: "line", x: "w/" + tabCount + "*" + (i + 1) + "-7", y: 0 },
-											{ action: "quadraticCurve", x1: "w/" + tabCount + "*" + (i + 1), y1: 0, x: "w/" + tabCount + "*" + (i + 1), y: 7 },
-											{ action: "line", x: "w/" + tabCount + "*" + (i + 1), y: "h" }
-										]
-									};
-									if (i != activeIndex) {
-										//如果不是激活的，需要添加深色的填充，画法需要关闭
-										pathCmd.fillStyle = { color: "r-20,g-20,b-20" };
-										pathCmd.actions.push({ action: "close" });
-									}
-									shape.path.push(pathCmd);
-									//调整textBlock
-									if (i < shape.textBlock.length) {
-										var shapeBlock = shape.textBlock[i];
-										shapeBlock.position.x = "w/" + tabCount + "*" + i + "+5";
-										shapeBlock.position.w = "w/" + tabCount + "-10";
-										newBlock.push(shapeBlock);
-									} else {
-										newBlock.push({
-											position: { x: "w/" + tabCount + "*" + i + "+5", y: 5, w: "w/" + tabCount + "-10", h: "h-10" }, text: "Tab " + (i + 1)
-										});
-									}
-								}
-								shape.textBlock = newBlock;
-								shape.path.push(last);
-								Schema.initShapeFunctions(shape);
-								Model.update(shape);
-								Designer.painter.renderShape(shape);
-								$("#change_uitab_index").spinner().setOptions({ max: tabCount });
-							}
-						}
-					}, {
-						id: "change_uitab_index",
-						label: "Selected:",
-						type: "spinner",
-						value: activeTab,
-						max: shape.path.length - 1,
-						onChange: function (active) {
-							console.log("select change");
-							//先查找当前第几个是激活的tab
-							var activeIndex = 0;
-							for (var i = 0; i < shape.path.length - 1; i++) {
-								var path = shape.path[i];
-								if (typeof path.fillStyle == "undefined") {
-									activeIndex = i;
-									break;
-								}
-							}
-							if (activeIndex != active - 1) {
-								//先置灰以前激活的
-								shape.path[activeIndex].fillStyle = { color: "r-20,g-20,b-20" };
-								shape.path[activeIndex].actions.push({ action: "close" });
-								//激活设置的
-								delete shape.path[active - 1].fillStyle;
-								shape.path[active - 1].actions.splice(6, 1)
-								//重绘、修改
-								Schema.initShapeFunctions(shape);
-								Model.update(shape);
-								Designer.painter.renderShape(shape);
-							}
-						}
-					}
-				]);
-			}
-		}
-		function showOptions(shape, options) {
-			var box = $("#shape_opt_box");
-			if (box.length == 0) {
-				box = $("<div id='shape_opt_box'><div class='shape_opts'></div><div class='ico dlg_close'></div></div>").appendTo("#designer_canvas");
-				box.bind("mousedown", function (e) {
-					e.stopPropagation();
-				});
-				box.children(".dlg_close").bind("click", function (e) {
-					box.hide();
-				});
-			}
-			box.show();
-			var pos = Utils.getShapeBox(shape);
-			box.css({
-				left: pos.x + pos.w + 10,
-				top: pos.y,
-				"z-index": Model.orderList.length + 1
-			});
-			var items = box.children(".shape_opts");
-			items.empty();
-			for (var i = 0; i < options.length; i++) {
-				var opt = options[i];
-				var item = $("<div class='opt'></div>").appendTo(items);
-				//标题
-				item.append("<label>" + opt.label + "</label>");
-				var field = $("<div class='field'></div>").appendTo(item);
-				if (opt.type == "spinner") {
-					var spinner = $("<div class='spinner active' style='width: 55px;'></div>").appendTo(field);
-					if (opt.id) {
-						spinner.attr("id", opt.id);
-					}
-					spinner.spinner({
-						min: 1,
-						max: typeof opt.max != "undefined" ? opt.max : 20,
-						step: 1,
-						onChange: opt.onChange
-					});
-					spinner.spinner().setValue( opt.value);
-				}
-			}
-		}
-	},
-	hideShapeOptions: function () {
-		$("#shape_opt_box").hide();
-	},
+UI.showShapeOptions = function() {
+    var shapeIds = Utils.getSelectedShapeIds();
+    UI.hideShapeOptions();
+    if (shapeIds.length == 1) {
+        //只选中了一个图形，显示图形的选项
+        var shape = Model.getShapeById(shapeIds[0]);
+        if (shape.name == "uiTab") {
+            //UI > Tab标签页
+            //先查找当前第几个是激活的tab
+            var activeTab = 0;
+            for (var i = 0; i < shape.path.length - 1; i++) {
+                var path = shape.path[i];
+                if (typeof path.fillStyle == "undefined") {
+                    activeTab = i + 1;
+                    break;
+                }
+            }
+            showOptions(shape,
+                [
+                    {
+                        label: "Tabs:",
+                        type: "spinner",
+                        value: shape.path.length - 1,
+                        onChange: function(tabCount) {
+                            console.log("tabcount change");
+                            //先查找当前第几个是激活的tab
+                            var activeIndex = 0;
+                            for (var i = 0; i < shape.path.length - 1; i++) {
+                                var path = shape.path[i];
+                                if (typeof path.fillStyle == "undefined") {
+                                    activeIndex = i;
+                                    break;
+                                }
+                            }
+                            //先记录最后一节画法
+                            var last = shape.path[shape.path.length - 1];
+                            if (tabCount != shape.path.length - 1) {
+                                //减少了tab
+                                if (activeIndex > tabCount - 1) {
+                                    activeIndex = tabCount - 1;
+                                    $("#change_uitab_index").spinner().setValue(tabCount);
+                                }
+                                shape.path = [];
+                                var newBlock = [];
+                                for (var i = 0; i < tabCount; i++) {
+                                    var pathCmd = {
+                                        actions: [
+                                            { action: "move", x: "w/" + tabCount + "*" + i, y: "h" },
+                                            { action: "line", x: "w/" + tabCount + "*" + i, y: 7 },
+                                            {
+                                                action: "quadraticCurve",
+                                                x1: "w/" + tabCount + "*" + i,
+                                                y1: 0,
+                                                x: "w/" + tabCount + "*" + i + "+7",
+                                                y: 0
+                                            },
+                                            { action: "line", x: "w/" + tabCount + "*" + (i + 1) + "-7", y: 0 },
+                                            {
+                                                action: "quadraticCurve",
+                                                x1: "w/" + tabCount + "*" + (i + 1),
+                                                y1: 0,
+                                                x: "w/" + tabCount + "*" + (i + 1),
+                                                y: 7
+                                            },
+                                            { action: "line", x: "w/" + tabCount + "*" + (i + 1), y: "h" }
+                                        ]
+                                    };
+                                    if (i != activeIndex) {
+                                        //如果不是激活的，需要添加深色的填充，画法需要关闭
+                                        pathCmd.fillStyle = { color: "r-20,g-20,b-20" };
+                                        pathCmd.actions.push({ action: "close" });
+                                    }
+                                    shape.path.push(pathCmd);
+                                    //调整textBlock
+                                    if (i < shape.textBlock.length) {
+                                        var shapeBlock = shape.textBlock[i];
+                                        shapeBlock.position.x = "w/" + tabCount + "*" + i + "+5";
+                                        shapeBlock.position.w = "w/" + tabCount + "-10";
+                                        newBlock.push(shapeBlock);
+                                    } else {
+                                        newBlock.push({
+                                            position: {
+                                                x: "w/" + tabCount + "*" + i + "+5",
+                                                y: 5,
+                                                w: "w/" + tabCount + "-10",
+                                                h: "h-10"
+                                            },
+                                            text: "Tab " + (i + 1)
+                                        });
+                                    }
+                                }
+                                shape.textBlock = newBlock;
+                                shape.path.push(last);
+                                Schema.initShapeFunctions(shape);
+                                Model.update(shape);
+                                Designer.painter.renderShape(shape);
+                                $("#change_uitab_index").spinner().setOptions({ max: tabCount });
+                            }
+                        }
+                    }, {
+                        id: "change_uitab_index",
+                        label: "Selected:",
+                        type: "spinner",
+                        value: activeTab,
+                        max: shape.path.length - 1,
+                        onChange: function(active) {
+                            console.log("select change");
+                            //先查找当前第几个是激活的tab
+                            var activeIndex = 0;
+                            for (var i = 0; i < shape.path.length - 1; i++) {
+                                var path = shape.path[i];
+                                if (typeof path.fillStyle == "undefined") {
+                                    activeIndex = i;
+                                    break;
+                                }
+                            }
+                            if (activeIndex != active - 1) {
+                                //先置灰以前激活的
+                                shape.path[activeIndex].fillStyle = { color: "r-20,g-20,b-20" };
+                                shape.path[activeIndex].actions.push({ action: "close" });
+                                //激活设置的
+                                delete shape.path[active - 1].fillStyle;
+                                shape.path[active - 1].actions.splice(6, 1)
+                                //重绘、修改
+                                Schema.initShapeFunctions(shape);
+                                Model.update(shape);
+                                Designer.painter.renderShape(shape);
+                            }
+                        }
+                    }
+                ]);
+        }
+    }
+
+    function showOptions(shape, options) {
+        var box = $("#shape_opt_box");
+        if (box.length == 0) {
+            box = $("<div id='shape_opt_box'><div class='shape_opts'></div><div class='ico dlg_close'></div></div>")
+                .appendTo("#designer_canvas");
+            box.bind("mousedown",
+                function(e) {
+                    e.stopPropagation();
+                });
+            box.children(".dlg_close").bind("click",
+                function(e) {
+                    box.hide();
+                });
+        }
+        box.show();
+        var pos = Utils.getShapeBox(shape);
+        box.css({
+            left: pos.x + pos.w + 10,
+            top: pos.y,
+            "z-index": Model.orderList.length + 1
+        });
+        var items = box.children(".shape_opts");
+        items.empty();
+        for (var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var item = $("<div class='opt'></div>").appendTo(items);
+            //标题
+            item.append("<label>" + opt.label + "</label>");
+            var field = $("<div class='field'></div>").appendTo(item);
+            if (opt.type == "spinner") {
+                var spinner = $("<div class='spinner active' style='width: 55px;'></div>").appendTo(field);
+                if (opt.id) {
+                    spinner.attr("id", opt.id);
+                }
+                spinner.spinner({
+                    min: 1,
+                    max: typeof opt.max != "undefined" ? opt.max : 20,
+                    step: 1,
+                    onChange: opt.onChange
+                });
+                spinner.spinner().setValue(opt.value);
+            }
+        }
+    }
+};
+UI.hideShapeOptions = function() {
+    $("#shape_opt_box").hide();
+};
 	/**
 	 * 收缩、展开标题栏
 	 */
-	toogleTitleBar: function () {
+UI.	toogleTitleBar= function () {
 		var ico = $("#bar_collapse").children("div");
 		if (ico.hasClass("collapse")) {
 			ico.attr("class", "ico expand");
@@ -1630,5 +1697,5 @@ var UI = {
 			}, 200);
 			$("#bar_return").hide();
 		}
-	}
+	
 };
