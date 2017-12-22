@@ -753,7 +753,7 @@ Dock.loadHistorys = function () {
 /**
  * 播放一个版本
  */
-Dock.playOneVersion = function (index, msgIndex) {
+Dock.playOneVersion = function(index, msgIndex) {
     var current = $("#history_versions").children("li[ind=" + index + "]");
     $("#history_versions").children(".selected").removeClass("selected");
     current.addClass("selected").addClass("playing");
@@ -778,18 +778,18 @@ Dock.playOneVersion = function (index, msgIndex) {
             index = index - 1;
             msgIndex = 0;
         }
-        this.playingTimeout = setTimeout(function () {
-            Dock.playOneVersion(index, msgIndex);
-        },
+        this.playingTimeout = setTimeout(function() {
+                Dock.playOneVersion(index, msgIndex);
+            },
             time);
     }
 
-},
+};
     Dock.currentDefinition = null;
 /**
  * 打开一个历史版本
  */
-Dock.openHistory = function (definition) {
+Dock.openHistory = function(definition) {
     if (this.currentDefinition == null) {
         this.currentDefinition = $.extend(true, {}, Model.define);
     }
@@ -805,440 +805,453 @@ Dock.openHistory = function (definition) {
     $(".panel_box").addClass("readonly");
     //中止监听
     CLB.stopListen();
-},
+};
 	/**
 	 * 关闭历史版本
 	 */
-    Dock.closeHistory = function () {
-        if (this.currentDefinition != null) {
-            Designer.open(this.currentDefinition);
-            this.currentDefinition = null;
-            this.activeOperation();
-        }
-    },
+Dock.closeHistory = function() {
+    if (this.currentDefinition != null) {
+        Designer.open(this.currentDefinition);
+        this.currentDefinition = null;
+        this.activeOperation();
+    }
+};
 	/**
 	 * 激活操作
 	 */
-    Dock.activeOperation = function () {
-        //重新初始化快捷键
-        Designer.hotkey.init();
-        Designer.op.init();
-        $("#menu_bar").children().removeClass("readonly");
-        $(".diagram_title").removeClass("readonly");
-        $(".dock_buttons").children().removeClass("disabled");
-        $("#dock_btn_history").removeClass("disabled");
-        $(".panel_box").removeClass("readonly");
-        $("#history_versions").children(".selected").removeClass("selected");
-        //继续监听
-        CLB.listen();
-        Dock.loadHistorys();
-    },
+Dock.activeOperation = function() {
+    //重新初始化快捷键
+    Designer.hotkey.init();
+    Designer.op.init();
+    $("#menu_bar").children().removeClass("readonly");
+    $(".diagram_title").removeClass("readonly");
+    $(".dock_buttons").children().removeClass("disabled");
+    $("#dock_btn_history").removeClass("disabled");
+    $(".panel_box").removeClass("readonly");
+    $("#history_versions").children(".selected").removeClass("selected");
+    //继续监听
+    CLB.listen();
+    Dock.loadHistorys();
+};
 	/**
 	 * 恢复版本
 	 */
-    Dock.restoreVersion = function () {
-        var selected = $("#history_versions").children(".selected");
-        if (selected.length) {
-            MessageSource.beginBatch();
-            var elements = Dock.currentDefinition.elements;
-            //删除当前的所有
-            var removed = [];
-            if (elements) {
-                for (var id in elements) {
-                    removed.push(elements[id]);
-                }
+Dock.restoreVersion = function() {
+    var selected = $("#history_versions").children(".selected");
+    if (selected.length) {
+        MessageSource.beginBatch();
+        var elements = Dock.currentDefinition.elements;
+        //删除当前的所有
+        var removed = [];
+        if (elements) {
+            for (var id in elements) {
+                removed.push(elements[id]);
             }
-            MessageSource.send("remove", removed);
-            //更新画布
-            var updatePageMsg = {
-                page: Utils.copy(Dock.currentDefinition.page),
-                update: Utils.copy(Model.define.page)
-            };
-            MessageSource.send("updatePage", updatePageMsg);
-            //添加新图形
-            var newElements = Model.define.elements;
-            var added = [];
-            if (newElements) {
-                for (var id in newElements) {
-                    added.push(newElements[id]);
-                }
-            }
-            MessageSource.send("create", added);
-            MessageSource.commit();
-            Dock.activeOperation();
         }
-    },
+        MessageSource.send("remove", removed);
+        //更新画布
+        var updatePageMsg = {
+            page: Utils.copy(Dock.currentDefinition.page),
+            update: Utils.copy(Model.define.page)
+        };
+        MessageSource.send("updatePage", updatePageMsg);
+        //添加新图形
+        var newElements = Model.define.elements;
+        var added = [];
+        if (newElements) {
+            for (var id in newElements) {
+                added.push(newElements[id]);
+            }
+        }
+        MessageSource.send("create", added);
+        MessageSource.commit();
+        Dock.activeOperation();
+    }
+};
 	/**
 	 * 设置数据属性列表
 	 */
-    Dock.setAttributeList = function () {
-        var selectedIds = Utils.getSelectedIds();
-        var shape = Model.getShapeById(selectedIds[0]);
-        $(".attr_list").empty();
-        if (shape.dataAttributes) {
-            for (var i = 0; i < shape.dataAttributes.length; i++) {
-                var attr = shape.dataAttributes[i];
-                var typeText = $("#attr_add_type").children("option[value=" + attr.type + "]").text();
-                var item = $("<li id='" + attr.id + "' class='attr_item attr_item_" + attr.id + "' onclick=\"Dock.editAttr('" + attr.id + "')\"><div class='attr_name'>" + attr.name + "</div><div class='attr_type'>" + typeText + "</div><div class='attr_value'>" + attr.value + "</div><div style='clear: both'></div></li>").appendTo($(".attr_list"));
-                if (attr.category != "default") {
-                    item.append("<div class='ico ico_attr_delete' onclick=\"Dock.deleteAttr('" + attr.id + "', event)\"></div>");
-                }
+Dock.setAttributeList = function() {
+    var selectedIds = Utils.getSelectedIds();
+    var shape = Model.getShapeById(selectedIds[0]);
+    $(".attr_list").empty();
+    if (shape.dataAttributes) {
+        for (var i = 0; i < shape.dataAttributes.length; i++) {
+            var attr = shape.dataAttributes[i];
+            var typeText = $("#attr_add_type").children("option[value=" + attr.type + "]").text();
+            var item = $("<li id='" +
+                attr.id +
+                "' class='attr_item attr_item_" +
+                attr.id +
+                "' onclick=\"Dock.editAttr('" +
+                attr.id +
+                "')\"><div class='attr_name'>" +
+                attr.name +
+                "</div><div class='attr_type'>" +
+                typeText +
+                "</div><div class='attr_value'>" +
+                attr.value +
+                "</div><div style='clear: both'></div></li>").appendTo($(".attr_list"));
+            if (attr.category != "default") {
+                item.append("<div class='ico ico_attr_delete' onclick=\"Dock.deleteAttr('" +
+                    attr.id +
+                    "', event)\"></div>");
             }
         }
-        this.fitAttrList();
-    },
+    }
+    this.fitAttrList();
+};
 	/**
 	 * 让数据属性列表适应
 	 */
-    Dock.fitAttrList = function () {
-        var scroll = $(".attr_list").scrollTop();
-        $(".attr_list").height("auto");
-        var top = $(".attr_list").offset().top;
-        var bottom = top + $(".attr_list").height() + 10;
-        if (bottom > $(window).height()) {
-            var height = $(window).height() - top - 10;
-            if (height < 140) {
-                height = 140;
-            }
-            $(".attr_list").height(height);
-        } else {
-            $(".attr_list").height("auto");
+Dock.fitAttrList = function() {
+    var scroll = $(".attr_list").scrollTop();
+    $(".attr_list").height("auto");
+    var top = $(".attr_list").offset().top;
+    var bottom = top + $(".attr_list").height() + 10;
+    if (bottom > $(window).height()) {
+        var height = $(window).height() - top - 10;
+        if (height < 140) {
+            height = 140;
         }
-        $(".attr_list").scrollTop(scroll);
-    },
+        $(".attr_list").height(height);
+    } else {
+        $(".attr_list").height("auto");
+    }
+    $(".attr_list").scrollTop(scroll);
+};
 	/**
 	 * 打开数据属性添加
 	 */
-    Dock.showAttrAdd = function () {
-        $("#attr_add_btn").hide();
-        $(".attr_add_items").show();
-        $("#attr_add_name").val("").focus();
-        $("#attr_add_type").val("string");
-        $("#attr_add_type").unbind().bind("change", function () {
+Dock.showAttrAdd = function() {
+    $("#attr_add_btn").hide();
+    $(".attr_add_items").show();
+    $("#attr_add_name").val("").focus();
+    $("#attr_add_type").val("string");
+    $("#attr_add_type").unbind().bind("change",
+        function() {
             Dock.setAttrValueInput(null, $(this).val());
         });
-        Dock.setAttrValueInput(null, "string");
-        this.fitAttrList();
-    },
+    Dock.setAttrValueInput(null, "string");
+    this.fitAttrList();
+};
 	/**
 	 * 保存数据属性添加
 	 */
-    Dock.saveAttrAdd = function () {
-        var name = $("#attr_add_name").val();
-        if (name == "") {
-            $("#attr_add_name").focus();
-            return;
-        }
-        var type = $("#attr_add_type").val();
-        var value = $("#attr_add_value_arera").children().val();
-        var newAttr = {
-            name: name,
-            type: type,
-            value: value
-        };
-        Designer.addDataAttribute(newAttr);
-        this.setAttributeList();
-        //初始化添加区域
-        this.showAttrAdd();
-    },
+Dock.saveAttrAdd = function() {
+    var name = $("#attr_add_name").val();
+    if (name == "") {
+        $("#attr_add_name").focus();
+        return;
+    }
+    var type = $("#attr_add_type").val();
+    var value = $("#attr_add_value_arera").children().val();
+    var newAttr = {
+        name: name,
+        type: type,
+        value: value
+    };
+    Designer.addDataAttribute(newAttr);
+    this.setAttributeList();
+    //初始化添加区域
+    this.showAttrAdd();
+};
 	/**
 	 * 取消数据属性添加
 	 */
-    Dock.cancelAttrAdd = function () {
-        $("#attr_add_btn").show();
-        $(".attr_add_items").hide();
-        this.fitAttrList();
-    },
+Dock.cancelAttrAdd = function() {
+    $("#attr_add_btn").show();
+    $(".attr_add_items").hide();
+    this.fitAttrList();
+};
 	/**
 	 * 编辑数据属性
 	 * @param {} attrId
 	 */
-    Dock.editAttr = function (attrId) {
-        var item = $(".attr_item_" + attrId);
-        if (item.hasClass("attr_editing")) {
-            return;
-        }
-        if ($(".attr_editing").length > 0) {
-            var editingId = $(".attr_editing").attr("id");
-            this.saveAttrEdit(editingId);
-        }
-        item = $(".attr_item_" + attrId);
-        item.addClass("attr_editing");
-        var attr = Designer.getDataAttrById(attrId);
-        //属性值输入
-        var input = this.setAttrValueInput(attr, attr.type);
-        input.val(attr.value).select();
-        if (attr.category != "default") {
-            //属性名和类型输入
-            var nameDiv = item.children(".attr_name");
-            nameDiv.empty();
-            var nameInput = $("<input type='text' class='input_text' style='width: 88px'/>").appendTo(nameDiv);
-            nameInput.val(attr.name).select();
-            var typeDiv = item.children(".attr_type");
-            typeDiv.empty();
-            var select = $("<select class='input_select' style='width: 60px'></select>").appendTo(typeDiv);
-            select.html($("#attr_add_type").html()).val(attr.type);
-            select.bind("change", function () {
+Dock.editAttr = function(attrId) {
+    var item = $(".attr_item_" + attrId);
+    if (item.hasClass("attr_editing")) {
+        return;
+    }
+    if ($(".attr_editing").length > 0) {
+        var editingId = $(".attr_editing").attr("id");
+        this.saveAttrEdit(editingId);
+    }
+    item = $(".attr_item_" + attrId);
+    item.addClass("attr_editing");
+    var attr = Designer.getDataAttrById(attrId);
+    //属性值输入
+    var input = this.setAttrValueInput(attr, attr.type);
+    input.val(attr.value).select();
+    if (attr.category != "default") {
+        //属性名和类型输入
+        var nameDiv = item.children(".attr_name");
+        nameDiv.empty();
+        var nameInput = $("<input type='text' class='input_text' style='width: 88px'/>").appendTo(nameDiv);
+        nameInput.val(attr.name).select();
+        var typeDiv = item.children(".attr_type");
+        typeDiv.empty();
+        var select = $("<select class='input_select' style='width: 60px'></select>").appendTo(typeDiv);
+        select.html($("#attr_add_type").html()).val(attr.type);
+        select.bind("change",
+            function() {
                 Dock.setAttrValueInput(attr, $(this).val());
             });
+    }
+    //添加显示设置
+    var displayArea = $("<div class='attr_edit_display'></div>").appendTo(item);
+    //显示为的按钮
+    displayArea.append("<div class='dock_label'>显示为：</div>");
+    displayArea.append(
+        "<div id='attr_edit_showtype' class='toolbar_button active btn_inline' style='width: 75px;'><div class='text_content'></div><div class='ico ico_dropdown'></div></div>");
+    displayArea.append("<div style='clear: both'></div>");
+    //显示参数区域
+    displayArea.append("<div class='attr_display_options'></div>");
+    this.appendDisplayItems();
+    var showType = "none";
+    if (attr.showType) {
+        showType = attr.showType;
+    }
+    this.setAttrDisplay(showType);
+    $("#attr_edit_showtype").attr("ty", showType).button({
+        onMousedown: function() {
+            $("#attr_display_list").dropdown({
+                target: $("#attr_edit_showtype"),
+                onSelect: function(item) {
+                    var type = item.attr("ty");
+                    $("#attr_edit_showtype").attr("ty", type).button().setText(item.text());
+                    Dock.setAttrDisplay(type);
+                }
+            });
+            var type = $("#attr_edit_showtype").text().trim();
+            $("#attr_display_list").children().each(function() {
+                if ($(this).text() == type) {
+                    $("#attr_display_list").dropdown("select", $(this));
+                    return false;
+                }
+            });
         }
-        //添加显示设置
-        var displayArea = $("<div class='attr_edit_display'></div>").appendTo(item);
-        //显示为的按钮
-        displayArea.append("<div class='dock_label'>显示为：</div>");
-        displayArea.append("<div id='attr_edit_showtype' class='toolbar_button active btn_inline' style='width: 75px;'><div class='text_content'></div><div class='ico ico_dropdown'></div></div>");
-        displayArea.append("<div style='clear: both'></div>");
-        //显示参数区域
-        displayArea.append("<div class='attr_display_options'></div>");
-        this.appendDisplayItems();
-        var showType = "none";
-        if (attr.showType) {
-            showType = attr.showType;
+    });
+    $("#attr_edit_showtype").attr("ty", showType).button()
+        .setText($("#attr_display_list").children("li[ty=" + showType + "]").html());
+    if (showType != "none") {
+        $("#attr_display_name").attr("checked", attr.showName);
+        if (showType == "icon") {
+            this.setAttrIcon(attr.icon);
         }
-        this.setAttrDisplay(showType);
-        $("#attr_edit_showtype").attr("ty", showType).button({
-            onMousedown: function () {
-                $("#attr_display_list").dropdown({
-                    target: $("#attr_edit_showtype"),
-                    onSelect: function (item) {
-                        var type = item.attr("ty");
-                        $("#attr_edit_showtype").attr("ty", type).button().setText(item.text());
-                        Dock.setAttrDisplay(type);
-                    }
-                });
-                var type = $("#attr_edit_showtype").text().trim();
-                $("#attr_display_list").children().each(function () {
-                    if ($(this).text() == type) {
-                        $("#attr_display_list").dropdown("select", $(this));
-                        return false;
-                    }
-                });
-            }
-        });
-        $("#attr_edit_showtype").attr("ty", showType).button().setText($("#attr_display_list").children("li[ty=" + showType + "]").html());
-        if (showType != "none") {
-            $("#attr_display_name").attr("checked", attr.showName);
-            if (showType == "icon") {
-                this.setAttrIcon(attr.icon);
-            }
-        }
-        var horizontal = "mostright";
-        if (attr.horizontal) {
-            horizontal = attr.horizontal;
-        }
-        var vertical = "mostbottom";
-        if (attr.vertical) {
-            vertical = attr.vertical;
-        }
-        $("#attr_location_h").button().setText($("#attr_location_h_list").children("li[loc=" + horizontal + "]").html());
-        $("#attr_location_h").attr("loc", horizontal);
-        $("#attr_location_v").button().setText($("#attr_location_v_list").children("li[loc=" + vertical + "]").html());
-        $("#attr_location_v").attr("loc", vertical);
-        //添加保存按钮
-        item.append("<div class='attr_edit_btns'><div id='save_edit_attr' class='toolbar_button active'>确定</div><div id='cancel_edit_attr' class='toolbar_button active' style='margin-left: 5px;'>取消</div></div>");
-        $("#save_edit_attr").bind("click", function (e) {
+    }
+    var horizontal = "mostright";
+    if (attr.horizontal) {
+        horizontal = attr.horizontal;
+    }
+    var vertical = "mostbottom";
+    if (attr.vertical) {
+        vertical = attr.vertical;
+    }
+    $("#attr_location_h").button().setText($("#attr_location_h_list").children("li[loc=" + horizontal + "]").html());
+    $("#attr_location_h").attr("loc", horizontal);
+    $("#attr_location_v").button().setText($("#attr_location_v_list").children("li[loc=" + vertical + "]").html());
+    $("#attr_location_v").attr("loc", vertical);
+    //添加保存按钮
+    item.append(
+        "<div class='attr_edit_btns'><div id='save_edit_attr' class='toolbar_button active'>确定</div><div id='cancel_edit_attr' class='toolbar_button active' style='margin-left: 5px;'>取消</div></div>");
+    $("#save_edit_attr").bind("click",
+        function(e) {
             e.stopPropagation();
             Dock.saveAttrEdit(attrId);
         });
-        $("#cancel_edit_attr").bind("click", function (e) {
+    $("#cancel_edit_attr").bind("click",
+        function(e) {
             e.stopPropagation();
             Dock.setAttributeList();
-        })
-    },
+        });
+};
 	/**
 	 * 设置数据属性值的输入
 	 * @param {} attr
 	 * @param {} type
 	 */
-    Dock.setAttrValueInput = function (attr, type) {
-        var valueArea;
-        if (attr != null) {
-            //如果为null，则是添加时调用，否则为修改
-            valueArea = $(".attr_editing").children(".attr_value");
-        } else {
-            valueArea = $("#attr_add_value_arera");
-        }
-        valueArea.empty();
-        var result;
-        if (type == "boolean") {
-            result = $("<select class='input_select'><option value=''></option><option value='true'>true</option><option value='false'>false</option></select>").appendTo(valueArea);;
-        } else if (type == "list") {
-            result = $("<select class='input_select'></select>").appendTo(valueArea);
-            if (attr.listItems) {
-                for (var i = 0; i < attr.listItems.length; i++) {
-                    var listItem = attr.listItems[i];
-                    result.append("<option value='" + listItem + "'>" + listItem + "</option>");
-                }
+Dock.setAttrValueInput = function(attr, type) {
+    var valueArea;
+    if (attr != null) {
+        //如果为null，则是添加时调用，否则为修改
+        valueArea = $(".attr_editing").children(".attr_value");
+    } else {
+        valueArea = $("#attr_add_value_arera");
+    }
+    valueArea.empty();
+    var result;
+    if (type == "boolean") {
+        result =
+            $(
+                "<select class='input_select'><option value=''></option><option value='true'>true</option><option value='false'>false</option></select>")
+            .appendTo(valueArea);;
+    } else if (type == "list") {
+        result = $("<select class='input_select'></select>").appendTo(valueArea);
+        if (attr.listItems) {
+            for (var i = 0; i < attr.listItems.length; i++) {
+                var listItem = attr.listItems[i];
+                result.append("<option value='" + listItem + "'>" + listItem + "</option>");
             }
-        } else {
-            result = $("<input type='text' class='input_text'/>").appendTo(valueArea);
         }
-        if (attr == null) {
-            valueArea.children().css("width", "260px");
-        } else {
-            valueArea.children().css("width", "128px");
-        }
-        return result;
-    },
+    } else {
+        result = $("<input type='text' class='input_text'/>").appendTo(valueArea);
+    }
+    if (attr == null) {
+        valueArea.children().css("width", "260px");
+    } else {
+        valueArea.children().css("width", "128px");
+    }
+    return result;
+};
 	/**
 	 * 添加数据显示的编辑项
 	 */
-    Dock.appendDisplayItems = function () {
-        var optionsArea = $(".attr_display_options");
-        //详细区域，包括是否显示name，图标
-        var detailArea = $("<div class='opt_area'></div>").appendTo(optionsArea);
-        detailArea.append("<input id='attr_display_name' type='checkbox'/><label for='attr_display_name'>显示属性名</label>");
-        //选择图标的Button
-        var iconButtonArea = $("<div id='attr_icon_area' style='padding-top:5px;'></div>").appendTo(detailArea);
-        iconButtonArea.append("<div class='dock_label'>图标：</div>");
-        iconButtonArea.append("<div id='attr_display_icon' ico='' class='toolbar_button active btn_inline' style='width: 50px'><div class='text_content'></div><div class='ico ico_dropdown'></div></div>");
-        iconButtonArea.append("<div style='clear: both'></div>");
-        if ($("#attr_icon_list").children("li").html() == "") {
-            //初始化图标选择
-            var html = "";
-            var index = 1;
-            while (index <= 49) {
-                if (index == 30) {
-                    //30时，要空出一格
-                    html += "<div></div>";
-                }
-                html += "<div onmousedown='Dock.setAttrIcon(" + index + ")' class='attr_icon_item'></div>";
-                index++;
+Dock.appendDisplayItems = function() {
+    var optionsArea = $(".attr_display_options");
+    //详细区域，包括是否显示name，图标
+    var detailArea = $("<div class='opt_area'></div>").appendTo(optionsArea);
+    detailArea.append("<input id='attr_display_name' type='checkbox'/><label for='attr_display_name'>显示属性名</label>");
+    //选择图标的Button
+    var iconButtonArea = $("<div id='attr_icon_area' style='padding-top:5px;'></div>").appendTo(detailArea);
+    iconButtonArea.append("<div class='dock_label'>图标：</div>");
+    iconButtonArea.append(
+        "<div id='attr_display_icon' ico='' class='toolbar_button active btn_inline' style='width: 50px'><div class='text_content'></div><div class='ico ico_dropdown'></div></div>");
+    iconButtonArea.append("<div style='clear: both'></div>");
+    if ($("#attr_icon_list").children("li").html() == "") {
+        //初始化图标选择
+        var html = "";
+        var index = 1;
+        while (index <= 49) {
+            if (index == 30) {
+                //30时，要空出一格
+                html += "<div></div>";
             }
-            $("#attr_icon_list").children("li").html(html);
+            html += "<div onmousedown='Dock.setAttrIcon(" + index + ")' class='attr_icon_item'></div>";
+            index++;
         }
-        //位置设置区域
-        var locationArea = $("<div class='opt_area location_area'></div>").appendTo(optionsArea);
-        locationArea.append("<div>显示位置：</div>");
-        locationArea.append("<div class='dock_label'>水平：</div>");
-        locationArea.append("<div id='attr_location_h' class='toolbar_button active btn_inline' loc='mostright'><div class='text_content location_content'><div><span style='left: 11px'></span></div>Most Right</div><div class='ico ico_dropdown'></div></div>");
-        locationArea.append("<div style='clear: both'></div>");
-        locationArea.append("<div class='dock_label'>垂直：</div>");
-        locationArea.append("<div id='attr_location_v' class='toolbar_button active btn_inline' loc='mostbottom'><div class='text_content location_content'><div><span style='top: 11px'></span></div>Most Bottom</div><div class='ico ico_dropdown'></div></div>");
-        locationArea.append("<div style='clear: both'></div>");
-        optionsArea.append("<div style='clear: both'></div>");
-        $("#attr_display_icon").button({
-            onMousedown: function () {
-                $("#attr_icon_list").dropdown({
-                    target: $("#attr_display_icon")
-                });
-            }
-        });
-        $("#attr_location_h").button({
-            onMousedown: function () {
-                $("#attr_location_h_list").dropdown({
-                    target: $("#attr_location_h"),
-                    onSelect: function (item) {
-                        $("#attr_location_h").button().setText(item.html());
-                        $("#attr_location_h").attr("loc", item.attr("loc"));
-                    }
-                });
-            }
-        });
-        $("#attr_location_v").button({
-            onMousedown: function () {
-                $("#attr_location_v_list").dropdown({
-                    target: $("#attr_location_v"),
-                    onSelect: function (item) {
-                        $("#attr_location_v").button().setText(item.html());
-                        $("#attr_location_v").attr("loc", item.attr("loc"));
-                    }
-                });
-            }
-        });
-    },
+        $("#attr_icon_list").children("li").html(html);
+    }
+    //位置设置区域
+    var locationArea = $("<div class='opt_area location_area'></div>").appendTo(optionsArea);
+    locationArea.append("<div>显示位置：</div>");
+    locationArea.append("<div class='dock_label'>水平：</div>");
+    locationArea.append(
+        "<div id='attr_location_h' class='toolbar_button active btn_inline' loc='mostright'><div class='text_content location_content'><div><span style='left: 11px'></span></div>Most Right</div><div class='ico ico_dropdown'></div></div>");
+    locationArea.append("<div style='clear: both'></div>");
+    locationArea.append("<div class='dock_label'>垂直：</div>");
+    locationArea.append(
+        "<div id='attr_location_v' class='toolbar_button active btn_inline' loc='mostbottom'><div class='text_content location_content'><div><span style='top: 11px'></span></div>Most Bottom</div><div class='ico ico_dropdown'></div></div>");
+    locationArea.append("<div style='clear: both'></div>");
+    optionsArea.append("<div style='clear: both'></div>");
+    $("#attr_display_icon").button({
+        onMousedown: function() {
+            $("#attr_icon_list").dropdown({
+                target: $("#attr_display_icon")
+            });
+        }
+    });
+    $("#attr_location_h").button({
+        onMousedown: function() {
+            $("#attr_location_h_list").dropdown({
+                target: $("#attr_location_h"),
+                onSelect: function(item) {
+                    $("#attr_location_h").button().setText(item.html());
+                    $("#attr_location_h").attr("loc", item.attr("loc"));
+                }
+            });
+        }
+    });
+    $("#attr_location_v").button({
+        onMousedown: function() {
+            $("#attr_location_v_list").dropdown({
+                target: $("#attr_location_v"),
+                onSelect: function(item) {
+                    $("#attr_location_v").button().setText(item.html());
+                    $("#attr_location_v").attr("loc", item.attr("loc"));
+                }
+            });
+        }
+    });
+};
 	/**
 	 * 根据数据属性显示类型，设置操作界面
 	 * @param {} type
 	 */
-    Dock.setAttrDisplay = function (type) {
-        if (type == "none") {
-            $(".attr_display_options").hide();
+Dock.setAttrDisplay = function(type) {
+    if (type == "none") {
+        $(".attr_display_options").hide();
+    } else {
+        $(".attr_display_options").show();
+        if (type == "icon") {
+            $("#attr_icon_area").show();
         } else {
-            $(".attr_display_options").show();
-            if (type == "icon") {
-                $("#attr_icon_area").show();
-            } else {
-                $("#attr_icon_area").hide();
-            }
+            $("#attr_icon_area").hide();
         }
-    },
+    }
+};
 	/**
 	 * 设置数据属性的显示图标
 	 * @param {} icon
 	 */
-    Dock.setAttrIcon = function (icon) {
-        $("#attr_display_icon").attr("ico", icon).button().setText("");
-        if (icon) {
-            $("#attr_display_icon").button().setText("<img src='/images/data-attr/" + icon + ".png'/>");
-        }
-    },
+Dock.setAttrIcon = function(icon) {
+    $("#attr_display_icon").attr("ico", icon).button().setText("");
+    if (icon) {
+        $("#attr_display_icon").button().setText("<img src='/images/data-attr/" + icon + ".png'/>");
+    }
+};
 	/**
 	 * 保存数据属性编辑
 	 * @param {} attrId
 	 */
-    Dock.saveAttrEdit = function (attrId) {
-        var item = $(".attr_item_" + attrId);
-        if (!item.hasClass("attr_editing")) {
+Dock.saveAttrEdit = function(attrId) {
+    var item = $(".attr_item_" + attrId);
+    if (!item.hasClass("attr_editing")) {
+        return;
+    }
+    var attr = Designer.getDataAttrById(attrId);
+    if (attr.category != "default") {
+        var name = item.children(".attr_name").children("input").val();
+        if (name == "") {
+            item.children(".attr_name").children("input").focus();
             return;
         }
-        var attr = Designer.getDataAttrById(attrId);
-        if (attr.category != "default") {
-            var name = item.children(".attr_name").children("input").val();
-            if (name == "") {
-                item.children(".attr_name").children("input").focus();
-                return;
-            }
-            attr.name = name;
-            attr.type = item.children(".attr_type").children("select").val();
+        attr.name = name;
+        attr.type = item.children(".attr_type").children("select").val();
+    }
+    attr.value = item.children(".attr_value").children().val();
+    var showType = $("#attr_edit_showtype").attr("ty");
+    attr.showType = showType;
+    if (showType != "none") {
+        attr.showName = $("#attr_display_name").is(":checked");
+        attr.horizontal = $("#attr_location_h").attr("loc");
+        attr.vertical = $("#attr_location_v").attr("loc");
+        if (showType == "icon") {
+            attr.icon = $("#attr_display_icon").attr("ico");
         }
-        attr.value = item.children(".attr_value").children().val();
-        var showType = $("#attr_edit_showtype").attr("ty");
-        attr.showType = showType;
-        if (showType != "none") {
-            attr.showName = $("#attr_display_name").is(":checked");
-            attr.horizontal = $("#attr_location_h").attr("loc");
-            attr.vertical = $("#attr_location_v").attr("loc");
-            if (showType == "icon") {
-                attr.icon = $("#attr_display_icon").attr("ico");
-            }
+    }
+    //BPMN数据属性规则
+    var selectedIds = Utils.getSelectedIds();
+    var shape = Model.getShapeById(selectedIds[0]);
+    if (attr.category == "default" && shape.category == "bpmn") {
+        if (!shape.attribute) {
+            shape.attribute = {};
         }
-        //BPMN数据属性规则
-        var selectedIds = Utils.getSelectedIds();
-        var shape = Model.getShapeById(selectedIds[0]);
-        if (attr.category == "default" && shape.category == "bpmn") {
-            if (!shape.attribute) {
-                shape.attribute = {};
-            }
-            if (!shape.attribute.markers) {
-                shape.attribute.markers = [];
-            }
-            var markers = shape.attribute.markers;
-            if (attr.name == "loopCharacteristics") {
-                Utils.removeFromArray(markers, "loop");
-                Utils.removeFromArray(markers, "sequential");
-                Utils.removeFromArray(markers, "parallel");
-                if (attr.value == "StandardLoopCharacteristics") {
-                    //显示循环
-                    Utils.addToArray(markers, "loop");
-                } else if (attr.value == "MultipleLoopCharacteristics") {
-                    var sequantial = Designer.getDefaultDataAttrByName("isSequantial");
-                    if (sequantial != null) {
-                        if (sequantial.value == "true") {
-                            //显示三条横线
-                            Utils.addToArray(markers, "sequential");
-                        } else {
-                            //显示三条竖线
-                            Utils.addToArray(markers, "parallel");
-                        }
-                    }
-                }
-            } else if (attr.name == "isSequantial") {
-                Utils.removeFromArray(markers, "sequential");
-                Utils.removeFromArray(markers, "parallel");
-                var loop = Designer.getDefaultDataAttrByName("loopCharacteristics");
-                if (loop != null && loop.value == "MultipleLoopCharacteristics") {
-                    if (attr.value == "true") {
+        if (!shape.attribute.markers) {
+            shape.attribute.markers = [];
+        }
+        var markers = shape.attribute.markers;
+        if (attr.name == "loopCharacteristics") {
+            Utils.removeFromArray(markers, "loop");
+            Utils.removeFromArray(markers, "sequential");
+            Utils.removeFromArray(markers, "parallel");
+            if (attr.value == "StandardLoopCharacteristics") {
+                //显示循环
+                Utils.addToArray(markers, "loop");
+            } else if (attr.value == "MultipleLoopCharacteristics") {
+                var sequantial = Designer.getDefaultDataAttrByName("isSequantial");
+                if (sequantial != null) {
+                    if (sequantial.value == "true") {
                         //显示三条横线
                         Utils.addToArray(markers, "sequential");
                     } else {
@@ -1246,117 +1259,133 @@ Dock.openHistory = function (definition) {
                         Utils.addToArray(markers, "parallel");
                     }
                 }
-            } else if (attr.name == "isForCompensation") {
-                //显示两个左箭头
-                Utils.removeFromArray(markers, "compensation");
+            }
+        } else if (attr.name == "isSequantial") {
+            Utils.removeFromArray(markers, "sequential");
+            Utils.removeFromArray(markers, "parallel");
+            var loop = Designer.getDefaultDataAttrByName("loopCharacteristics");
+            if (loop != null && loop.value == "MultipleLoopCharacteristics") {
                 if (attr.value == "true") {
-                    Utils.addToArray(markers, "compensation");
-                }
-            } else if (attr.name == "isCollection" || attr.name == "ParticipantMultiplicity") {
-                Utils.removeFromArray(markers, "parallel");
-                if (attr.value == "true") {
-                    //显示三条竖线
-                    Utils.addToArray(markers, "parallel");
-                }
-            } else if (attr.name == "loopType") {
-                Utils.removeFromArray(markers, "loop");
-                Utils.removeFromArray(markers, "sequential");
-                Utils.removeFromArray(markers, "parallel");
-                if (attr.value == "Standard") {
-                    //显示循环
-                    Utils.addToArray(markers, "loop");
-                } else if (attr.value == "MultiInstanceSequential") {
                     //显示三条横线
                     Utils.addToArray(markers, "sequential");
-                } else if (attr.value == "MultiInstanceParallel") {
+                } else {
                     //显示三条竖线
                     Utils.addToArray(markers, "parallel");
                 }
             }
+        } else if (attr.name == "isForCompensation") {
+            //显示两个左箭头
+            Utils.removeFromArray(markers, "compensation");
+            if (attr.value == "true") {
+                Utils.addToArray(markers, "compensation");
+            }
+        } else if (attr.name == "isCollection" || attr.name == "ParticipantMultiplicity") {
+            Utils.removeFromArray(markers, "parallel");
+            if (attr.value == "true") {
+                //显示三条竖线
+                Utils.addToArray(markers, "parallel");
+            }
+        } else if (attr.name == "loopType") {
+            Utils.removeFromArray(markers, "loop");
+            Utils.removeFromArray(markers, "sequential");
+            Utils.removeFromArray(markers, "parallel");
+            if (attr.value == "Standard") {
+                //显示循环
+                Utils.addToArray(markers, "loop");
+            } else if (attr.value == "MultiInstanceSequential") {
+                //显示三条横线
+                Utils.addToArray(markers, "sequential");
+            } else if (attr.value == "MultiInstanceParallel") {
+                //显示三条竖线
+                Utils.addToArray(markers, "parallel");
+            }
         }
-        Designer.updateDataAttribute(attr);
-        this.setAttributeList();
-    },
+    }
+    Designer.updateDataAttribute(attr);
+    this.setAttributeList();
+};
 	/**
 	 * 删除数据属性
 	 * @param {} attrId
 	 */
-    Dock.deleteAttr = function (attrId, event) {
-        event.stopPropagation();
-        var item = $(".attr_item_" + attrId);
-        item.remove();
-        this.fitAttrList();
-        Designer.deleteDataAttribute(attrId);
-    },
+Dock.deleteAttr = function(attrId, event) {
+    event.stopPropagation();
+    var item = $(".attr_item_" + attrId);
+    item.remove();
+    this.fitAttrList();
+    Designer.deleteDataAttribute(attrId);
+};
 	/**
 	 * 进入全屏
 	 */
-    Dock.fullScreen = function (element, presentation) {
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
+Dock.fullScreen = function(element, presentation) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else {
+        //无法进入全屏，提示错误
+        if (presentation) {
+            $("#fullscreen_tip").find(".t").text("由于您的浏览器限制，无法进入演示视图。");
         } else {
-            //无法进入全屏，提示错误
-            if (presentation) {
-                $("#fullscreen_tip").find(".t").text("由于您的浏览器限制，无法进入演示视图。");
-            } else {
-                $("#fullscreen_tip").find(".t").text("无法进入全屏视图，您可以按(F11)进入。");
-            }
-            $("#fullscreen_tip").fadeIn();
+            $("#fullscreen_tip").find(".t").text("无法进入全屏视图，您可以按(F11)进入。");
         }
-    },
+        $("#fullscreen_tip").fadeIn();
+    }
+};
 	/**
 	 * 进入演示视图
 	 */
-    Dock.enterPresentation = function () {
-        $("#designer").bind('webkitfullscreenchange', function (e) {
+Dock.enterPresentation = function() {
+    $("#designer").bind('webkitfullscreenchange',
+        function(e) {
             Dock.manageFullScreen();
         });
-        $(document).bind('mozfullscreenchange', function (e) {
+    $(document).bind('mozfullscreenchange',
+        function(e) {
             Dock.manageFullScreen();
-        }).bind('fullscreenchange', function (e) {
+        }).bind('fullscreenchange',
+        function(e) {
             Dock.manageFullScreen();
         });
-        this.fullScreen(Utils.getDomById("designer"), true);
-
-    },
+    this.fullScreen(Utils.getDomById("designer"), true);
+};
 	/**
 	 * 进入全屏视图
 	 */
-    Dock.enterFullScreen = function () {
-        this.fullScreen(document.documentElement);
-    },
-    Dock.manageFullScreen = function () {
-        var designer = Utils.getDomById("designer");
-        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
-            //如果进入全屏状态
-            $("#shape_panel").addClass("readonly");
-            $("#designer_viewport").addClass("readonly");
-            $(window).unbind("resize.designer");
-            $("#designer_layout").height(window.screen.height);
-            //取消快捷键
-            Designer.hotkey.cancel();
-            Designer.op.cancel();
-            //隐藏Dock
-            $("#dock").hide();
-            $(".dock_view").hide();
-            Designer.contextMenu.destroy();
-            Designer.op.canvasFreeDraggable();
-        } else {
-            $("#shape_panel").removeClass("readonly");
-            $("#designer_viewport").removeClass("readonly");
-            Designer.initialize.initLayout();
-            Designer.hotkey.init();
-            Designer.op.init();
-            $("#dock").show();
-            if (Dock.currentView != "") {
-                Dock.showView(Dock.currentView);
-            }
-            Designer.contextMenu.init();
-            $("#designer").unbind('webkitfullscreenchange');
-            $("#designer").unbind('mozfullscreenchange').unbind('fullscreenchange');
+Dock.enterFullScreen = function() {
+    this.fullScreen(document.documentElement);
+};
+Dock.manageFullScreen = function() {
+    var designer = Utils.getDomById("designer");
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+        //如果进入全屏状态
+        $("#shape_panel").addClass("readonly");
+        $("#designer_viewport").addClass("readonly");
+        $(window).unbind("resize.designer");
+        $("#designer_layout").height(window.screen.height);
+        //取消快捷键
+        Designer.hotkey.cancel();
+        Designer.op.cancel();
+        //隐藏Dock
+        $("#dock").hide();
+        $(".dock_view").hide();
+        Designer.contextMenu.destroy();
+        Designer.op.canvasFreeDraggable();
+    } else {
+        $("#shape_panel").removeClass("readonly");
+        $("#designer_viewport").removeClass("readonly");
+        Designer.initialize.initLayout();
+        Designer.hotkey.init();
+        Designer.op.init();
+        $("#dock").show();
+        if (Dock.currentView != "") {
+            Dock.showView(Dock.currentView);
         }
+        Designer.contextMenu.init();
+        $("#designer").unbind('webkitfullscreenchange');
+        $("#designer").unbind('mozfullscreenchange').unbind('fullscreenchange');
     }
+};
